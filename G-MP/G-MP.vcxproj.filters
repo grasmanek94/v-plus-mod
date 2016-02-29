@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="enet">
+      <UniqueIdentifier>{9fe8c1e0-e3e4-4f76-98b3-3cd1f071fc92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="enet\include">
+      <UniqueIdentifier>{aca9e315-52ab-4469-9ed9-c12f75de5af6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomConsole.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardManager.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\callbacks.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\compress.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\enetpp.cxx">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\host.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\list.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\packet.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\peer.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\protocol.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\win32.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+    <ClCompile Include="enet\unix.c">
+      <Filter>enet</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Script.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomConsole.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardManager.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedMP.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GTAV.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\callbacks.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\enet.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\enetpp.hxx">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\list.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\protocol.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\time.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\types.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\unix.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\utility.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+    <ClInclude Include="enet\include\enet\win32.h">
+      <Filter>enet\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
