@@ -8,9 +8,10 @@
 using namespace Utility;
 
 void External_Init(HINSTANCE hModule);
-void External_Cleanup();
+void External_Cleanup(HINSTANCE hInstance);
 
-DWORD WINAPI Run() {
+DWORD WINAPI Run() 
+{
 
 #ifdef _DEBUG
 	GetConsole()->Allocate();
@@ -18,14 +19,14 @@ DWORD WINAPI Run() {
 
 	LOG_PRINT( "Initializing..." );
 
-	if ( !InputHook::Initialize() ) {
-
+	if ( !InputHook::Initialize() ) 
+	{
 		LOG_ERROR( "Failed to initialize InputHook" );
 		return 0;
 	}
 
-	if ( !ScriptEngine::Initialize() ) {
-
+	if ( !ScriptEngine::Initialize() ) 
+	{
 		LOG_ERROR( "Failed to initialize ScriptEngine" );
 		return 0;
 	}
@@ -40,35 +41,29 @@ DWORD WINAPI Run() {
 	return 1;
 }
 
-void Cleanup() {
+void Cleanup() 
+{
 
 	LOG_PRINT( "Cleanup" );
 
-	External_Cleanup();
+	External_Cleanup(Utility::GetOurModuleHandle());
 	// Maybe kill threads n shit
 
 	InputHook::Remove();
 
-	if ( GetConsole()->IsAllocated() ) {
+	if ( GetConsole()->IsAllocated() ) 
+	{
 		GetConsole()->DeAllocate();
 	}
 }
 
-BOOL APIENTRY DllMain( HINSTANCE hModule, DWORD dwReason, LPVOID lpvReserved ) {
+void GMP_Init()
+{
+	//SetOurModuleHanlde(hModule);
+	CloseHandle(CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Run, NULL, NULL, NULL));
+}
 
-	switch ( dwReason ) {
-		case DLL_PROCESS_ATTACH: {
-
-			SetOurModuleHanlde( hModule );
-			CloseHandle( CreateThread( NULL, NULL, (LPTHREAD_START_ROUTINE)Run, NULL, NULL, NULL ) );
-			break;
-		}
-		case DLL_PROCESS_DETACH: {
-
-			Cleanup();
-			break;
-		}
-	}
-
-	return TRUE;
+void GMP_Cleanup()
+{
+	Cleanup();
 }

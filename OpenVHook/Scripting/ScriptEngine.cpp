@@ -36,7 +36,8 @@ bool ScriptEngine::Initialize() {
 
 	auto scrThreadCollectionPattern =	pattern( "48 8B C8 EB 03 48 8B CB 48 8B 05" );
 	auto activeThreadTlsOffsetPattern = pattern( "48 8B 04 D0 4A 8B 14 00 48 8B 01 F3 44 0F 2C 42 20" );
-	auto scrThreadIdPattern =			pattern( "FF 40 5C 8B 15 ? ? ? ? 48 8B" );
+	// auto scrThreadIdPattern =			pattern( "FF 40 5C 8B 15 ? ? ? ? 48 8B" );
+	auto scrThreadIdPattern =			pattern( "C0 74 5C 8B 15 ? ? ? ? 48 8B" );
 	auto registrationTablePattern =		pattern( "76 61 49 8B 7A 40 48 8D 0D" );
 	auto g_scriptHandlerMgrPattern =	pattern( "74 17 48 8B C8 E8 ? ? ? ? 48 8D 0D" );
 	auto gameStatePattern =				pattern( "83 3D ? ? ? ? ? 8A D9 74 0A" );	

@@ -48,10 +48,10 @@ void OnKeyStateChange(bool pressed, unsigned char vkey)
 
 void main()
 {
-	EnableCustomConsole();
+	//EnableCustomConsole();
 
 	game = GTA::V::Setup();
-	cht = new GTA::CustomHelpText("GZ-LGM| ");
+	//cht = new GTA::CustomHelpText("GZ-LGM| ");
 
 	printf("Game Base Addr: 0x%p\r\n", game);
 
@@ -83,7 +83,7 @@ void main()
 
 			PLAYER::SET_MAX_WANTED_LEVEL(0);
 
-			cht->ShowThisFrame();
+			//cht->ShowThisFrame();
 		}
 		
 		WAIT(0);
