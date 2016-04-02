@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2C4BAD8D-3EBD-4919-B7AB-69B36DF25F10}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ClientCore</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;CLIENTCORE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile />
+      <AdditionalIncludeDirectories>./;../../Shared/;../../Vendor/FW1FontWrapper/</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <OutputFile>D:\Steam Games\SteamApps\common\Grand Theft Auto V\v-plus.dll</OutputFile>
+      <AdditionalLibraryDirectories>../../Vendor/FW1FontWrapper/</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FW1FontWrapper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shared\SharedUtility.h" />
+    <ClInclude Include="DllMain.h" />
+    <ClInclude Include="Game\CGameAddresses.h" />
+    <ClInclude Include="Game\CGameOverlay.h" />
+    <ClInclude Include="Game\CGamePatches.h" />
+    <ClInclude Include="Game\CGameStartupManager.h" />
+    <ClInclude Include="Game\CGameStateWatcher.h" />
+    <ClInclude Include="Game\CGameUtility.h" />
+    <ClInclude Include="Game\CGameVersion.h" />
+    <ClInclude Include="Game\Input\InputHook.h" />
+    <ClInclude Include="Game\Scripting\NativeInvoker.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_335to350.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_350to372.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_372to393.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_393to473.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_473to505.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_505to573.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_573to617.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_617to678.h" />
+    <ClInclude Include="Game\Scripting\ScriptEngine.h" />
+    <ClInclude Include="Game\Scripting\ScriptThread.h" />
+    <ClInclude Include="Game\Scripting\TestThread.h" />
+    <ClInclude Include="Utility\Hooking\HookFunction.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.FuncCalls.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.Invoke.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.Patterns.h" />
+    <ClInclude Include="Utility\RAGE\pgCollection.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Shared\SharedUtility.cpp" />
+    <ClCompile Include="DllMain.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Game\CGameAddresses.cpp" />
+    <ClCompile Include="Game\CGameOverlay.cpp" />
+    <ClCompile Include="Game\CGamePatches.cpp" />
+    <ClCompile Include="Game\CGameStartupManager.cpp" />
+    <ClCompile Include="Game\CGameStateWatcher.cpp" />
+    <ClCompile Include="Game\CGameUtility.cpp" />
+    <ClCompile Include="Game\CGameVersion.cpp" />
+    <ClCompile Include="Game\Input\InputHook.cpp" />
+    <ClCompile Include="Game\Scripting\NativeInvoker.cpp" />
+    <ClCompile Include="Game\Scripting\ScriptEngine.cpp" />
+    <ClCompile Include="Game\Scripting\ScriptThread.cpp" />
+    <ClCompile Include="Game\Scripting\TestThread.cpp" />
+    <ClCompile Include="Utility\Hooking\HookFunction.cpp" />
+    <ClCompile Include="Utility\Hooking\Hooking.cpp" />
+    <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

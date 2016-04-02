@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="Game\CGamePatches.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Hooking\HookFunction.cpp">
+      <Filter>Utility\Hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Hooking\Hooking.cpp">
+      <Filter>Utility\Hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp">
+      <Filter>Utility\Hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Input\InputHook.cpp">
+      <Filter>Game\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CGameStateWatcher.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CGameUtility.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CGameOverlay.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CGameStartupManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CGameVersion.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scripting\NativeInvoker.cpp">
+      <Filter>Game\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scripting\ScriptEngine.cpp">
+      <Filter>Game\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scripting\ScriptThread.cpp">
+      <Filter>Game\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Scripting\TestThread.cpp">
+      <Filter>Game\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Shared\SharedUtility.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\CGameAddresses.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DllMain.h" />
+    <ClInclude Include="Game\CGamePatches.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Hooking\HookFunction.h">
+      <Filter>Utility\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Hooking\Hooking.FuncCalls.h">
+      <Filter>Utility\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Hooking\Hooking.h">
+      <Filter>Utility\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Hooking\Hooking.Invoke.h">
+      <Filter>Utility\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Hooking\Hooking.Patterns.h">
+      <Filter>Utility\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Input\InputHook.h">
+      <Filter>Game\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CGameStateWatcher.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CGameUtility.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CGameOverlay.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CGameStartupManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables.h">
+      <Filter>Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_335to350.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_350to372.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_372to393.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_393to473.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_473to505.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_505to573.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_573to617.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_617to678.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CGameVersion.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeInvoker.h">
+      <Filter>Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\RAGE\pgCollection.h">
+      <Filter>Utility\RAGE</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\ScriptEngine.h">
+      <Filter>Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\ScriptThread.h">
+      <Filter>Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\TestThread.h">
+      <Filter>Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shared\SharedUtility.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\CGameAddresses.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{026536a4-a3dc-4bc6-bbda-dbc073bb98fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{8823bad0-6432-4eb4-8a13-7f96546babc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\Hooking">
+      <UniqueIdentifier>{ac571004-3dd3-4d1e-b7eb-0a595c5e247d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Input">
+      <UniqueIdentifier>{d50cdc38-b61a-4b15-8a68-0cf431400a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripting">
+      <UniqueIdentifier>{ca7942fc-dd28-4e28-a983-f663d92e1c15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scripting\NativeTranslationTables">
+      <UniqueIdentifier>{d44bc241-ac42-45be-8bf6-44833972da2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility\RAGE">
+      <UniqueIdentifier>{70d70add-10a4-4b0d-8678-58625cec3921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{9af254e8-4763-4312-970b-9c7e12bb010b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
