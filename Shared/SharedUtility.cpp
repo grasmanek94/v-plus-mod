@@ -10,9 +10,9 @@
 	#define NOMINMAX
 
 	#include <winsock2.h>
-	#include <windows.h>
+	//#include <windows.h>
 	#include <mmsystem.h>
-	#include <direct.h>
+	//#include <direct.h>
 	#include <WS2tcpip.h>
 	#include <tlhelp32.h>
 	#include <Shlwapi.h>
@@ -74,7 +74,8 @@ namespace SharedUtility
 	{
 		INT nLength;
 		DWORD dwTemp;
-		HANDLE hProcess, hModuleSnap;
+		HANDLE hProcess;
+		HANDLE hModuleSnap = NULL;
 		LPVOID lpLoadLibraryW = NULL;
 		LPVOID lpRemoteString;
 		MODULEENTRY32 me32 = {0};
