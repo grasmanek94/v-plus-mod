@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{600299D7-7501-49C5-9A25-48378F5085BA}</ProjectGuid>
-    <RootNamespace>ClientNetwork</RootNamespace>
+    <ProjectGuid>{8BE64469-5A8B-4DE3-9402-4A657A20DEAB}</ProjectGuid>
+    <RootNamespace>Enet</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -66,6 +66,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>Source;Source/include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -73,7 +75,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="net.cxx" />
+    <ClCompile Include="Source\callbacks.c" />
+    <ClCompile Include="Source\compress.c" />
+    <ClCompile Include="Source\enetpp.cxx" />
+    <ClCompile Include="Source\host.c" />
+    <ClCompile Include="Source\list.c" />
+    <ClCompile Include="Source\packet.c" />
+    <ClCompile Include="Source\peer.c" />
+    <ClCompile Include="Source\protocol.c" />
+    <ClCompile Include="Source\unix.c" />
+    <ClCompile Include="Source\win32.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\include\enet\callbacks.h" />
+    <ClInclude Include="Source\include\enet\enet.h" />
+    <ClInclude Include="Source\include\enet\enetpp.hxx" />
+    <ClInclude Include="Source\include\enet\list.h" />
+    <ClInclude Include="Source\include\enet\protocol.h" />
+    <ClInclude Include="Source\include\enet\time.h" />
+    <ClInclude Include="Source\include\enet\types.h" />
+    <ClInclude Include="Source\include\enet\unix.h" />
+    <ClInclude Include="Source\include\enet\utility.h" />
+    <ClInclude Include="Source\include\enet\win32.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

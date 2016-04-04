@@ -44,9 +44,6 @@
     <ClCompile Include="Game\Scripting\TestThread.cpp">
       <Filter>Game\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Shared\SharedUtility.cpp">
-      <Filter>Shared</Filter>
-    </ClCompile>
     <ClCompile Include="Game\CGameAddresses.cpp">
       <Filter>Game</Filter>
     </ClCompile>

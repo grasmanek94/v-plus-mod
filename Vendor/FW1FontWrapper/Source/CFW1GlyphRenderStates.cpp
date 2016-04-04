@@ -679,7 +679,7 @@ HRESULT CFW1GlyphRenderStates::createPixelShaders() {
 			// Compile clipping pixel shader
 			ID3DBlob *pPSClipCode;
 			
-			HRESULT hResult = m_pfnD3DCompile(
+			/*HRESULT*/ hResult = m_pfnD3DCompile(
 				psClipStr,
 				sizeof(psClipStr),
 				NULL,

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SDKDDKVer.h>
+//#include <SDKDDKVer.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -19,8 +19,12 @@
 #include <Psapi.h>
 #pragma comment(lib, "psapi.lib")
 
+//http://stackoverflow.com/questions/16224273/warnings-using-vs2012-and-directx-june-2010
+#pragma warning( push )
+#pragma warning( disable : 4005 )
 #include <d3d11.h>
 #include "FW1FontWrapper.h"
+#pragma warning( pop )
 
 #include <unordered_map>
 #include <unordered_set>

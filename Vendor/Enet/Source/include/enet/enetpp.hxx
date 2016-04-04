@@ -14,7 +14,7 @@ class NetworkBase
 	friend class NetworkClient;
 private:
 	ENetAddress address;
-	ENetHost * member;
+	ENetHost* member;
 	ENetEvent event;
 
 	int initialisation_code;
