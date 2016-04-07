@@ -1,96 +1,114 @@
 #include <enet/enetpp.hxx>
 #include <vector>
 #include <exception>
+#include <array>
+#include <memory>
 
-enum RPC_List
+#include <cereal/archives/binary.hpp>
+
+size_t constexpr const_hash(char const *input) 
 {
-	RPC_PlayerMessage
-};
+	return *input ?
+		static_cast<size_t>(*input) + 33 * const_hash(input + 1) :
+		5381;
+}
 
-namespace V_Plus
+// when using this interface, it is mandatory to implement 
+// private:	
+//	template<class Archive> void serialize(Archive& archive)
+class ISendable
 {
-	namespace Client
-	{
-		namespace Network
-		{
-			class IExchangeable
-			{
-			public:
-				virtual std::vector<char> Serialize() = 0;
-				virtual bool Deserialize(const std::vector<char>& serialized_data) = 0;
-			};
-
-			class IRPC
-			{
-			public:
-				virtual size_t RPC_Id() const = 0;
-				virtual void Call(const std::vector<char>& serialized_data) = 0;
-			};
-
-			class Instance
-			{
-			private:
-				NetworkClient client;
-				std::vector<IRPC> rpc;
-			public:
-				Instance()
-				{
-					int init_code = client.GetInitCode();
-
-					if (init_code)
-					{
-						// TODO custom exception class
-						throw std::exception(("Cannot initialise ENET, error code: " + std::to_string(init_code)).c_str());
-					}
-					if (!client.Create() || !client.Good())
-					{
-						// TODO custom exception class
-						throw std::exception("ENET host member creation failed");
-					}
-
-					//ready to use Connect
-				}
-
-				~Instance()
-				{
-
-				}
-			};
-		};
-	};
-};
-
-using namespace V_Plus::Client::Network;
-
-class PlayerMessage : public IExchangeable
-{
-
 public:
-	std::vector<char> Serialize()
-	{
+	virtual size_t Sendable_Id() const = 0;
+};
 
+class PlayerMessage : public ISendable
+{
+	template<class Archive>
+	void serialize(Archive& archive)
+	{
+		archive(message);
 	}
 
-	bool Deserialize(const std::vector<char>& serialized_data)
-	{
+	std::wstring message;
+public:
 
+	size_t Sendable_Id() const
+	{
+		return const_hash("PlayerMessage");
+	}
+
+	const std::wstring getMessage() const
+	{
+		return message;
+	}
+
+	void setMessage(const std::wstring& msg)
+	{
+		message = msg;
 	}
 };
 
-class PlayerMessageRPC : public IRPC
+class Instance
 {
-	PlayerMessage message;
+private:
+	NetworkClient connection;
 public:
-	size_t RPC_Id()
+	Instance()
 	{
-		return RPC_PlayerMessage;
+		PlayerMessage x;
+
+		int init_code = connection.GetInitCode();
+
+		if (init_code)
+		{
+			// TODO custom exception class
+			throw std::exception(("Cannot initialize ENET, error code: " + std::to_string(init_code)).c_str());
+		}
+
+		if (!connection.Create() || !connection.Good())
+		{
+			// TODO custom exception class
+			throw std::exception("ENET host member creation failed");
+		}
+
+
+		//ready to use Connect
 	}
 
-	void Call(const std::vector<char>& serialized_data)
+	void Tick()
 	{
-		if (message.Deserialize(serialized_data))
+		if (connection.Pull())
 		{
+			ENetEvent event = connection.Event();
 
+			switch (event.type)
+			{
+
+			case ENET_EVENT_TYPE_CONNECT:
+				
+				break;
+
+			case ENET_EVENT_TYPE_RECEIVE:
+				
+				break;
+
+			case ENET_EVENT_TYPE_DISCONNECT:
+				
+				break;
+
+			case ENET_EVENT_TYPE_NONE:
+				//plz no warnings
+				break;
+
+			}
 		}
 	}
+
+	~Instance()
+	{
+
+	}
 };
+
+Instance y;
