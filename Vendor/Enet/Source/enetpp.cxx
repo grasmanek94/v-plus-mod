@@ -53,6 +53,11 @@ int NetworkBase::Send(ENetPeer* peer, const void* data, size_t bytes, _ENetPacke
 	return enet_peer_send(peer, 0, enet_packet_create(data, bytes, flags));
 }
 
+int NetworkBase::Send(ENetPeer* peer, ENetPacket* packet)
+{
+	return enet_peer_send(peer, 0, packet);
+}
+
 NetworkServer::NetworkServer()
 {
 	address.host = ENET_HOST_ANY;
@@ -80,6 +85,11 @@ bool NetworkServer::Create(size_t max_connections)
 void NetworkServer::Broadcast(const void* data, size_t bytes, _ENetPacketFlag flags)
 {
 	enet_host_broadcast(member, 0, enet_packet_create(data, bytes, flags));
+}
+
+void NetworkServer::Broadcast(ENetPacket* packet)
+{
+	enet_host_broadcast(member, 0, packet);
 }
 
 NetworkClient::NetworkClient()
@@ -124,4 +134,9 @@ bool NetworkClient::Create()
 int NetworkClient::Send(const void* data, size_t bytes, _ENetPacketFlag flags)
 {
 	return NetworkBase::Send(peer, data, bytes, flags);
+}
+
+int NetworkClient::Send(ENetPacket* packet)
+{
+	return NetworkBase::Send(peer, packet);
 }

@@ -12,8 +12,6 @@ private:
 public:
 	Instance()
 	{
-		ChatMessage x;
-
 		int init_code = connection.GetInitCode();
 
 		if (init_code)

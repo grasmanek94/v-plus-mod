@@ -56,7 +56,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Shared\SharedUtility.h" />
+    <ClInclude Include="..\Client.Shared\SharedUtility.h" />
     <ClInclude Include="Main.h" />
   </ItemGroup>
   <ItemGroup>

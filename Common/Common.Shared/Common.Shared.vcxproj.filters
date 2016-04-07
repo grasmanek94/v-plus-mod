@@ -2,8 +2,18 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Common.cxx" />
+    <ClCompile Include="Networking.cxx" />
+    <ClCompile Include="SendableEventMessage.cxx" />
+    <ClCompile Include="Messages.cxx" />
+    <ClCompile Include="Messages\ChatMessage.cxx" />
+    <ClCompile Include="Messages\PeerConnection.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.hxx" />
+    <ClInclude Include="Networking.hxx" />
+    <ClInclude Include="SendableEventMessage.hxx" />
+    <ClInclude Include="Messages.hxx" />
+    <ClInclude Include="Messages\ChatMessage.hxx" />
+    <ClInclude Include="Messages\PeerConnection.hxx" />
   </ItemGroup>
 </Project>

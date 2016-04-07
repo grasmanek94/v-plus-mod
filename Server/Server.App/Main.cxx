@@ -1,4 +1,3 @@
-#include <enet/enetpp.hxx>
 #include <iostream>
 #include <thread>
 #include <memory>
@@ -10,35 +9,7 @@
 #include <algorithm>
 #include <iterator>
 
-class Packet
-{
-private:
-	ENetPacket* packet;
-public:
-	template<typename T>
-	Packet(const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
-	{
-		/*
-		This is so ugly |-( We'll see what we can do about the tripple buffering problem
-		*/
-		std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
-		size_t unique_id = object.Event_Id();
-		ss.write(reinterpret_cast<char*>(&unique_id), sizeof(size_t));
-		cereal::BinaryOutputArchive oarchive(ss);
-		oarchive(object);
-		
-		std::string temp(ss.str());
-
-		packet = enet_packet_create(temp.c_str(), temp.size(), flags);
-	}
-
-	int Send(NetworkClient* client)
-	{
-		return client->
-	}
-};
-
-
+#include <Networking.hxx>
 class Id
 {
 	std::vector<size_t> free_ids;
@@ -99,19 +70,22 @@ private:
 
 	}
 
-	void Handle(const ENetPeer* peer, const PeerConnected& data)
+	void Handle(const ENetPeer* peer, PeerConnected& data)
 	{
 
 	}
 
-	void Handle(const ENetPeer* peer, const PeerDisconnected& data)
+	void Handle(const ENetPeer* peer, PeerDisconnected& data)
 	{
 
 	}
 
-	void Handle(const ENetPeer* peer, const ChatMessage& message)
+	void Handle(const ENetPeer* peer, ChatMessage& message)
 	{
+		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
+		Packet packet(message);
+		packet.Broadcast(connection);
 	}
 
 public:

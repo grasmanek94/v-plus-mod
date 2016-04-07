@@ -39,7 +39,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Server\Server.App;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -47,10 +47,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Messages\ChatMessage.cxx" />
     <ClCompile Include="Common.cxx" />
+    <ClCompile Include="Messages.cxx" />
+    <ClCompile Include="Networking.cxx" />
+    <ClCompile Include="Messages\PeerConnection.cxx" />
+    <ClCompile Include="SendableEventMessage.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Messages\ChatMessage.hxx" />
     <ClInclude Include="Common.hxx" />
+    <ClInclude Include="Messages.hxx" />
+    <ClInclude Include="Networking.hxx" />
+    <ClInclude Include="Messages\PeerConnection.hxx" />
+    <ClInclude Include="SendableEventMessage.hxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
