@@ -16,13 +16,13 @@ size_t constexpr const_hash(char const *input)
 // when using this interface, it is mandatory to implement 
 // private:	
 //	template<class Archive> void serialize(Archive& archive)
-class ISendable
+class IEvent
 {
 public:
-	virtual size_t Sendable_Id() const = 0;
+	virtual size_t Event_Id() const = 0;
 };
 
-class PlayerMessage : public ISendable
+class ChatMessage : public IEvent
 {
 	template<class Archive>
 	void serialize(Archive& archive)
@@ -33,9 +33,9 @@ class PlayerMessage : public ISendable
 	std::wstring message;
 public:
 
-	size_t Sendable_Id() const
+	size_t Event_Id() const
 	{
-		return const_hash("PlayerMessage");
+		return const_hash("ChatMessage");
 	}
 
 	const std::wstring getMessage() const
@@ -56,7 +56,7 @@ private:
 public:
 	Instance()
 	{
-		PlayerMessage x;
+		ChatMessage x;
 
 		int init_code = connection.GetInitCode();
 

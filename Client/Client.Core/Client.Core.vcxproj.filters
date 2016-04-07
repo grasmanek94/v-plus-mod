@@ -128,11 +128,11 @@
     <ClInclude Include="Game\Scripting\TestThread.h">
       <Filter>Game\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Shared\SharedUtility.h">
-      <Filter>Shared</Filter>
-    </ClInclude>
     <ClInclude Include="Game\CGameAddresses.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Client.Shared\SharedUtility.h">
+      <Filter>Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
