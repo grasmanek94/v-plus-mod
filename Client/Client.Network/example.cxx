@@ -3,51 +3,7 @@
 #include <exception>
 #include <array>
 #include <memory>
-
-#include <cereal/archives/binary.hpp>
-
-size_t constexpr const_hash(char const *input) 
-{
-	return *input ?
-		static_cast<size_t>(*input) + 33 * const_hash(input + 1) :
-		5381;
-}
-
-// when using this interface, it is mandatory to implement 
-// private:	
-//	template<class Archive> void serialize(Archive& archive)
-class IEvent
-{
-public:
-	virtual size_t Event_Id() const = 0;
-};
-
-class ChatMessage : public IEvent
-{
-	template<class Archive>
-	void serialize(Archive& archive)
-	{
-		archive(message);
-	}
-
-	std::wstring message;
-public:
-
-	size_t Event_Id() const
-	{
-		return const_hash("ChatMessage");
-	}
-
-	const std::wstring getMessage() const
-	{
-		return message;
-	}
-
-	void setMessage(const std::wstring& msg)
-	{
-		message = msg;
-	}
-};
+#include <Common.hxx>
 
 class Instance
 {
@@ -90,7 +46,9 @@ public:
 				break;
 
 			case ENET_EVENT_TYPE_RECEIVE:
-				
+
+				/* Clean up the packet now that we're done using it. */
+				enet_packet_destroy(event.packet);
 				break;
 
 			case ENET_EVENT_TYPE_DISCONNECT:

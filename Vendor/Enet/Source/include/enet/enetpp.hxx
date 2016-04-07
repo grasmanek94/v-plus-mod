@@ -50,4 +50,7 @@ public:
 	bool Create();
 	int Send(const void* data, size_t bytes, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE);
 };
+
+const size_t MAX_PACKET_SIZE = 32 * 1024;//k bytes
+const size_t MAX_PACKETS_PER_PEER = 512;
 #endif

@@ -67,7 +67,12 @@ bool NetworkServer::Create(size_t max_connections)
 			1								/* allow up to 1 channels to be used, 0								*/,
 			0								/* assume any amount of incoming bandwidth							*/,
 			0								/* assume any amount of outgoing bandwidth							*/);
-		return true;
+
+		// TODO: make this into something more configurable
+		member->maximumPacketSize = MAX_PACKET_SIZE;
+		member->maximumWaitingData = MAX_PACKETS_PER_PEER * MAX_PACKET_SIZE;
+
+		return member != nullptr;
 	}
 	return false;
 }
@@ -111,7 +116,7 @@ bool NetworkClient::Create()
 			1								/* allow up to 1 channels to be used, 0								*/,
 			0								/* assume any amount of incoming bandwidth							*/,
 			0								/* assume any amount of outgoing bandwidth							*/);
-		return true;
+		return member != nullptr;
 	}
 	return false;
 }
