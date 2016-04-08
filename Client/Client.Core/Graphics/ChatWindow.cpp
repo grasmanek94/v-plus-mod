@@ -79,8 +79,10 @@ void ChatWindow::AddChatMessageA(char *pszNickname, unsigned long ulNickColor, c
 		wcNickname[MAX_PLAYER_NAME + 1],
 		wcMessage[MAX_LINE_LENGTH + 1];
 
-	mbstowcs(wcNickname, pszNickname, MAX_PLAYER_NAME);
-	mbstowcs(wcMessage, pszMessage, MAX_LINE_LENGTH);
+	size_t length;
+
+	mbstowcs_s(&length, wcNickname, pszNickname, MAX_PLAYER_NAME);
+	mbstowcs_s(&length, wcMessage, pszMessage, MAX_LINE_LENGTH);
 
 	std::wstring
 		wstrNick(wcNickname),
@@ -111,11 +113,13 @@ void ChatWindow::AddInfoMessageA(char *pszFormat, ...)
 
 	va_list args;
 	va_start(args, pszFormat);
-	vsprintf(tmp_buf, pszFormat, args);
+	vsprintf_s(tmp_buf, 512, pszFormat, args);
 	va_end(args);
 
 	wchar_t wcText[MAX_LINE_LENGTH + 1];
-	mbstowcs(wcText, tmp_buf, MAX_LINE_LENGTH);
+	size_t length;
+
+	mbstowcs_s(&length, wcText, tmp_buf, MAX_LINE_LENGTH);
 
 	AddDefaultEntry(std::wstring(wcText), CHAT_COLOR_INFO);
 }
@@ -127,7 +131,7 @@ void ChatWindow::AddInfoMessageW(wchar_t *pwszFormat, ...)
 
 	va_list args;
 	va_start(args, pwszFormat);
-	vswprintf(tmp_buf, pwszFormat, args);
+	vswprintf_s(tmp_buf, 512, pwszFormat, args);
 	va_end(args);
 
 	AddDefaultEntry(std::wstring(tmp_buf), CHAT_COLOR_INFO);
@@ -140,11 +144,13 @@ void ChatWindow::AddDebugMessageA(char *pszFormat, ...)
 
 	va_list args;
 	va_start(args, pszFormat);
-	vsprintf(tmp_buf, pszFormat, args);
+	vsprintf_s(tmp_buf, 512, pszFormat, args);
 	va_end(args);
 
 	wchar_t wcText[MAX_LINE_LENGTH + 1];
-	mbstowcs(wcText, tmp_buf, MAX_LINE_LENGTH);
+	size_t length;
+
+	mbstowcs_s(&length, wcText, tmp_buf, MAX_LINE_LENGTH);
 
 	AddDefaultEntry(std::wstring(wcText), CHAT_COLOR_DEBUG);
 
@@ -158,7 +164,7 @@ void ChatWindow::AddDebugMessageW(wchar_t *pwszFormat, ...)
 
 	va_list args;
 	va_start(args, pwszFormat);
-	vswprintf(tmp_buf, pwszFormat, args);
+	vswprintf_s(tmp_buf, 512, pwszFormat, args);
 	va_end(args);
 
 	AddDefaultEntry(std::wstring(tmp_buf), CHAT_COLOR_DEBUG);
@@ -170,7 +176,9 @@ void ChatWindow::AddClientMessageA(unsigned long ulColor, char *pszMessage)
 	ulColor = (ulColor >> 8) | 0xFF000000; // convert to ARGB
 
 	wchar_t wszMessage[MAX_LINE_LENGTH + 1];
-	mbstowcs(wszMessage, pszMessage, MAX_MESSAGE_LENGTH);
+	size_t length;
+
+	mbstowcs_s(&length, wszMessage, pszMessage, MAX_MESSAGE_LENGTH);
 
 	AddDefaultEntry(std::wstring(wszMessage), ulColor);
 }
