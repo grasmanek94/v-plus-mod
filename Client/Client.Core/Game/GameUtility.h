@@ -1,6 +1,6 @@
 #pragma once
 
-class CGameUtility
+class GameUtility
 {
 public:
 	static bool CompareMemory(const unsigned char *pData, const unsigned char *bMask, const char *sMask);

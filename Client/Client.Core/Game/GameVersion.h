@@ -1,6 +1,6 @@
 #pragma once
 
-enum eGameVersion : int
+enum GameVersionId : int
 {
 	VER_1_0_335_2_STEAM,
 	VER_1_0_335_2_NOSTEAM,
@@ -36,13 +36,18 @@ enum eGameVersion : int
 	VER_UNK = -1
 };
 
-class CGameVersion
+class GameVersion
 {
 private:
 	static bool bChecked;
-	static eGameVersion storedGameVersion;
+	static GameVersionId storedGameVersion;
+	static std::list<GameVersionId> supportedVersions;
 
 public:
-	static eGameVersion Get();
+	static GameVersionId Get();
+
+	static bool IsSupported(GameVersionId gameVersion);
+	static bool IsSupported();
+
 	static void Check();
 };

@@ -1,17 +1,19 @@
-#include "DllMain.h"
+#include "Main.h"
 
-bool CGameOverlay::bInitialized = false;
+bool GameOverlay::bInitialized = false;
 
-ID3D11Device * CGameOverlay::pDevice = NULL;
-ID3D11DeviceContext * CGameOverlay::pContext = NULL;
+ID3D11Device * GameOverlay::pDevice = NULL;
+ID3D11DeviceContext * GameOverlay::pContext = NULL;
 
-DXGISwapChainPresent CGameOverlay::pRealPresent = NULL;
-uintptr_t CGameOverlay::hkSwapChainVFTable[64];
+DXGISwapChainPresent GameOverlay::pRealPresent = NULL;
+uintptr_t GameOverlay::hkSwapChainVFTable[64];
 
-IFW1Factory * CGameOverlay::pFW1Factory = NULL;
-IFW1FontWrapper * CGameOverlay::pFontWrapper = NULL;
+IFW1Factory * GameOverlay::pFW1Factory = NULL;
+IFW1FontWrapper * GameOverlay::pFontWrapper = NULL;
 
-HRESULT __stdcall CGameOverlay::HookedPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
+ChatWindow *pChatWindow = NULL;
+
+HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags)
 {
     if(!bInitialized)
     {
@@ -23,22 +25,27 @@ HRESULT __stdcall CGameOverlay::HookedPresent(IDXGISwapChain* pSwapChain, UINT S
 
         pFW1Factory->Release();
 
+		if(pChatWindow == NULL)
+		{
+			pChatWindow = new ChatWindow(pContext, pFontWrapper);
+		}
+
         bInitialized = true;
     }
 
 	wchar_t wszGameStateString[128];
-	swprintf_s(wszGameStateString, 128, L"Game state: %d", CGameStateWatcher::GetGameState());
+	swprintf_s(wszGameStateString, 128, L"Game state: %d", GameStateWatcher::GetGameState());
 
 	pFontWrapper->DrawString(pContext, wszGameStateString, 18.0f, 22.0f, 20.0f, 0xff000000, FW1_RESTORESTATE);
 	pFontWrapper->DrawString(pContext, wszGameStateString, 18.0f, 20.0f, 18.0f, 0xffffffff, FW1_RESTORESTATE);
 
-	if(CGameStateWatcher::GetGameState() == GameStatePlaying && CGameAddresses::ppWorld != NULL)
+	if(GameStateWatcher::GetGameState() == GameStatePlaying && GameAddresses::ppPedFactory != NULL)
 	{
-		uint64_t pWorld = *(uint64_t *)(CGameAddresses::ppWorld);
+		uint64_t pPedFactory = *(uint64_t *)(GameAddresses::ppPedFactory);
 
-		if(pWorld != NULL)
+		if(pPedFactory != NULL)
 		{
-			uint64_t pLocalPlayerPed = *(uint64_t *)(pWorld + 8);
+			uint64_t pLocalPlayerPed = *(uint64_t *)(pPedFactory + 8);
 
 			if(pLocalPlayerPed != NULL)
 			{
@@ -52,16 +59,23 @@ HRESULT __stdcall CGameOverlay::HookedPresent(IDXGISwapChain* pSwapChain, UINT S
 		}
 	}
 
+	drawTaskList(pContext, pFontWrapper);
+
+	if(pChatWindow != NULL)
+	{
+		//pChatWindow->Draw();
+	}
+
     return pRealPresent(pSwapChain, SyncInterval, Flags);
 }
 
-bool CGameOverlay::Setup()
+bool GameOverlay::Setup()
 {
-	auto location = CGameUtility::FindPattern("\x80\x7E\x10\x00\x48\x8B\x0D\x00\x00\x00\x00\x48\x8D\x94\x24\xA0\x00\x00\x00\x0F\x94\x05", "xxxxxxx????xxxxxxxxxxx");
+	auto location = GameUtility::FindPattern("\x80\x7E\x10\x00\x48\x8B\x0D\x00\x00\x00\x00\x48\x8D\x94\x24\xA0\x00\x00\x00\x0F\x94\x05", "xxxxxxx????xxxxxxxxxxx");
 
 	while(!location)
 	{
-		location = CGameUtility::FindPattern("\x80\x7E\x10\x00\x48\x8B\x0D\x00\x00\x00\x00\x48\x8D\x94\x24\xA0\x00\x00\x00\x0F\x94\x05", "xxxxxxx????xxxxxxxxxxx");
+		location = GameUtility::FindPattern("\x80\x7E\x10\x00\x48\x8B\x0D\x00\x00\x00\x00\x48\x8D\x94\x24\xA0\x00\x00\x00\x0F\x94\x05", "xxxxxxx????xxxxxxxxxxx");
 
 		Sleep(50);
 	}
@@ -100,7 +114,7 @@ bool CGameOverlay::Setup()
 	return false;
 }
 
-void CGameOverlay::Shutdown()
+void GameOverlay::Shutdown()
 {
 	if(pFontWrapper)
 	{

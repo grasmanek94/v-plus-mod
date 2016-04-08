@@ -1,6 +1,6 @@
-#include "DllMain.h"
+#include "Main.h"
 
-bool CGameUtility::CompareMemory(const unsigned char *pData, const unsigned char *bMask, const char *sMask)
+bool GameUtility::CompareMemory(const unsigned char *pData, const unsigned char *bMask, const char *sMask)
 {
 	for(; *sMask; ++sMask, ++pData, ++bMask)
 		if(*sMask == 'x' && *pData != *bMask)
@@ -9,7 +9,7 @@ bool CGameUtility::CompareMemory(const unsigned char *pData, const unsigned char
 	return *sMask == NULL;
 }
 
-intptr_t CGameUtility::FindPattern(const char *bMask, const char *sMask)
+intptr_t GameUtility::FindPattern(const char *bMask, const char *sMask)
 {
 	static intptr_t pGameBase = (intptr_t)GetModuleHandle(nullptr);
 	static DWORD pGameSize = 0;
@@ -30,7 +30,7 @@ intptr_t CGameUtility::FindPattern(const char *bMask, const char *sMask)
 	return 0;
 }
 
-bool CGameUtility::IsIntroMovieStringAvailable()
+bool GameUtility::IsIntroMovieStringAvailable()
 {
-	return (CGameUtility::FindPattern("platform:/movies/rockstar_logos", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") != 0);
+	return (GameUtility::FindPattern("platform:/movies/rockstar_logos", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx") != 0);
 }

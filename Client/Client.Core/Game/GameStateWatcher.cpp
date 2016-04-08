@@ -1,8 +1,8 @@
-#include "DllMain.h"
+#include "Main.h"
 
-eGameState * CGameStateWatcher::pGameState = NULL;
+eGameState * GameStateWatcher::pGameState = NULL;
 
-eGameState CGameStateWatcher::GetGameState()
+eGameState GameStateWatcher::GetGameState()
 {
 	if(pGameState != NULL)
 	{
@@ -12,7 +12,7 @@ eGameState CGameStateWatcher::GetGameState()
 	return GameStateUnknown;
 }
 
-DWORD WINAPI CGameStateWatcher::WorkerThread()
+DWORD WINAPI GameStateWatcher::WorkerThread()
 {
 	for(;;)
 	{
@@ -30,9 +30,9 @@ DWORD WINAPI CGameStateWatcher::WorkerThread()
 	return 1;
 }
 
-bool CGameStateWatcher::Setup()
+bool GameStateWatcher::Setup()
 {
-	auto gameStatePattern = CGameUtility::FindPattern("\x83\x3D\x00\x00\x00\x00\x00\x8A\xD9\x74\x0A", "xx?????xxxx");
+	auto gameStatePattern = GameUtility::FindPattern("\x83\x3D\x00\x00\x00\x00\x00\x8A\xD9\x74\x0A", "xx?????xxxx");
 
 	if(gameStatePattern == 0)
 	{

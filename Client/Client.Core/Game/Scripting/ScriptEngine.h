@@ -18,6 +18,32 @@ public:
 
 class scrNativeCallContext;
 
+typedef DWORD scrVoid;
+typedef DWORD scrAny;
+typedef DWORD scrUint;
+typedef DWORD scrHash;
+typedef int scrEntity;
+typedef int scrPlayer;
+typedef int scrFireId;
+typedef int scrPed;
+typedef int scrVehicle;
+typedef int scrCam;
+typedef int scrCarGenerator;
+typedef int scrGroup;
+typedef int scrTrain;
+typedef int scrPickup;
+typedef int scrObject;
+typedef int scrWeapon;
+typedef int scrInterior;
+typedef int scrBlip;
+typedef int scrTexture;
+typedef int scrTextureDict;
+typedef int scrCoverPoint;
+typedef int scrCamera;
+typedef int scrTaskSequence;
+typedef int scrColourIndex;
+typedef int scrSphere;
+
 struct scrVector
 {
 	float x;

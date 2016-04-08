@@ -1,9 +1,17 @@
-#include "DllMain.h"
+#include "Main.h"
 
-bool CGameVersion::bChecked = false;
-eGameVersion CGameVersion::storedGameVersion = VER_UNK;
+bool GameVersion::bChecked = false;
+GameVersionId GameVersion::storedGameVersion = VER_UNK;
 
-eGameVersion CGameVersion::Get()
+std::list<GameVersionId> GameVersion::supportedVersions =
+{
+	VER_1_0_350_1_STEAM,
+
+	VER_1_0_678_1_STEAM,
+	VER_1_0_678_1_NOSTEAM,
+};
+
+GameVersionId GameVersion::Get()
 {
 	if(bChecked)
 	{
@@ -11,7 +19,7 @@ eGameVersion CGameVersion::Get()
 	}
 
 	uintptr_t pGameBase = (uintptr_t)GetModuleHandle(nullptr);
-	eGameVersion gameVersion = VER_UNK;
+	GameVersionId gameVersion = VER_UNK;
 
 	DWORD v0 = *(DWORD *)(pGameBase + 0x870000);
 
@@ -92,7 +100,17 @@ eGameVersion CGameVersion::Get()
 	return gameVersion;
 }
 
-void CGameVersion::Check()
+bool GameVersion::IsSupported(GameVersionId gameVersion)
+{
+	return (std::find(supportedVersions.begin(), supportedVersions.end(), gameVersion) != supportedVersions.end());
+}
+
+bool GameVersion::IsSupported()
+{
+	return (bChecked ? IsSupported(storedGameVersion) : false);
+}
+
+void GameVersion::Check()
 {
 	if(!bChecked)
 	{

@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="DllMain.cpp" />
-    <ClCompile Include="Game\CGamePatches.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
     <ClCompile Include="Utility\Hooking\HookFunction.cpp">
       <Filter>Utility\Hooking</Filter>
     </ClCompile>
@@ -16,21 +12,6 @@
     </ClCompile>
     <ClCompile Include="Game\Input\InputHook.cpp">
       <Filter>Game\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CGameStateWatcher.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CGameUtility.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CGameOverlay.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CGameStartupManager.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Game\CGameVersion.cpp">
-      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Game\Scripting\NativeInvoker.cpp">
       <Filter>Game\Scripting</Filter>
@@ -44,15 +25,48 @@
     <ClCompile Include="Game\Scripting\TestThread.cpp">
       <Filter>Game\Scripting</Filter>
     </ClCompile>
-    <ClCompile Include="Game\CGameAddresses.cpp">
+    <ClCompile Include="Graphics\ChatWindow.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ChatWindowEntry.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\ChatWindowEntrySection.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Utility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientCore.cpp" />
+    <ClCompile Include="Game\GameAddresses.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameOverlay.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GamePatches.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStartupManager.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameStateWatcher.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameUtility.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameVersion.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Tasks.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\GameHooks.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DllMain.h" />
-    <ClInclude Include="Game\CGamePatches.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Utility\Hooking\HookFunction.h">
       <Filter>Utility\Hooking</Filter>
     </ClInclude>
@@ -70,18 +84,6 @@
     </ClInclude>
     <ClInclude Include="Game\Input\InputHook.h">
       <Filter>Game\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CGameStateWatcher.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CGameUtility.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CGameOverlay.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Game\CGameStartupManager.h">
-      <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Game\Scripting\NativeTranslationTables.h">
       <Filter>Game\Scripting</Filter>
@@ -110,9 +112,6 @@
     <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_617to678.h">
       <Filter>Game\Scripting\NativeTranslationTables</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CGameVersion.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scripting\NativeInvoker.h">
       <Filter>Game\Scripting</Filter>
     </ClInclude>
@@ -128,11 +127,49 @@
     <ClInclude Include="Game\Scripting\TestThread.h">
       <Filter>Game\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Game\CGameAddresses.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="..\Client.Shared\SharedUtility.h">
       <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Graphics\ChatWindow.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ChatWindowEntry.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ChatWindowEntrySection.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Utility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientCore.h" />
+    <ClInclude Include="Game\GameAddresses.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameOverlay.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GamePatches.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStartupManager.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameStateWatcher.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameUtility.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameVersion.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Tasks.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\GameHooks.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +196,9 @@
     </Filter>
     <Filter Include="Shared">
       <UniqueIdentifier>{9af254e8-4763-4312-970b-9c7e12bb010b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{2f98a0f2-9723-4b1f-9a82-f4873939feff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

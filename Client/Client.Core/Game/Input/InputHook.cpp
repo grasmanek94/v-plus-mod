@@ -1,4 +1,4 @@
-#include "DllMain.h"
+#include "Main.h"
 
 WNDPROC	oWndProc;
 

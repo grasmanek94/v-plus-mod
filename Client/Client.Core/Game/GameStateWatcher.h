@@ -12,7 +12,7 @@ enum eGameState
 	GameStateRestartStory = 8
 };
 
-class CGameStateWatcher
+class GameStateWatcher
 {
 private:
 	static eGameState *pGameState;

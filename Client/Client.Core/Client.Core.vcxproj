@@ -31,6 +31,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -42,6 +43,7 @@
       <PreprocessorDefinitions>VPLUS_CLIENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile />
       <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Vendor\FW1FontWrapper\Source;.\jitasm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -54,14 +56,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Client.Shared\SharedUtility.h" />
-    <ClInclude Include="DllMain.h" />
-    <ClInclude Include="Game\CGameAddresses.h" />
-    <ClInclude Include="Game\CGameOverlay.h" />
-    <ClInclude Include="Game\CGamePatches.h" />
-    <ClInclude Include="Game\CGameStartupManager.h" />
-    <ClInclude Include="Game\CGameStateWatcher.h" />
-    <ClInclude Include="Game\CGameUtility.h" />
-    <ClInclude Include="Game\CGameVersion.h" />
+    <ClInclude Include="ClientCore.h" />
+    <ClInclude Include="Game\GameHooks.h" />
+    <ClInclude Include="Game\Tasks.h" />
+    <ClInclude Include="Graphics\ChatWindow.h" />
+    <ClInclude Include="Graphics\ChatWindowEntry.h" />
+    <ClInclude Include="Graphics\ChatWindowEntrySection.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Game\GameAddresses.h" />
+    <ClInclude Include="Game\GameOverlay.h" />
+    <ClInclude Include="Game\GamePatches.h" />
+    <ClInclude Include="Game\GameStartupManager.h" />
+    <ClInclude Include="Game\GameStateWatcher.h" />
+    <ClInclude Include="Game\GameUtility.h" />
+    <ClInclude Include="Game\GameVersion.h" />
     <ClInclude Include="Game\Input\InputHook.h" />
     <ClInclude Include="Game\Scripting\NativeInvoker.h" />
     <ClInclude Include="Game\Scripting\NativeTranslationTables.h" />
@@ -82,28 +90,31 @@
     <ClInclude Include="Utility\Hooking\Hooking.Invoke.h" />
     <ClInclude Include="Utility\Hooking\Hooking.Patterns.h" />
     <ClInclude Include="Utility\RAGE\pgCollection.h" />
+    <ClInclude Include="Utility\Utility.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DllMain.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Game\CGameAddresses.cpp" />
-    <ClCompile Include="Game\CGameOverlay.cpp" />
-    <ClCompile Include="Game\CGamePatches.cpp" />
-    <ClCompile Include="Game\CGameStartupManager.cpp" />
-    <ClCompile Include="Game\CGameStateWatcher.cpp" />
-    <ClCompile Include="Game\CGameUtility.cpp" />
-    <ClCompile Include="Game\CGameVersion.cpp" />
+    <ClCompile Include="ClientCore.cpp" />
+    <ClCompile Include="Game\GameHooks.cpp" />
+    <ClCompile Include="Game\GameAddresses.cpp" />
+    <ClCompile Include="Game\GameOverlay.cpp" />
+    <ClCompile Include="Game\GamePatches.cpp" />
+    <ClCompile Include="Game\GameStartupManager.cpp" />
+    <ClCompile Include="Game\GameStateWatcher.cpp" />
+    <ClCompile Include="Game\GameUtility.cpp" />
+    <ClCompile Include="Game\GameVersion.cpp" />
     <ClCompile Include="Game\Input\InputHook.cpp" />
     <ClCompile Include="Game\Scripting\NativeInvoker.cpp" />
     <ClCompile Include="Game\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="Game\Scripting\ScriptThread.cpp" />
     <ClCompile Include="Game\Scripting\TestThread.cpp" />
+    <ClCompile Include="Game\Tasks.cpp" />
+    <ClCompile Include="Graphics\ChatWindow.cpp" />
+    <ClCompile Include="Graphics\ChatWindowEntry.cpp" />
+    <ClCompile Include="Graphics\ChatWindowEntrySection.cpp" />
     <ClCompile Include="Utility\Hooking\HookFunction.cpp" />
     <ClCompile Include="Utility\Hooking\Hooking.cpp" />
     <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp" />
+    <ClCompile Include="Utility\Utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

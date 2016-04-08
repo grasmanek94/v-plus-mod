@@ -1,4 +1,4 @@
-#include "DllMain.h"
+#include "Main.h"
 
 static pgPtrCollection<ScriptThread> *scrThreadCollection;
 static uint32_t activeThreadTlsOffset;
@@ -219,7 +219,7 @@ uint64_t ScriptEngine::GetNewHashFromOldHash(uint64_t oldHash)
 		tempHash = NULL,
 		newHash = NULL;
 
-	switch(CGameVersion::Get())
+	switch(GameVersion::Get())
 	{
 		case VER_1_0_335_2_STEAM:
 		case VER_1_0_335_2_NOSTEAM:
@@ -352,6 +352,6 @@ uint64_t ScriptEngine::GetNewHashFromOldHash(uint64_t oldHash)
 	}
 
 	foundHashCache[oldHash] = newHash;
-	LOG_PRINT("Cached 0x%p hash (new: 0x%p), native handler: 0x%p", oldHash, newHash, ScriptEngine::GetNativeHandler(oldHash));
+	//LOG_PRINT("Cached 0x%p hash (new: 0x%p), native handler: 0x%p", oldHash, newHash, ScriptEngine::GetNativeHandler(oldHash));
 	return newHash;
 }

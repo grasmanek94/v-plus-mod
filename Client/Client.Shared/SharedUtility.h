@@ -20,5 +20,10 @@ namespace SharedUtility
 
 	bool IsFileExists(const wchar_t *pwszFileName);
 	const wchar_t * GetExecutablePath();
+
+	void TemporaryLogFunction(char *pszFormat, ...);
 #endif
+
+	unsigned int HashRageString(const char *string);
+	unsigned int HashString(const char *string);
 }

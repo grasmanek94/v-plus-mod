@@ -322,5 +322,56 @@ namespace SharedUtility
 		StripPath1(wszExecutablePath);
 		return wszExecutablePath;
 	}
+
+	void TemporaryLogFunction(char *pszFormat, ...)
+	{
+		char szBuffer[512];
+		memset(szBuffer, 0, 512);
+
+		va_list args;
+		va_start(args, pszFormat);
+		vsprintf_s(szBuffer, pszFormat, args);
+		va_end(args);
+
+		OutputDebugStringA(szBuffer);
+	}
 #endif
+
+	unsigned int HashRageString(const char *string)
+	{
+		unsigned int hash = 0;
+		size_t len = strlen(string);
+
+		for (size_t i = 0; i < len; i++)
+		{
+			hash += string[i];
+			hash += (hash << 10);
+			hash ^= (hash >> 6);
+		}
+
+		hash += (hash << 3);
+		hash ^= (hash >> 11);
+		hash += (hash << 15);
+
+		return hash;
+	}
+
+	unsigned int HashString(const char *string)
+	{
+		unsigned int hash = 0;
+		size_t len = strlen(string);
+
+		for (size_t i = 0; i < len; i++)
+		{
+			hash += tolower(string[i]);
+			hash += (hash << 10);
+			hash ^= (hash >> 6);
+		}
+
+		hash += (hash << 3);
+		hash ^= (hash >> 11);
+		hash += (hash << 15);
+
+		return hash;
+	}
 };

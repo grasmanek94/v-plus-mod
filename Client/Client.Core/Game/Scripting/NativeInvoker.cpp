@@ -1,4 +1,4 @@
-#include "DllMain.h"
+#include "Main.h"
 
 void NativeInvoke::Invoke(NativeContext *cxt, uint64_t hash)
 {

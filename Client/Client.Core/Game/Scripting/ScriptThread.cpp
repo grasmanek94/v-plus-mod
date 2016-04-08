@@ -1,4 +1,4 @@
-#include "DllMain.h"
+#include "Main.h"
 
 eScriptThreadState ScriptThread::Tick(uint32_t opsToExecute)
 {

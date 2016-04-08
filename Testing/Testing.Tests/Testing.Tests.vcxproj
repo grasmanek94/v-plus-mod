@@ -51,7 +51,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Testing.GoogleTest.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Testing.GoogleMock.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Core.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Network.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Testing.GoogleTest.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Testing.GoogleMock.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Network.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)Build\$(Platform)\$(Configuration)\Tests.exe</Command>

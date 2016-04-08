@@ -31,21 +31,24 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <mutex>
 
 #include "SharedUtility.h"
 
 #include "Utility/Hooking/Hooking.h"
 #include "Utility/RAGE/pgCollection.h"
+#include "Utility/Utility.h"
 
 #include "Game/Input/InputHook.h"
 
-#include "Game/CGameUtility.h"
-#include "Game/CGameStateWatcher.h"
-#include "Game/CGameAddresses.h"
-#include "Game/CGamePatches.h"
-#include "Game/CGameOverlay.h"
-#include "Game/CGameStartupManager.h"
-#include "Game/CGameVersion.h"
+#include "Game/GameUtility.h"
+#include "Game/GameStateWatcher.h"
+#include "Game/GameAddresses.h"
+#include "Game/GamePatches.h"
+#include "Game/GameOverlay.h"
+#include "Game/GameStartupManager.h"
+#include "Game/GameVersion.h"
+#include "Game/GameHooks.h"
 
 #include "Game/Scripting/NativeTranslationTables.h"
 #include "Game/Scripting/ScriptThread.h"
@@ -54,9 +57,15 @@
 
 #include "Game/Scripting/TestThread.h"
 
-void TemporaryLogFunction(char *pszFormat, ...);
+#include "Graphics/ChatWindowEntrySection.h"
+#include "Graphics/ChatWindowEntry.h"
+#include "Graphics/ChatWindow.h"
 
-#define LOG_PRINT TemporaryLogFunction
-#define LOG_DEBUG TemporaryLogFunction
-#define LOG_WARNING TemporaryLogFunction
-#define LOG_ERROR TemporaryLogFunction
+#include "Game/Tasks.h"
+
+#define LOG_PRINT SharedUtility::TemporaryLogFunction
+#define LOG_DEBUG SharedUtility::TemporaryLogFunction
+#define LOG_WARNING SharedUtility::TemporaryLogFunction
+#define LOG_ERROR SharedUtility::TemporaryLogFunction
+
+#include "ClientCore.h"

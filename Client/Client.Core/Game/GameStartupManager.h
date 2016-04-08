@@ -1,6 +1,6 @@
 #pragma once
 
-class CGameStartupManager
+class GameStartupManager
 {
 private:
 	static uint32_t *pLandingPage;

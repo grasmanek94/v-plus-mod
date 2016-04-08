@@ -2,7 +2,7 @@
 
 typedef HRESULT (__stdcall *DXGISwapChainPresent) (IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags); 
 
-class CGameOverlay
+class GameOverlay
 {
 private:
 	static bool bInitialized;
