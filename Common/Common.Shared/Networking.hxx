@@ -79,6 +79,9 @@ public:
 				} \
 				break;
 
+			#pragma warning( push )
+			#pragma warning( disable : 4307 )
+
 			switch (unique_class_id)
 			{
 				IMPLEMENT_CASE_FOR(ChatMessage);
@@ -90,9 +93,91 @@ public:
 				#endif
 			}
 
+			#pragma warning( pop )
+
 			#undef IMPLEMENT_CASE_FOR
+
 		}
 		/* Clean up the packet now that we're done using it. */
 		enet_packet_destroy(event.packet);
+	}
+};
+
+class V_Plus_NetworkClient: public NetworkClient
+{
+public:
+	template<typename T>
+	int Send(const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
+	{
+		/*
+			Well reduced it to double-buffer, I think we're not going to get any faster with this
+		*/
+		std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
+		size_t unique_id = object.UniqueClassId();
+		ss.write(reinterpret_cast<char*>(&unique_id), sizeof(size_t));
+		cereal::BinaryOutputArchive oarchive(ss);
+		oarchive(object);
+
+		size_t x = ss.tellp();
+		ENetPacket* packet = enet_packet_create(nullptr, x, flags);
+
+		if (packet)
+		{
+			ss.rdbuf()->sgetn(reinterpret_cast<char*>(packet->data), x);
+			return NetworkClient::Send(packet);
+		}
+		return -1;
+	}
+};
+
+class V_Plus_NetworkServer : public NetworkServer
+{
+public:
+	template<typename T>
+	int Send(ENetPeer* peer, const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
+	{
+		/*
+		Well reduced it to double-buffer, I think we're not going to get any faster with this
+		*/
+		std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
+		size_t unique_id = object.UniqueClassId();
+		ss.write(reinterpret_cast<char*>(&unique_id), sizeof(size_t));
+		cereal::BinaryOutputArchive oarchive(ss);
+		oarchive(object);
+
+		size_t x = ss.tellp();
+		ENetPacket* packet = enet_packet_create(nullptr, x, flags);
+
+		if (packet)
+		{
+			ss.rdbuf()->sgetn(reinterpret_cast<char*>(packet->data), x);
+			return NetworkServer::Send(peer, packet);
+		}
+		return -1;
+	}
+
+	template<typename T>
+	bool Broadcast(const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
+	{
+		/*
+		Well reduced it to double-buffer, I think we're not going to get any faster with this
+		*/
+		std::stringstream ss(std::ios::in | std::ios::out | std::ios::binary);
+		size_t unique_id = object.UniqueClassId();
+		ss.write(reinterpret_cast<char*>(&unique_id), sizeof(size_t));
+		cereal::BinaryOutputArchive oarchive(ss);
+		oarchive(object);
+
+		size_t x = ss.tellp();
+		ENetPacket* packet = enet_packet_create(nullptr, x, flags);
+
+		if (!packet)
+		{
+			return false;
+		}
+
+		ss.rdbuf()->sgetn(reinterpret_cast<char*>(packet->data), x);
+		NetworkServer::Broadcast(packet);
+		return true;
 	}
 };

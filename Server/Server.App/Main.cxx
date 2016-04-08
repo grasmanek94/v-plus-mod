@@ -59,7 +59,7 @@ public:
 class Server: public MessageReceiver
 {
 private:
-	NetworkServer connection;
+	V_Plus_NetworkServer connection;
 	Id id_generator;
 	const size_t max_players;
 	std::vector<ENetPeer*> peers;
@@ -90,8 +90,7 @@ private:
 
 		std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;
 
-		Packet packet(message);
-		packet.Broadcast(connection);
+		connection.Broadcast(message);
 	}
 
 public:

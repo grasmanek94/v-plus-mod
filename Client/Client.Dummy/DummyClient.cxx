@@ -5,7 +5,7 @@
 class Client : public MessageReceiver
 {
 private:
-	NetworkClient connection;
+	V_Plus_NetworkClient connection;
 
 	void HandleTick()
 	{
@@ -13,8 +13,7 @@ private:
 		{
 			ChatMessage message;
 			message.SetContents(L"Hello there, here is a Dummy Client!");
-			Packet packet(message);
-			packet.Send(connection);
+			connection.Send(message);
 		}
 	}
 
