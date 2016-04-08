@@ -39,7 +39,7 @@ public:
 
 	bool FreeId(size_t id)
 	{
-		if (taken_ids.size() >= id)
+		if (taken_ids.size() <= id)
 		{
 			return false;
 		}
