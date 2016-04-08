@@ -19,9 +19,11 @@ public:
 		cereal::BinaryOutputArchive oarchive(ss);
 		oarchive(object);
 
-		packet = enet_packet_create(nullptr, ss.tellg(), flags);
+		size_t x = ss.tellp();
 
-		ss.rdbuf()->sgetn(reinterpret_cast<char*>(packet->data), ss.tellg());
+		packet = enet_packet_create(nullptr, x, flags);
+
+		ss.rdbuf()->sgetn(reinterpret_cast<char*>(packet->data), x);
 	}
 
 	int Send(NetworkClient& client);
