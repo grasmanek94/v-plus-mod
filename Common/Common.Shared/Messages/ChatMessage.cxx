@@ -3,12 +3,12 @@
 ChatMessage::ChatMessage()
 { }
 
-const std::wstring ChatMessage::GetMessage() const
+const std::wstring ChatMessage::GetContents() const
 {
 	return message;
 }
 
-void ChatMessage::SetMessage(const std::wstring& msg)
+void ChatMessage::SetContents(const std::wstring& msg)
 {
 	message = msg;
 }
@@ -22,5 +22,3 @@ void ChatMessage::SetSender(size_t id)
 {
 	sender = id;
 }
-
-UniqueClassId_Implement(ChatMessage);

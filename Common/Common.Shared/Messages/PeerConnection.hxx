@@ -1,5 +1,5 @@
 #pragma once
-#include <cstdlib>
+#include <SendableEventMessage.hxx>
 
 class PeerConnected
 {
@@ -7,7 +7,15 @@ private:
 	size_t id;
 
 public:
-	PeerConnected(size_t id);
+	template<class Archive>
+	void serialize(Archive & ar)
+	{
+		ar(id);
+	}
+
+	UniqueClassId_Declare(PeerConnected);
+
+	PeerConnected(size_t id = (size_t)-1);
 	size_t Id() const;
 };
 
@@ -17,7 +25,15 @@ private:
 	size_t id;
 
 public:
-	PeerDisconnected(size_t id);
+	template<class Archive>
+	void serialize(Archive & ar)
+	{
+		ar(id);
+	}
+
+	UniqueClassId_Declare(PeerDisconnected);
+
+	PeerDisconnected(size_t id = (size_t)-1);
 
 	size_t Id() const;
 };
