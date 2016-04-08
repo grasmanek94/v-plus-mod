@@ -10,57 +10,13 @@
 #include <iterator>
 
 #include <Networking.hxx>
-class Id
-{
-	std::vector<size_t> free_ids;
-	std::vector<bool> taken_ids;
-public:
-	Id(size_t max_ids)
-	{
-		free_ids.reserve(max_ids);
-		taken_ids.resize(max_ids);
-		for (size_t i = 0; i < max_ids; ++i)
-		{
-			free_ids.push_back((max_ids -1 ) - i);
-		}
-	}
-
-	size_t GetId()
-	{
-		if (free_ids.size())
-		{
-			size_t free_id = free_ids.back();
-			taken_ids[free_id] = true;
-			free_ids.pop_back();
-			return free_id;
-		}
-		return (size_t)-1;
-	}
-
-	bool FreeId(size_t id)
-	{
-		if (taken_ids.size() <= id)
-		{
-			return false;
-		}
-
-		if (!taken_ids[id])
-		{
-			return false;
-		}
-
-		taken_ids[id] = false;
-		free_ids.push_back(id);
-
-		return true;
-	}
-};
+#include <IdCounter.hxx>
 
 class Server: public MessageReceiver
 {
 private:
 	V_Plus_NetworkServer connection;
-	Id id_generator;
+	IdCounter id_generator;
 	const size_t max_players;
 	std::vector<ENetPeer*> peers;
 	std::set<ENetPeer*> connected_peers;

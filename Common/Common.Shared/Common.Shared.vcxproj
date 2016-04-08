@@ -48,6 +48,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="IdCounter.cxx" />
     <ClCompile Include="Messages\ChatMessage.cxx" />
     <ClCompile Include="Common.cxx" />
     <ClCompile Include="Messages.cxx" />
@@ -56,6 +57,7 @@
     <ClCompile Include="SendableEventMessage.cxx" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IdCounter.hxx" />
     <ClInclude Include="Messages\ChatMessage.hxx" />
     <ClInclude Include="Common.hxx" />
     <ClInclude Include="Messages.hxx" />

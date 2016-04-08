@@ -7,6 +7,7 @@
     <ClCompile Include="Messages.cxx" />
     <ClCompile Include="Messages\ChatMessage.cxx" />
     <ClCompile Include="Messages\PeerConnection.cxx" />
+    <ClCompile Include="IdCounter.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.hxx" />
@@ -15,5 +16,6 @@
     <ClInclude Include="Messages.hxx" />
     <ClInclude Include="Messages\ChatMessage.hxx" />
     <ClInclude Include="Messages\PeerConnection.hxx" />
+    <ClInclude Include="IdCounter.hxx" />
   </ItemGroup>
 </Project>
