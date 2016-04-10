@@ -39,3 +39,8 @@ bool IdCounter::FreeId(size_t id)
 
 	return true;
 }
+
+size_t IdCounter::Max()
+{
+	return taken_ids.size();
+}

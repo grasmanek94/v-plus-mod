@@ -9,4 +9,5 @@ public:
 	IdCounter(size_t max_ids);
 	size_t GetId();
 	bool FreeId(size_t id);
+	size_t Max();
 };
