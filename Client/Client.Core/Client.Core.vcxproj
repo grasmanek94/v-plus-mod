@@ -103,7 +103,6 @@
     <ClCompile Include="Game\GameUtility.cpp" />
     <ClCompile Include="Game\GameVersion.cpp" />
     <ClCompile Include="Game\Input\InputHook.cpp" />
-    <ClCompile Include="Game\Scripting\NativeInvoker.cpp" />
     <ClCompile Include="Game\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="Game\Scripting\ScriptThread.cpp" />
     <ClCompile Include="Game\Scripting\TestThread.cpp" />

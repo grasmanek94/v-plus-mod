@@ -9,5 +9,5 @@ private:
 	static bool SkipIntro();
 	static bool RevealFullMap(bool bToggle);
 	static bool UseMultiplayerUI();
-	static bool DisableRadioStationChangeEffect();
+	static bool DisableWeaponAndRadioWheelEffect();
 };

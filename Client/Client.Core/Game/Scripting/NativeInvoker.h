@@ -13,15 +13,15 @@ public:
 	template<typename T>
 	inline T GetArgument(int idx)
 	{
-		intptr_t *arguments = (intptr_t*)m_pArgs;
-		return *(T*)&arguments[idx];
+		intptr_t *arguments = (intptr_t *)m_pArgs;
+		return *(T *)&arguments[idx];
 	}
 
 	template<typename T>
 	inline void SetResult(int idx, T value)
 	{
-		intptr_t *returnValues = (intptr_t*)m_pReturn;
-		*(T*)&returnValues[idx] = value;
+		intptr_t *returnValues = (intptr_t *)m_pReturn;
+		*(T *)&returnValues[idx] = value;
 	}
 
 	inline int GetArgumentCount()
@@ -32,8 +32,8 @@ public:
 	template<typename T>
 	inline T GetResult(int idx)
 	{
-		intptr_t *returnValues = (intptr_t*)m_pReturn;
-		return *(T*)&returnValues[idx];
+		intptr_t *returnValues = (intptr_t *)m_pReturn;
+		return *(T *)&returnValues[idx];
 	}
 };
 
@@ -42,7 +42,7 @@ class NativeContext : public scrNativeCallContext
 private:
 	// Configuration
 	enum {
-		MaxNativeParams = 16,
+		MaxNativeParams = 32,
 		ArgSize = 8,
 	};
 
@@ -66,17 +66,17 @@ public:
 		else if(sizeof(T) < ArgSize)
 		{
 			// Ensure we don't have any stray data
-			*reinterpret_cast<uintptr_t*>(m_TempStack + ArgSize * m_nArgCount) = 0;
+			*reinterpret_cast<uintptr_t *>(m_TempStack + ArgSize * m_nArgCount) = 0;
 		}
 
-		*reinterpret_cast<T*>(m_TempStack + ArgSize * m_nArgCount) = value;
+		*reinterpret_cast<T *>(m_TempStack + ArgSize * m_nArgCount) = value;
 		m_nArgCount++;
 	}
 
 	inline void Reverse()
 	{
 		uintptr_t tempValues[MaxNativeParams];
-		uintptr_t *args = (uintptr_t*)m_pArgs;
+		uintptr_t *args = (uintptr_t *)m_pArgs;
 
 		for(uint32_t i = 0; i < m_nArgCount; i++)
 		{
@@ -90,7 +90,7 @@ public:
 	template <typename T>
 	inline T GetResult()
 	{
-		return *reinterpret_cast<T*>( m_TempStack );
+		return *reinterpret_cast<T *>(m_TempStack);
 	}
 };
 
@@ -102,7 +102,15 @@ struct pass
 class NativeInvoke
 {
 private:
-	static void Invoke(NativeContext *cxt, uint64_t hash);
+	static void Invoke(NativeContext *cxt, uint64_t hash)
+	{
+		auto fn = ScriptEngine::GetNativeHandler(hash);
+
+		if(fn != 0)
+		{
+			fn(cxt);
+		}
+	}
 
 public:
 	template<uint64_t Hash, typename R, typename... Args>
@@ -116,7 +124,7 @@ public:
 		}(), 1)...};
 
 		// reverse the order of the list since the pass method pushes in reverse
-		cxt.Reverse();
+		//cxt.Reverse(); // don't need to reverse when using 2015 toolset
 
 		Invoke(&cxt, Hash);
 

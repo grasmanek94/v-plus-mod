@@ -13,9 +13,6 @@
     <ClCompile Include="Game\Input\InputHook.cpp">
       <Filter>Game\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Game\Scripting\NativeInvoker.cpp">
-      <Filter>Game\Scripting</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Scripting\ScriptEngine.cpp">
       <Filter>Game\Scripting</Filter>
     </ClCompile>

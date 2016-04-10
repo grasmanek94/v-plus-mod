@@ -32,9 +32,9 @@ struct CTaskPlayerOnFoot
 private:
 	uint8_t pad[480];
 };
+*/
 
 extern uintptr_t hook::baseAddress;
-*/
 
 void TestThread::DoRun()
 {
@@ -216,9 +216,6 @@ void TestThread::DoRun()
 
 				m_clonePed = NativeInvoke::Invoke<CREATE_PED, uint32_t>(1, 0x9B810FA2, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, 0, 1);
 
-				NativeInvoke::Invoke<SET_PED_CAN_BE_TARGETTED, int>(m_clonePed, 1);
-				NativeInvoke::Invoke<SET_PED_CAN_RAGDOLL, int>(m_clonePed, 0);
-
 				/*if(GameAddresses::scriptHandleToPed != NULL)
 				{
 					typedef uint64_t (__fastcall * scriptHandleToPed_t)(scrPed pedHandle);
@@ -255,43 +252,81 @@ void TestThread::DoRun()
 			}
 		}
 
-		if(m_bClonePedSpawned && GameAddresses::scriptHandleToPed != NULL)
+		if(m_bClonePedSpawned && GameAddresses::scriptHandleToPed != NULL && m_clonePed != -1)
 		{
 			if(NativeInvoke::Invoke<DOES_ENTITY_EXIST, bool>(m_clonePed) && NativeInvoke::Invoke<IS_ENTITY_A_PED, bool>(m_clonePed))
 			{
-				if(!NativeInvoke::Invoke<IS_ENTITY_DEAD, bool>(m_clonePed) || !NativeInvoke::Invoke<IS_PED_DEAD, bool>(m_clonePed))
+				if(!NativeInvoke::Invoke<IS_ENTITY_DEAD, bool>(m_clonePed) && !NativeInvoke::Invoke<IS_PED_DEAD, bool>(m_clonePed))
 				{
-					typedef uint64_t (__fastcall * scriptHandleToPed_t)(scrPed pedHandle);
-					static scriptHandleToPed_t scriptHandleToPed = (scriptHandleToPed_t)GameAddresses::scriptHandleToPed;
-
-					uint64_t pLocalPlayerPed = scriptHandleToPed(playerPedId);
-					uint64_t pClonePed = scriptHandleToPed(m_clonePed);
-
-					if(pLocalPlayerPed != NULL && pClonePed != NULL)
+					if(!NativeInvoke::Invoke<IS_ENTITY_DEAD, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_DEAD, bool>(playerPedId))
 					{
-						g_pClonePed = pClonePed;
+						typedef uint64_t (__fastcall * scriptHandleToPed_t)(scrPed pedHandle);
+						static scriptHandleToPed_t scriptHandleToPed = (scriptHandleToPed_t)GameAddresses::scriptHandleToPed;
 
-						scrVector playerCoords;
-						playerCoords.x = *(float *)(pLocalPlayerPed + 0x90);
-						playerCoords.y = *(float *)(pLocalPlayerPed + 0x94);
-						playerCoords.z = *(float *)(pLocalPlayerPed + 0x98);
+						uint64_t pLocalPlayerPed = scriptHandleToPed(playerPedId);
+						uint64_t pClonePed = scriptHandleToPed(m_clonePed);
 
-						scrVector playerRotation = NativeInvoke::Invoke<GET_ENTITY_ROTATION, scrVector>(playerPedId, 0);
-						scrVector playerVelocity = NativeInvoke::Invoke<GET_ENTITY_VELOCITY, scrVector>(playerPedId, 0);
+						if(pLocalPlayerPed != NULL && pClonePed != NULL)
+						{
+							g_pClonePed = pClonePed;
 
-						float newZ = 0.0f;
-						NativeInvoke::Invoke<GET_GROUND_Z_FOR_3D_COORD, int>(playerCoords.x, playerCoords.y, 1000.0f, &newZ);
+							scrVector playerCoords;
+							playerCoords.x = *(float *)(pLocalPlayerPed + 0x90);
+							playerCoords.y = *(float *)(pLocalPlayerPed + 0x94);
+							playerCoords.z = *(float *)(pLocalPlayerPed + 0x98);
 
-						NativeInvoke::Invoke<SET_ENTITY_COORDS, int>(m_clonePed, playerCoords.x, playerCoords.y + 2, newZ);
-						NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(m_clonePed, playerRotation.x, playerRotation.y, playerRotation.z, 2, 1);
-						NativeInvoke::Invoke<SET_ENTITY_VELOCITY, int>(m_clonePed, playerVelocity.x, playerVelocity.y, playerVelocity.z);
+							scrVector playerRotation = NativeInvoke::Invoke<GET_ENTITY_ROTATION, scrVector>(playerPedId, 0);
+							scrVector playerVelocity = NativeInvoke::Invoke<GET_ENTITY_VELOCITY, scrVector>(playerPedId, 0);
 
-						// *(float *)(pClonePed + 0x578) = *(float *)(pLocalPlayerPed + 0x578); // current sprinting speed
-						// *(float *)(pClonePed + 0x580) = *(float *)(pLocalPlayerPed + 0x580); // target sprinting speed
+							if(NativeInvoke::Invoke<IS_PED_JUMPING, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_JUMPING, bool>(m_clonePed))
+							{
+								playerCoords.z += 0.075f;
+							}
+
+							NativeInvoke::Invoke<SET_ENTITY_COORDS_NO_OFFSET, int>(m_clonePed, playerCoords.x, playerCoords.y + 2, playerCoords.z);
+							NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(m_clonePed, playerRotation.x, playerRotation.y, playerRotation.z, 2, 1);
+							NativeInvoke::Invoke<SET_ENTITY_VELOCITY, int>(m_clonePed, playerVelocity.x, playerVelocity.y, playerVelocity.z);
+
+							scrHash
+								curPlayerPedWeaponHash = 0,
+								curClonePedWeaponHash = 0;
+						
+							NativeInvoke::Invoke<GET_CURRENT_PED_WEAPON, scrHash>(playerPedId, &curPlayerPedWeaponHash, true);
+							NativeInvoke::Invoke<GET_CURRENT_PED_WEAPON, scrHash>(m_clonePed, &curClonePedWeaponHash, true);
+
+							if(curPlayerPedWeaponHash != curClonePedWeaponHash)
+							{
+								NativeInvoke::Invoke<GIVE_WEAPON_TO_PED, scrVoid>(m_clonePed, curPlayerPedWeaponHash, 9999, true, true);
+								NativeInvoke::Invoke<SET_CURRENT_PED_WEAPON, scrVoid>(m_clonePed, curPlayerPedWeaponHash, true);
+							}
+
+							if(NativeInvoke::Invoke<IS_PED_RELOADING, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_RELOADING, bool>(m_clonePed))
+							{
+								NativeInvoke::Invoke<TASK_RELOAD_WEAPON, scrVoid>(m_clonePed, 1); // not seems to work
+							}
+
+							if(NativeInvoke::Invoke<IS_PED_JUMPING, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_JUMPING, bool>(m_clonePed))
+							{
+								NativeInvoke::Invoke<TASK_JUMP, scrVoid>(m_clonePed, true);
+							}
+							else if(playerVelocity.x > 0 || playerVelocity.y > 0 || playerVelocity.z > 0)
+							{
+								NativeInvoke::Invoke<TASK_GO_STRAIGHT_TO_COORD, scrVoid>(m_clonePed, playerCoords.x, playerCoords.y + 2, playerCoords.z, 4.0f, 15, 0.0f, 0.0f);
+							}
+							else
+							{
+								NativeInvoke::Invoke<TASK_STAND_STILL, scrVoid>(m_clonePed, 15);
+							}
+
+							*(float *)(pClonePed + 0x578) = *(float *)(pLocalPlayerPed + 0x578); // current sprinting speed
+							*(float *)(pClonePed + 0x580) = *(float *)(pLocalPlayerPed + 0x580); // target sprinting speed
+						}
 					}
 				}
 				else
 				{
+					NativeInvoke::Invoke<RESURRECT_PED, int>(m_clonePed);
+					NativeInvoke::Invoke<CLEAR_PED_TASKS_IMMEDIATELY, scrVoid>(m_clonePed);
 /*
 					g_pClonePed = NULL;
 
@@ -300,11 +335,8 @@ void TestThread::DoRun()
 					m_bClonePedSpawned = false;
 					m_clonePed = -1;
 
-					NativeInvoke::Invoke<SET_ENTITY_AS_MISSION_ENTITY, int>(handle, 1, 1);
-					NativeInvoke::Invoke<DELETE_ENTITY, int>(&handle);
+					NativeInvoke::Invoke<DELETE_PED, scrVoid>(&handle);
 */
-
-					NativeInvoke::Invoke<RESURRECT_PED, int>(m_clonePed);
 				}
 			}
 		}
