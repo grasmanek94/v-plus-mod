@@ -7,8 +7,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Networking\Common.cxx" />
-    <ClCompile Include="Networking\IdCounter.cxx" />
+    <ClCompile Include="Common.cxx" />
+    <ClCompile Include="IdCounter.cxx" />
     <ClCompile Include="Networking\Messages.cxx" />
     <ClCompile Include="Networking\Messages\ChatMessage.cxx" />
     <ClCompile Include="Networking\Messages\OnFootSync.cxx" />
@@ -20,8 +20,8 @@
   <ItemGroup>
     <ClInclude Include="Math\Math.hxx" />
     <ClInclude Include="Math\Vector3.hxx" />
-    <ClInclude Include="Networking\Common.hxx" />
-    <ClInclude Include="Networking\IdCounter.hxx" />
+    <ClInclude Include="Common.hxx" />
+    <ClInclude Include="IdCounter.hxx" />
     <ClInclude Include="Networking\Messages.hxx" />
     <ClInclude Include="Networking\Messages\ChatMessage.hxx" />
     <ClInclude Include="Networking\Messages\OnFootSync.hxx" />

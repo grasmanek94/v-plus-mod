@@ -1,4 +1,5 @@
 #pragma once
+#include <Networking/Networking.hxx>
 
 enum NativeIdentifiers : uint64_t
 {
@@ -66,7 +67,7 @@ enum NativeIdentifiers : uint64_t
 	TASK_RELOAD_WEAPON = 0x62D2916F56B9CD2D,
 };
 
-class TestThread : public ScriptThread
+class TestThread : public ScriptThread, public MessageReceiver
 {
 private:
 	bool m_bInitialized;
@@ -77,6 +78,18 @@ private:
 	bool m_bClonePedSpawned;
 	scrPed m_clonePed;
 
+	V_Plus_NetworkClient connection;
+
+	void Handle(const ENetPeer* peer, PeerConnected& data) override;
+	void Handle(const ENetPeer* peer, PeerDisconnected& data) override;
+	void Handle(const ENetPeer* peer, ChatMessage& message) override;
+	void Handle(const ENetPeer* peer, PlayerJoin& message) override;
+	void Handle(const ENetPeer* peer, PlayerQuit& message) override;
+	void Handle(const ENetPeer* peer, PlayerSpawn& message) override;
+	void Handle(const ENetPeer* peer, PlayerDespawn& message) override;
+	void Handle(const ENetPeer* peer, OnFootSync& message) override;
+
+	void RunNetwork();
 public:
 	TestThread();
 

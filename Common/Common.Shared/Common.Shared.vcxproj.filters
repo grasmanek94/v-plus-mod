@@ -21,12 +21,6 @@
     <ClCompile Include="Networking\Messages\PeerConnection.cxx">
       <Filter>Networking\Messages</Filter>
     </ClCompile>
-    <ClCompile Include="Networking\Common.cxx">
-      <Filter>Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="Networking\IdCounter.cxx">
-      <Filter>Networking</Filter>
-    </ClCompile>
     <ClCompile Include="Networking\Messages.cxx">
       <Filter>Networking</Filter>
     </ClCompile>
@@ -39,6 +33,12 @@
     <ClCompile Include="Networking\Messages\PlayerMessages.cxx">
       <Filter>Networking\Messages</Filter>
     </ClCompile>
+    <ClCompile Include="IdCounter.cxx">
+      <Filter>Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cxx">
+      <Filter>Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Networking\Messages\ChatMessage.hxx">
@@ -49,12 +49,6 @@
     </ClInclude>
     <ClInclude Include="Networking\Messages\PeerConnection.hxx">
       <Filter>Networking\Messages</Filter>
-    </ClInclude>
-    <ClInclude Include="Networking\Common.hxx">
-      <Filter>Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="Networking\IdCounter.hxx">
-      <Filter>Networking</Filter>
     </ClInclude>
     <ClInclude Include="Networking\Messages.hxx">
       <Filter>Networking</Filter>
@@ -73,6 +67,12 @@
     </ClInclude>
     <ClInclude Include="Networking\Messages\PlayerMessages.hxx">
       <Filter>Networking\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="IdCounter.hxx">
+      <Filter>Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.hxx">
+      <Filter>Networking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,6 +9,22 @@ TestThread::TestThread()
 	m_bIsWaitingForClonePedModelToLoad = false;
 	m_bClonePedSpawned = false;
 	m_clonePed = -1;
+
+	int init_code = connection.GetInitCode();
+
+	if (init_code)
+	{
+		// TODO custom exception class
+		throw std::exception(("Cannot initialize ENET, error code: " + std::to_string(init_code)).c_str());
+	}
+
+	if (!connection.Create() || !connection.Good())
+	{
+		// TODO custom exception class
+		throw std::exception("ENET host member creation failed");
+	}
+
+	connection.Connect("127.0.0.1", 5544);
 }
 
 eScriptThreadState TestThread::Reset(uint32_t scriptHash, void* pArgs, uint32_t argCount)
@@ -352,5 +368,79 @@ void TestThread::DoRun()
 		NativeInvoke::Invoke<SUPPRESS_AGITATION_EVENTS_NEXT_FRAME, uint32_t>();
 
 		NativeInvoke::Invoke<SET_MAX_WANTED_LEVEL, int>(0);
+	}
+
+	RunNetwork();
+}
+
+void TestThread::Handle(const ENetPeer* peer, PeerConnected& data)
+{
+
+}
+
+void TestThread::Handle(const ENetPeer* peer, PeerDisconnected& data)
+{
+
+}
+
+void TestThread::Handle(const ENetPeer* peer, ChatMessage& message)
+{
+	std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;
+}
+
+void TestThread::Handle(const ENetPeer* peer, PlayerJoin& message)
+{
+
+}
+
+void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
+{
+
+}
+
+void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
+{
+
+}
+
+void TestThread::Handle(const ENetPeer* peer, PlayerDespawn& message)
+{
+
+}
+
+void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
+{
+
+}
+
+void TestThread::RunNetwork()
+{
+	if (connection.Pull())
+	{
+		ENetEvent event = connection.Event();
+
+		switch (event.type)
+		{
+
+		case ENET_EVENT_TYPE_CONNECT:
+			std::cout << "Connected!" << std::endl;
+			break;
+
+		case ENET_EVENT_TYPE_RECEIVE:
+		{
+			ProcessPacketReceiveEvent(event);
+		}
+		break;
+
+		case ENET_EVENT_TYPE_DISCONNECT:
+			std::cout << "Disconnected! Reconnecting..." << std::endl;
+			connection.Connect("127.0.0.1", 5544);
+			break;
+
+		case ENET_EVENT_TYPE_NONE:
+			//plz no warnings
+			break;
+
+		}
 	}
 }

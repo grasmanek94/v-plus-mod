@@ -58,7 +58,7 @@ private:
 
 	void Handle(const ENetPeer* peer, OnFootSync& message) override
 	{
-
+		//received onfootsync
 	}
 
 public:

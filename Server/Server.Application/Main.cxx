@@ -71,7 +71,8 @@ private:
 
 	void Handle(const ENetPeer* peer, OnFootSync& message) override
 	{
-
+		message.SetSender(reinterpret_cast<size_t>(peer->data));
+		connection.Broadcast(message);
 	}
 
 public:
