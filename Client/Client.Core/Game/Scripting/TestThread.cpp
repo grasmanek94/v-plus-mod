@@ -481,6 +481,11 @@ void TestThread::Handle(const ENetPeer* peer, PlayerJoin& message)
 {
 	__Player plyr(message.GetSender(), message.GetName());
 	player_pool.players.push_back(plyr);
+
+	if(pChatWindow != NULL)
+	{
+		pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message.GetName(), message.GetSender());
+	}
 }
 
 void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
@@ -491,6 +496,11 @@ void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
 
         if(temp_iter->id == message.GetSender())
 		{
+			if(pChatWindow != NULL)
+			{
+				pChatWindow->AddInfoMessageW(L"%ls left. (ID: %d)", temp_iter->name, temp_iter->id);
+			}
+
             player_pool.players.erase(temp_iter);
 		}
     }
@@ -513,6 +523,11 @@ void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
 
 			plyr.ped = NativeInvoke::Invoke<CREATE_PED, uint32_t>(1, model_hash, position.x, position.y, position.z, 0.0f, 0, 1);
 			NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(plyr.ped, rotation.x, rotation.y, rotation.z, 2, 1);
+
+			if(pChatWindow != NULL)
+			{
+				pChatWindow->AddInfoMessageW(L"%ls spawned. (ID: %d)", plyr.name, plyr.id);
+			}
 		}
 	}
 }
