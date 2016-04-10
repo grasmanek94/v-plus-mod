@@ -1,6 +1,6 @@
 #include <exception>
 #include <thread>
-#include <Networking.hxx>
+#include <Networking/Networking.hxx>
 #include <SharedUtility.h>
 
 class Client : public MessageReceiver

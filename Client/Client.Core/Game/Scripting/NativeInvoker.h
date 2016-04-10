@@ -124,7 +124,7 @@ public:
 		}(), 1)...};
 
 		// reverse the order of the list since the pass method pushes in reverse
-		//cxt.Reverse(); // don't need to reverse when using 2015 toolset
+		cxt.Reverse(); // don't need to reverse when using 2015 toolset
 
 		Invoke(&cxt, Hash);
 

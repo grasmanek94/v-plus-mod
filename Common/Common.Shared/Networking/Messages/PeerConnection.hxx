@@ -1,5 +1,5 @@
 #pragma once
-#include <SendableEventMessage.hxx>
+#include <Networking/SendableEventMessage.hxx>
 
 class PeerConnected
 {

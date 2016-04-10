@@ -1,6 +1,6 @@
 #pragma once
-#include <SendableEventMessage.hxx>
-#include <Math.hxx>
+#include <Networking/SendableEventMessage.hxx>
+#include <Math/Math.hxx>
 #include <string>
 
 class PlayerJoin

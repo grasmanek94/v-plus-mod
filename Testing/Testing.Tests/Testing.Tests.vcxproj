@@ -26,13 +26,12 @@
   <ImportGroup Label="Shared">
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="..\..\Config\Shared_Testing.props" />
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>Tests</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -44,14 +43,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;VPLUS_CLIENT;VPLUS_SERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vendor\googletest\include;$(SolutionDir)Vendor\googlemock\include;.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\Enet\Source\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Common\Common.Shared\Math;$(SolutionDir)Common\Common.Shared\Networking;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Dummy;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;$(SolutionDir)Server\Server.App;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Testing.GoogleTest.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Testing.GoogleMock.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Network.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)Build\$(Platform)\$(Configuration)\Tests.exe</Command>

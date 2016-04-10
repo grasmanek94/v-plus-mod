@@ -9,7 +9,8 @@
 #include <algorithm>
 #include <iterator>
 
-#include <Networking.hxx>
+#include <Networking/Networking.hxx>
+#include <Math/Math.hxx>
 #include <IdCounter.hxx>
 
 struct __Player // temporary

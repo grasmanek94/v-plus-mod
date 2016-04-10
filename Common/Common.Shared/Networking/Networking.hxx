@@ -31,7 +31,7 @@ public:
 	void Broadcast(NetworkServer& server);
 };
 
-#include <Messages.hxx>
+#include "Messages.hxx"
 
 class MessageReceiver
 {
