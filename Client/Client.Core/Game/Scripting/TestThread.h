@@ -79,6 +79,7 @@ private:
 	scrPed m_clonePed;
 
 	V_Plus_NetworkClient connection;
+	bool connected;
 
 	void Handle(const ENetPeer* peer, PeerConnected& data) override;
 	void Handle(const ENetPeer* peer, PeerDisconnected& data) override;
@@ -90,6 +91,7 @@ private:
 	void Handle(const ENetPeer* peer, OnFootSync& message) override;
 
 	void RunNetwork();
+
 public:
 	TestThread();
 

@@ -12,6 +12,28 @@
 #include <Networking.hxx>
 #include <IdCounter.hxx>
 
+struct __Player // temporary
+{
+	size_t id;
+	std::wstring name;
+	bool spawned;
+	uint32_t model_hash;
+	Vector3 position;
+	Vector3 rotation;
+
+	__Player(size_t _id, std::wstring _name)
+	{
+		id = _id;
+		name = _name;
+		spawned = false;
+	}
+};
+
+struct __PlayerPool // temporary
+{
+	std::list<__Player> players;
+} player_pool;
+
 class Server: public MessageReceiver
 {
 private:
@@ -51,28 +73,137 @@ private:
 
 	void Handle(const ENetPeer* peer, PlayerJoin& message) override
 	{
+		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
+		__Player plyr(message.GetSender(), message.GetName());
+		player_pool.players.push_back(plyr);
+
+		for(auto &plyr : player_pool.players)
+		{
+			if(plyr.id != message.GetSender())
+			{
+				PlayerJoin player_join;
+				player_join.SetSender(plyr.id);
+				player_join.SetName(plyr.name);
+				connection.Send((ENetPeer*)peer, player_join);
+
+				if(plyr.spawned)
+				{
+					PlayerSpawn player_spawn;
+					player_spawn.SetSender(plyr.id);
+					player_spawn.SetModelHash(plyr.model_hash);
+					player_spawn.SetPosition(plyr.position);
+					player_spawn.SetRotation(plyr.rotation);
+					connection.Send((ENetPeer*)peer, player_spawn);
+				}
+			}
+		}
+
+		std::wcout << "Player joined: " << message.GetName() << " with ID:" << message.GetSender() << std::endl;
+
+		for(auto &_peer : connected_peers)
+		{
+			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			{
+				connection.Send(_peer, message);
+			}
+		}
 	}
 
 	void Handle(const ENetPeer* peer, PlayerQuit& message) override
 	{
+		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
+		for(auto iter = player_pool.players.begin(); iter != player_pool.players.end();)
+		{
+			auto temp_iter = iter++;
+
+			if(temp_iter->id == message.GetSender())
+			{
+				player_pool.players.erase(temp_iter);
+			}
+		}
+
+		for(auto &_peer : connected_peers)
+		{
+			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			{
+				connection.Send(_peer, message);
+			}
+		}
 	}
 
 	void Handle(const ENetPeer* peer, PlayerSpawn& message) override
 	{
+		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
+		for(auto &plyr : player_pool.players)
+		{
+			if(plyr.id == message.GetSender())
+			{
+				Vector3
+					_position,
+					_rotation;
+
+				plyr.model_hash = message.GetModelHash();
+
+				message.GetPosition(_position);
+				plyr.position = _position;
+
+				message.GetRotation(_rotation);
+				plyr.rotation = _rotation;
+			}
+		}
+
+		for(auto &_peer : connected_peers)
+		{
+			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			{
+				connection.Send(_peer, message);
+			}
+		}
 	}
 
 	void Handle(const ENetPeer* peer, PlayerDespawn& message) override
 	{
+		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
+		for(auto &_peer : connected_peers)
+		{
+			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			{
+				connection.Send(_peer, message);
+			}
+		}
 	}
 
 	void Handle(const ENetPeer* peer, OnFootSync& message) override
 	{
 		message.SetSender(reinterpret_cast<size_t>(peer->data));
-		connection.Broadcast(message);
+
+		for(auto &plyr : player_pool.players)
+		{
+			if(plyr.id == message.GetSender())
+			{
+				Vector3
+					_position,
+					_rotation;
+
+				message.GetPosition(_position);
+				plyr.position = _position;
+
+				message.GetRotation(_rotation);
+				plyr.rotation = _rotation;
+			}
+		}
+
+		for(auto &_peer : connected_peers)
+		{
+			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			{
+				connection.Send(_peer, message);
+			}
+		}
 	}
 
 public:

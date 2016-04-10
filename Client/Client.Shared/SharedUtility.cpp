@@ -374,4 +374,59 @@ namespace SharedUtility
 
 		return hash;
 	}
+
+	unsigned long GetTime()
+	{
+#ifdef WIN32
+		return timeGetTime();
+#else
+		#if !defined(CLOCK_MONOTONIC)
+			#error "This platform does not have monotonic clock support."
+		#endif
+
+		struct timeval now;
+		struct timespec tsnow;
+
+		if(!clock_gettime(CLOCK_MONOTONIC, &tsnow))
+		{
+			now.tv_sec = tsnow.tv_sec;
+			now.tv_usec = tsnow.tv_nsec / 1000;
+		}
+		else
+		{
+			(void)gettimeofday(&now, NULL);
+		}
+
+		long long llMilliseconds = ((long long)now.tv_sec) * 1000 + now.tv_usec / 1000;
+		return llMilliseconds;
+#endif
+	}
+
+	long long GetTime64()
+	{
+		static CriticalSection s_criticalSection;
+
+		s_criticalSection.Lock();
+
+		static long long llCurrent = ((unsigned int)(GetTime()) % 300000 + 200000);
+		static unsigned int uiWas = (unsigned int)(GetTime());
+		unsigned int uiNow = GetTime();
+		unsigned int uiDelta = uiNow - uiWas;
+		long long llResult = 0;
+
+		uiWas = uiNow;
+
+		if(uiDelta > 0x80000000)
+			uiDelta = 0;
+
+		if(uiDelta > 600 * 1000)
+			uiDelta = 600 * 1000;
+
+		llCurrent += uiDelta;
+		llResult = llCurrent;
+
+		s_criticalSection.Unlock();
+
+		return llResult;
+	}
 };

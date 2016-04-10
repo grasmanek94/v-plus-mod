@@ -33,7 +33,7 @@ HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT Sy
         bInitialized = true;
     }
 
-	wchar_t wszGameStateString[128];
+	/*wchar_t wszGameStateString[128];
 	swprintf_s(wszGameStateString, 128, L"Game state: %d", GameStateWatcher::GetGameState());
 
 	pFontWrapper->DrawString(pContext, wszGameStateString, 18.0f, 22.0f, 20.0f, 0xff000000, FW1_RESTORESTATE);
@@ -57,13 +57,13 @@ HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT Sy
 				pFontWrapper->DrawString(pContext, wszPositionString, 18.0f, 20.0f, 40.0f, 0xffffffff, FW1_RESTORESTATE);
 			}
 		}
-	}
+	}*/
 
 	//drawTaskList(pContext, pFontWrapper);
 
 	if(pChatWindow != NULL)
 	{
-		//pChatWindow->Draw();
+		pChatWindow->Draw();
 	}
 
     return pRealPresent(pSwapChain, SyncInterval, Flags);

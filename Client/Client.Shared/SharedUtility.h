@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "CriticalSection.h"
+
 namespace SharedUtility
 {
 #ifdef WIN32
@@ -26,4 +28,7 @@ namespace SharedUtility
 
 	unsigned int HashRageString(const char *string);
 	unsigned int HashString(const char *string);
+
+	unsigned long GetTime();
+	long long GetTime64();
 }

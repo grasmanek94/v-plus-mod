@@ -58,7 +58,21 @@ private:
 
 	void Handle(const ENetPeer* peer, OnFootSync& message) override
 	{
-		//received onfootsync
+		static size_t cloned_id = -1;
+
+		if(cloned_id == -1)
+		{
+			cloned_id = message.GetSender();
+		}
+
+		if(cloned_id == message.GetSender())
+		{
+			Vector3 position;
+			message.GetPosition(position);
+			position.y += 2;
+			message.SetPosition(position);
+			connection.Send(message);
+		}
 	}
 
 public:
@@ -92,8 +106,24 @@ public:
 			{
 
 			case ENET_EVENT_TYPE_CONNECT:
+			{
 				std::cout << "Connected!" << std::endl;
+
+				PlayerJoin player_join;
+				player_join.SetName(L"DummyClient");
+				connection.Send(player_join);
+
+				std::cout << "Sent player join packet!" << std::endl;
+
+				PlayerSpawn player_spawn;
+				player_spawn.SetModelHash(0xA8683715); // A_C_Chimp
+				player_spawn.SetPosition(Vector3(-786.44f, -48.50f, 37.75f));
+				player_spawn.SetRotation(Vector3(0.0f, 0.0f, 0.0f));
+				connection.Send(player_spawn);
+
+				std::cout << "Sent player spawn packet!" << std::endl;
 				break;
+			}
 
 			case ENET_EVENT_TYPE_RECEIVE:
 			{
