@@ -51,6 +51,7 @@
       <AddModuleNamesToAssembly>
       </AddModuleNamesToAssembly>
       <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
