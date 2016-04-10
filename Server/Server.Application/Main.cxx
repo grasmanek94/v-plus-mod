@@ -14,6 +14,7 @@
 
 struct __Player // temporary
 {
+	ENetPeer* peer;
 	size_t id;
 	std::wstring name;
 	bool spawned;
@@ -21,8 +22,9 @@ struct __Player // temporary
 	Vector3 position;
 	Vector3 rotation;
 
-	__Player(size_t _id, std::wstring _name)
+	__Player(ENetPeer* _peer, size_t _id, std::wstring _name)
 	{
+		peer = _peer;
 		id = _id;
 		name = _name;
 		spawned = false;
@@ -57,6 +59,27 @@ private:
 
 	void Handle(const ENetPeer* peer, PeerDisconnected& data) override
 	{
+		for(auto iter = player_pool.players.begin(); iter != player_pool.players.end();)
+		{
+			auto temp_iter = iter++;
+
+			if(temp_iter->id == reinterpret_cast<size_t>(peer->data))
+			{
+				PlayerQuit player_quit;
+				player_quit.SetSender(temp_iter->id);
+
+				for(auto &plyr : player_pool.players)
+				{
+					if(plyr.id != temp_iter->id)
+					{
+						connection.Send(plyr.peer, player_quit);
+					}
+				}
+
+				player_pool.players.erase(temp_iter);
+			}
+		}
+
 		in_addr x;
 		x.S_un.S_addr = peer->address.host;
 		std::cout << "Peer disconnected: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
@@ -75,7 +98,7 @@ private:
 	{
 		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
-		__Player plyr(message.GetSender(), message.GetName());
+		__Player plyr((ENetPeer*)peer, message.GetSender(), message.GetName());
 		player_pool.players.push_back(plyr);
 
 		for(auto &plyr : player_pool.players)
@@ -101,11 +124,11 @@ private:
 
 		std::wcout << "Player joined: " << message.GetName() << " with ID:" << message.GetSender() << std::endl;
 
-		for(auto &_peer : connected_peers)
+		for(auto &plyr : player_pool.players)
 		{
-			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			if(plyr.id != message.GetSender())
 			{
-				connection.Send(_peer, message);
+				connection.Send(plyr.peer, message);
 			}
 		}
 	}
@@ -124,11 +147,11 @@ private:
 			}
 		}
 
-		for(auto &_peer : connected_peers)
+		for(auto &plyr : player_pool.players)
 		{
-			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			if(plyr.id != message.GetSender())
 			{
-				connection.Send(_peer, message);
+				connection.Send(plyr.peer, message);
 			}
 		}
 	}
@@ -152,14 +175,16 @@ private:
 
 				message.GetRotation(_rotation);
 				plyr.rotation = _rotation;
+
+				plyr.spawned = true;
 			}
 		}
 
-		for(auto &_peer : connected_peers)
+		for(auto &plyr : player_pool.players)
 		{
-			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			if(plyr.id != message.GetSender())
 			{
-				connection.Send(_peer, message);
+				connection.Send(plyr.peer, message);
 			}
 		}
 	}
@@ -168,11 +193,11 @@ private:
 	{
 		message.SetSender(reinterpret_cast<size_t>(peer->data));
 
-		for(auto &_peer : connected_peers)
+		for(auto &plyr : player_pool.players)
 		{
-			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			if(plyr.id != message.GetSender())
 			{
-				connection.Send(_peer, message);
+				connection.Send(plyr.peer, message);
 			}
 		}
 	}
@@ -197,11 +222,11 @@ private:
 			}
 		}
 
-		for(auto &_peer : connected_peers)
+		for(auto &plyr : player_pool.players)
 		{
-			if(reinterpret_cast<size_t>(_peer->data) != message.GetSender())
+			if(plyr.id != message.GetSender())
 			{
-				connection.Send(_peer, message);
+				connection.Send(plyr.peer, message);
 			}
 		}
 	}

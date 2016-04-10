@@ -10,6 +10,7 @@ struct __Player // temporary
 	size_t id;
 	std::wstring name;
 	scrPed ped;
+	bool spawned;
 	bool was_jumping;
 
 	__Player(size_t _id, std::wstring _name)
@@ -17,6 +18,7 @@ struct __Player // temporary
 		id = _id;
 		name = _name;
 		ped = -1;
+		spawned = false;
 		was_jumping = false;
 	}
 };
@@ -473,7 +475,7 @@ void TestThread::Handle(const ENetPeer* peer, ChatMessage& message)
 
 	if(pChatWindow != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"[%d]: %ls", message.GetSender(), message.GetContents());
+		pChatWindow->AddInfoMessageW(L"[%d]: %ls", message.GetSender(), message.GetContents().c_str());
 	}
 }
 
@@ -484,7 +486,7 @@ void TestThread::Handle(const ENetPeer* peer, PlayerJoin& message)
 
 	if(pChatWindow != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message.GetName(), message.GetSender());
+		pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message.GetName().c_str(), message.GetSender());
 	}
 }
 
@@ -498,7 +500,7 @@ void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
 		{
 			if(pChatWindow != NULL)
 			{
-				pChatWindow->AddInfoMessageW(L"%ls left. (ID: %d)", temp_iter->name, temp_iter->id);
+				pChatWindow->AddInfoMessageW(L"%ls left. (ID: %d)", temp_iter->name.c_str(), temp_iter->id);
 			}
 
             player_pool.players.erase(temp_iter);
@@ -510,7 +512,7 @@ void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
 {
 	for(auto &plyr : player_pool.players)
 	{
-		if(plyr.id == message.GetSender())
+		if(plyr.id == message.GetSender() && !plyr.spawned)
 		{
 			uint32_t model_hash = message.GetModelHash();
 
@@ -524,9 +526,11 @@ void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
 			plyr.ped = NativeInvoke::Invoke<CREATE_PED, uint32_t>(1, model_hash, position.x, position.y, position.z, 0.0f, 0, 1);
 			NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(plyr.ped, rotation.x, rotation.y, rotation.z, 2, 1);
 
+			plyr.spawned = true;
+
 			if(pChatWindow != NULL)
 			{
-				pChatWindow->AddInfoMessageW(L"%ls spawned. (ID: %d)", plyr.name, plyr.id);
+				pChatWindow->AddInfoMessageW(L"%ls spawned. (ID: %d)", plyr.name.c_str(), plyr.id);
 			}
 		}
 	}
@@ -541,7 +545,7 @@ void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
 {
 	for(auto &plyr : player_pool.players)
 	{
-		if(plyr.id == message.GetSender() && plyr.ped != -1)
+		if(plyr.id == message.GetSender() && plyr.spawned && plyr.ped != -1)
 		{
 			Vector3
 				position,
@@ -627,6 +631,8 @@ void TestThread::RunNetwork()
 				}
 
 				connected = true;
+
+				player_pool.players.clear();
 
 				PlayerJoin player_join;
 				player_join.SetName(L"Player");
