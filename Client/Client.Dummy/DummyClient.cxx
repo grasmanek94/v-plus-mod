@@ -1,6 +1,7 @@
 #include <exception>
 #include <thread>
 #include <Networking.hxx>
+#include <SharedUtility.h>
 
 class Client : public MessageReceiver
 {
@@ -116,7 +117,7 @@ public:
 				std::cout << "Sent player join packet!" << std::endl;
 
 				PlayerSpawn player_spawn;
-				player_spawn.SetModelHash(0xA8683715); // A_C_Chimp
+				player_spawn.SetModelHash(0x0D7114C9);
 				player_spawn.SetPosition(Vector3(-786.44f, -48.50f, 37.75f));
 				player_spawn.SetRotation(Vector3(0.0f, 0.0f, 0.0f));
 				connection.Send(player_spawn);
