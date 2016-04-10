@@ -39,6 +39,11 @@ private:
 	virtual void Handle(const ENetPeer* peer, PeerConnected& data) = 0;
 	virtual void Handle(const ENetPeer* peer, PeerDisconnected& data) = 0;
 	virtual void Handle(const ENetPeer* peer, ChatMessage& message) = 0;
+	virtual void Handle(const ENetPeer* peer, PlayerJoin& message) = 0;
+	virtual void Handle(const ENetPeer* peer, PlayerQuit& message) = 0;
+	virtual void Handle(const ENetPeer* peer, PlayerSpawn& message) = 0;
+	virtual void Handle(const ENetPeer* peer, PlayerDespawn& message) = 0;
+	virtual void Handle(const ENetPeer* peer, OnFootSync& message) = 0;
 
 public:
 	template <typename size_t unused = 0>
@@ -85,6 +90,11 @@ public:
 			switch (unique_class_id)
 			{
 				IMPLEMENT_CASE_FOR(ChatMessage);
+				IMPLEMENT_CASE_FOR(PlayerJoin);
+				IMPLEMENT_CASE_FOR(PlayerQuit);
+				IMPLEMENT_CASE_FOR(PlayerSpawn);
+				IMPLEMENT_CASE_FOR(PlayerDespawn);
+				IMPLEMENT_CASE_FOR(OnFootSync);
 
 				//Because of this we need to impl in header, so, template:
 				#ifdef VPLUS_CLIENT

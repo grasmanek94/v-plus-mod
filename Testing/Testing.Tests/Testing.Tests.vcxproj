@@ -44,7 +44,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;VPLUS_CLIENT;VPLUS_SERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Vendor\googletest\include;$(SolutionDir)Vendor\googlemock\include;.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\Enet\Source\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Dummy;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;$(SolutionDir)Server\Server.App;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Vendor\googletest\include;$(SolutionDir)Vendor\googlemock\include;.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\Enet\Source\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Common\Common.Shared\Math;$(SolutionDir)Common\Common.Shared\Networking;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Dummy;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;$(SolutionDir)Server\Server.App;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -6,6 +6,30 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Networking\Common.cxx" />
+    <ClCompile Include="Networking\IdCounter.cxx" />
+    <ClCompile Include="Networking\Messages.cxx" />
+    <ClCompile Include="Networking\Messages\ChatMessage.cxx" />
+    <ClCompile Include="Networking\Messages\OnFootSync.cxx" />
+    <ClCompile Include="Networking\Messages\PeerConnection.cxx" />
+    <ClCompile Include="Networking\Messages\PlayerMessages.cxx" />
+    <ClCompile Include="Networking\Networking.cxx" />
+    <ClCompile Include="Networking\SendableEventMessage.cxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Math\Math.hxx" />
+    <ClInclude Include="Math\Vector3.hxx" />
+    <ClInclude Include="Networking\Common.hxx" />
+    <ClInclude Include="Networking\IdCounter.hxx" />
+    <ClInclude Include="Networking\Messages.hxx" />
+    <ClInclude Include="Networking\Messages\ChatMessage.hxx" />
+    <ClInclude Include="Networking\Messages\OnFootSync.hxx" />
+    <ClInclude Include="Networking\Messages\PeerConnection.hxx" />
+    <ClInclude Include="Networking\Messages\PlayerMessages.hxx" />
+    <ClInclude Include="Networking\Networking.hxx" />
+    <ClInclude Include="Networking\SendableEventMessage.hxx" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0D9133BD-1415-4462-BD64-85DCB237BC87}</ProjectGuid>
     <RootNamespace>CommonShared</RootNamespace>
@@ -39,7 +63,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Server\Server.App;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Common\Common.Shared\Math;$(SolutionDir)Common\Common.Shared\Networking;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Server\Server.App;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>VPLUS_CLIENT;VPLUS_SERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -47,24 +71,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="IdCounter.cxx" />
-    <ClCompile Include="Messages\ChatMessage.cxx" />
-    <ClCompile Include="Common.cxx" />
-    <ClCompile Include="Messages.cxx" />
-    <ClCompile Include="Networking.cxx" />
-    <ClCompile Include="Messages\PeerConnection.cxx" />
-    <ClCompile Include="SendableEventMessage.cxx" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="IdCounter.hxx" />
-    <ClInclude Include="Messages\ChatMessage.hxx" />
-    <ClInclude Include="Common.hxx" />
-    <ClInclude Include="Messages.hxx" />
-    <ClInclude Include="Networking.hxx" />
-    <ClInclude Include="Messages\PeerConnection.hxx" />
-    <ClInclude Include="SendableEventMessage.hxx" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

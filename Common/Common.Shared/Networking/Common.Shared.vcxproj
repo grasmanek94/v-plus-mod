@@ -7,14 +7,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{DC7290C0-4211-4213-A2F8-662AB8FB6573}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ServerApp</RootNamespace>
+    <ProjectGuid>{0D9133BD-1415-4462-BD64-85DCB237BC87}</ProjectGuid>
+    <RootNamespace>CommonShared</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -30,32 +29,41 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
-    <TargetName>v-plus-svr</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;VPLUS_SERVER;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Vendor\Enet\Source\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>.;$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Server\Server.App;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.DLL;$(SolutionDir)Client\Client.Launcher;$(SolutionDir)Client\Client.Network;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VPLUS_CLIENT;VPLUS_SERVER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cxx" />
+    <ClCompile Include="IdCounter.cxx" />
+    <ClCompile Include="Messages\ChatMessage.cxx" />
+    <ClCompile Include="Common.cxx" />
+    <ClCompile Include="Messages.cxx" />
+    <ClCompile Include="Networking.cxx" />
+    <ClCompile Include="Messages\PeerConnection.cxx" />
+    <ClCompile Include="SendableEventMessage.cxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="IdCounter.hxx" />
+    <ClInclude Include="Messages\ChatMessage.hxx" />
+    <ClInclude Include="Common.hxx" />
+    <ClInclude Include="Messages.hxx" />
+    <ClInclude Include="Networking.hxx" />
+    <ClInclude Include="Messages\PeerConnection.hxx" />
+    <ClInclude Include="SendableEventMessage.hxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -59,7 +59,7 @@ HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT Sy
 		}
 	}
 
-	drawTaskList(pContext, pFontWrapper);
+	//drawTaskList(pContext, pFontWrapper);
 
 	if(pChatWindow != NULL)
 	{

@@ -36,6 +36,31 @@ private:
 		std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;
 	}
 
+	void Handle(const ENetPeer* peer, PlayerJoin& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, PlayerQuit& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, PlayerSpawn& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, PlayerDespawn& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, OnFootSync& message) override
+	{
+
+	}
+
 public:
 	Client()
 	{

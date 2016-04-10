@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C4FA1D
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common.Shared", "Common\Common.Shared\Common.Shared.vcxproj", "{0D9133BD-1415-4462-BD64-85DCB237BC87}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server.App", "Server\Server.App\Server.App.vcxproj", "{DC7290C0-4211-4213-A2F8-662AB8FB6573}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server.Application", "Server\Server.Application\Server.Application.vcxproj", "{DC7290C0-4211-4213-A2F8-662AB8FB6573}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8BE64469-5A8B-4DE3-9402-4A657A20DEAB} = {8BE64469-5A8B-4DE3-9402-4A657A20DEAB}
 		{0D9133BD-1415-4462-BD64-85DCB237BC87} = {0D9133BD-1415-4462-BD64-85DCB237BC87}

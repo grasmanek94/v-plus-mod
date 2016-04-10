@@ -49,6 +49,31 @@ private:
 		connection.Broadcast(message);
 	}
 
+	void Handle(const ENetPeer* peer, PlayerJoin& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, PlayerQuit& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, PlayerSpawn& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, PlayerDespawn& message) override
+	{
+
+	}
+
+	void Handle(const ENetPeer* peer, OnFootSync& message) override
+	{
+
+	}
+
 public:
 	Server(const std::string bind_address, uint16_t port, size_t max_players)
 		: id_generator(max_players), max_players(max_players)
