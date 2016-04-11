@@ -60,9 +60,13 @@
   <ItemGroup>
     <ClCompile Include="IdGenerator.cxx" />
     <ClCompile Include="Main.cxx" />
+    <ClCompile Include="PatternScanner.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="info.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArrayUtils.hxx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

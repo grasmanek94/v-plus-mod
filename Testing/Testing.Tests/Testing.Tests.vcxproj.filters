@@ -3,8 +3,12 @@
   <ItemGroup>
     <ClCompile Include="Main.cxx" />
     <ClCompile Include="IdGenerator.cxx" />
+    <ClCompile Include="PatternScanner.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="info.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArrayUtils.hxx" />
   </ItemGroup>
 </Project>

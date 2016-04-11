@@ -1,4 +1,9 @@
-#include "Main.h"
+#include <windows.h>
+#include <Psapi.h>
+
+#pragma comment(lib, "psapi.lib")
+
+#include "GameUtility.h"
 
 bool GameUtility::CompareMemory(const unsigned char *pData, const unsigned char *bMask, const char *sMask)
 {

@@ -82,13 +82,6 @@
     <ClInclude Include="Game\Scripting\ScriptEngine.h" />
     <ClInclude Include="Game\Scripting\ScriptThread.h" />
     <ClInclude Include="Game\Scripting\TestThread.h" />
-    <ClInclude Include="Utility\Hooking\HookFunction.h" />
-    <ClInclude Include="Utility\Hooking\Hooking.FuncCalls.h" />
-    <ClInclude Include="Utility\Hooking\Hooking.h" />
-    <ClInclude Include="Utility\Hooking\Hooking.Invoke.h" />
-    <ClInclude Include="Utility\Hooking\Hooking.Patterns.h" />
-    <ClInclude Include="Utility\RAGE\pgCollection.h" />
-    <ClInclude Include="Utility\Utility.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientCore.cpp" />
@@ -108,10 +101,6 @@
     <ClCompile Include="Graphics\ChatWindow.cpp" />
     <ClCompile Include="Graphics\ChatWindowEntry.cpp" />
     <ClCompile Include="Graphics\ChatWindowEntrySection.cpp" />
-    <ClCompile Include="Utility\Hooking\HookFunction.cpp" />
-    <ClCompile Include="Utility\Hooking\Hooking.cpp" />
-    <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp" />
-    <ClCompile Include="Utility\Utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

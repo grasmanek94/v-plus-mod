@@ -1,15 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Utility\Hooking\HookFunction.cpp">
-      <Filter>Utility\Hooking</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\Hooking\Hooking.cpp">
-      <Filter>Utility\Hooking</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp">
-      <Filter>Utility\Hooking</Filter>
-    </ClCompile>
     <ClCompile Include="Game\Input\InputHook.cpp">
       <Filter>Game\Input</Filter>
     </ClCompile>
@@ -30,9 +21,6 @@
     </ClCompile>
     <ClCompile Include="Graphics\ChatWindowEntrySection.cpp">
       <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Utility\Utility.cpp">
-      <Filter>Utility</Filter>
     </ClCompile>
     <ClCompile Include="ClientCore.cpp" />
     <ClCompile Include="Game\GameAddresses.cpp">
@@ -64,21 +52,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Utility\Hooking\HookFunction.h">
-      <Filter>Utility\Hooking</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Hooking\Hooking.FuncCalls.h">
-      <Filter>Utility\Hooking</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Hooking\Hooking.h">
-      <Filter>Utility\Hooking</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Hooking\Hooking.Invoke.h">
-      <Filter>Utility\Hooking</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Hooking\Hooking.Patterns.h">
-      <Filter>Utility\Hooking</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Input\InputHook.h">
       <Filter>Game\Input</Filter>
     </ClInclude>
@@ -112,9 +85,6 @@
     <ClInclude Include="Game\Scripting\NativeInvoker.h">
       <Filter>Game\Scripting</Filter>
     </ClInclude>
-    <ClInclude Include="Utility\RAGE\pgCollection.h">
-      <Filter>Utility\RAGE</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Scripting\ScriptEngine.h">
       <Filter>Game\Scripting</Filter>
     </ClInclude>
@@ -136,9 +106,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\ChatWindowEntrySection.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\Utility.h">
-      <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="ClientCore.h" />
     <ClInclude Include="Game\GameAddresses.h">
@@ -173,12 +140,6 @@
     <Filter Include="Game">
       <UniqueIdentifier>{026536a4-a3dc-4bc6-bbda-dbc073bb98fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utility">
-      <UniqueIdentifier>{8823bad0-6432-4eb4-8a13-7f96546babc5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\Hooking">
-      <UniqueIdentifier>{ac571004-3dd3-4d1e-b7eb-0a595c5e247d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game\Input">
       <UniqueIdentifier>{d50cdc38-b61a-4b15-8a68-0cf431400a1a}</UniqueIdentifier>
     </Filter>
@@ -187,9 +148,6 @@
     </Filter>
     <Filter Include="Game\Scripting\NativeTranslationTables">
       <UniqueIdentifier>{d44bc241-ac42-45be-8bf6-44833972da2e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Utility\RAGE">
-      <UniqueIdentifier>{70d70add-10a4-4b0d-8678-58625cec3921}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shared">
       <UniqueIdentifier>{9af254e8-4763-4312-970b-9c7e12bb010b}</UniqueIdentifier>

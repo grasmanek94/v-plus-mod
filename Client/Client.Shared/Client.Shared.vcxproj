@@ -8,10 +8,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SharedUtility.cpp" />
+    <ClCompile Include="Utility\Hooking\HookFunction.cpp" />
+    <ClCompile Include="Utility\Hooking\Hooking.cpp" />
+    <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp" />
+    <ClCompile Include="Utility\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CriticalSection.h" />
+    <ClInclude Include="jitasm\jitasm.h" />
     <ClInclude Include="SharedUtility.h" />
+    <ClInclude Include="Utility\Hooking\HookFunction.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.FuncCalls.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.Invoke.h" />
+    <ClInclude Include="Utility\Hooking\Hooking.Patterns.h" />
+    <ClInclude Include="Utility\RAGE\pgCollection.h" />
+    <ClInclude Include="Utility\Utility.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{288B71C8-9FEB-449E-9E3B-0D7652AF0D82}</ProjectGuid>
