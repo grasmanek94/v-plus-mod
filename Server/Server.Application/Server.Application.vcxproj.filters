@@ -3,4 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cxx" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="info.rc" />
+  </ItemGroup>
 </Project>

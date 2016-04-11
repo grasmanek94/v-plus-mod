@@ -281,3 +281,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 g-mp.VC.opendb
+Common/Common.Version/auto_version.h

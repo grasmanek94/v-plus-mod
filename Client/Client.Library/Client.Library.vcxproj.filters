@@ -3,4 +3,7 @@
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="info.rc" />
+  </ItemGroup>
 </Project>
