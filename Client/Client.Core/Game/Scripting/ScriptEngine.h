@@ -44,7 +44,7 @@ typedef int scrTaskSequence;
 typedef int scrColourIndex;
 typedef int scrSphere;
 
-struct scrVector
+struct scrVector3
 {
 	float x;
 

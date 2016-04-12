@@ -135,6 +135,9 @@
     <ClInclude Include="Game\GameHooks.h">
       <Filter>Game</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Scripting\Natives.h">
+      <Filter>Game\Scripting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game">

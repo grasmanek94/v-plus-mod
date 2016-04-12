@@ -21,6 +21,8 @@ DWORD WINAPI ClientCore::Run()
 	if(GameVersion::IsSupported())
 	{
 		GamePatches::InstallPatches();
+		GameHooks::InstallHooks();
+
 		GameAddresses::FindAddresses();
 
 		HWND windowHandle = FindWindow(L"grcWindow", NULL);
@@ -32,8 +34,6 @@ DWORD WINAPI ClientCore::Run()
 
 		if(ScriptEngine::Initialize())
 		{
-			GameHooks::InstallHooks();
-
 			while(ScriptEngine::IsThreadCollectionEmpty())
 			{
 				Sleep(100);

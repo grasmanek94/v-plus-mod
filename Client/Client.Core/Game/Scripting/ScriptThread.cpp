@@ -7,8 +7,8 @@ eScriptThreadState ScriptThread::Tick(uint32_t opsToExecute)
 	return threadTickGta(this, opsToExecute);
 }
 
-void ScriptThread::Kill() {
-
+void ScriptThread::Kill()
+{
 	typedef void (__thiscall * ScriptThreadKill_t) (ScriptThread *ScriptThread);
 	static ScriptThreadKill_t killScriptThread = (ScriptThreadKill_t)hook::pattern("48 83 EC 20 48 83 B9 10 01 00 00 00 48 8B D9 74 14").count(1).get(0).get<void>(-6);
 	return killScriptThread(this);
@@ -19,7 +19,8 @@ eScriptThreadState ScriptThread::Run(uint32_t opsToExecute)
 	if(GetScriptHandler() == nullptr)
 	{
 		ScriptEngine::GetScriptHandleMgr()->AttachScript(this);
-		this->m_bNetworkFlag = true;
+
+		//this->m_bNetworkFlag = true;
 	}
 
 	// Set the current thread

@@ -1,4 +1,5 @@
 #include "Main.h"
+#include "Natives.h"
 
 extern uintptr_t hook::baseAddress;
 extern ChatWindow *pChatWindow;
@@ -10,6 +11,13 @@ struct __Player // temporary
 	size_t id;
 	std::wstring name;
 	scrPed ped;
+	bool waiting_for_model_to_load;
+	struct
+	{
+		scrHash model_hash;
+		Vector3 position;
+		Vector3 rotation;
+	} spawn_info;
 	bool spawned;
 	bool was_jumping;
 
@@ -18,6 +26,7 @@ struct __Player // temporary
 		id = _id;
 		name = _name;
 		ped = -1;
+		waiting_for_model_to_load = false;
 		spawned = false;
 		was_jumping = false;
 	}
@@ -52,52 +61,24 @@ eScriptThreadState TestThread::Reset(uint32_t scriptHash, void* pArgs, uint32_t 
 	return ScriptThread::Reset(scriptHash, pArgs, argCount);
 }
 
-/*
-struct CTaskPlayerOnFoot
-{
-private:
-	uint8_t pad[480];
-};
-*/
-
 void TestThread::DoRun()
 {
-	scrPed playerPedId = NativeInvoke::Invoke<GET_PLAYER_PED, uint32_t>(-1);
+	scrPed playerPedId = PLAYER::GET_PLAYER_PED(-1);
 
 	if(playerPedId != -1 && playerPedId != 0)
 	{
 		if(!m_bInitialized)
 		{
-			NativeInvoke::Invoke<LOAD_SCENE, int>(-786.44f, -48.50f, 37.75f);
+			STREAMING::LOAD_SCENE(-786.44f, -48.50f, 37.75f);
 
-			NativeInvoke::Invoke<SHUTDOWN_LOADING_SCREEN, int>();
-			NativeInvoke::Invoke<DO_SCREEN_FADE_IN, int>(0);
+			SCRIPT::SHUTDOWN_LOADING_SCREEN();
+			CAM::DO_SCREEN_FADE_IN(0);
 
-			NativeInvoke::Invoke<SET_GARBAGE_TRUCKS, int>(0);
-			NativeInvoke::Invoke<SET_RANDOM_BOATS, int>(0);
-			NativeInvoke::Invoke<SET_RANDOM_TRAINS, int>(0);
+			VEHICLE::SET_GARBAGE_TRUCKS(FALSE);
+			VEHICLE::SET_RANDOM_BOATS(FALSE);
+			VEHICLE::SET_RANDOM_TRAINS(FALSE);
 
-			NativeInvoke::Invoke<SET_ENTITY_COORDS, int>(playerPedId, -786.44f, -48.50f, 37.75f);
-
-/*
-			uintptr_t baseAddress = (uintptr_t)GetModuleHandle(nullptr);
-			FILE *pNativeHandlerListFile = fopen("nativeHandlers.txt", "w");
-
-			if(pNativeHandlerListFile)
-			{
-				fprintf(pNativeHandlerListFile, "base: 0x%p\n\n", baseAddress);
-
-				for(uint32_t i = 0; i < 10514; i += 2)
-				{
-					ScriptEngine::NativeHandler nativeHandler = ScriptEngine::GetNativeHandler(nativeTranslationTable_335to350[i]);
-					uintptr_t relativeAddress = (uintptr_t)nativeHandler - baseAddress;
-
-					fprintf(pNativeHandlerListFile, "0x%p --> 0x%p (0x%p)\n", nativeTranslationTable_335to350[i], nativeHandler, relativeAddress);
-				}
-
-				fclose(pNativeHandlerListFile);
-			}
-*/
+			ENTITY::SET_ENTITY_COORDS(playerPedId, -786.44f, -48.50f, 37.75f, FALSE, FALSE, FALSE, FALSE);
 
 			int init_code = connection.GetInitCode();
 
@@ -132,7 +113,7 @@ void TestThread::DoRun()
 		{
 			if(!s_bWasF9Pressed)
 			{
-				NativeInvoke::Invoke<REQUEST_MODEL, int>(0xC1AE4D16);
+				STREAMING::REQUEST_MODEL(0xC1AE4D16);
 
 				m_bIsWaitingForVehicleModelToLoad = true;
 				s_bWasF9Pressed = true;
@@ -147,7 +128,7 @@ void TestThread::DoRun()
 		{
 			if(!s_bWasF10Pressed)
 			{
-				if(NativeInvoke::Invoke<DOES_ENTITY_EXIST, uint32_t>(playerPedId) != 0)
+				if(ENTITY::DOES_ENTITY_EXIST(playerPedId) != 0)
 				{
 					static LPCSTR weaponNames[] = {
 						"WEAPON_KNIFE", "WEAPON_NIGHTSTICK", "WEAPON_HAMMER", "WEAPON_BAT", "WEAPON_GOLFCLUB", "WEAPON_CROWBAR", 
@@ -162,19 +143,14 @@ void TestThread::DoRun()
 						"WEAPON_MARKSMANRIFLE", "WEAPON_HEAVYSHOTGUN", "WEAPON_GUSENBERG", "WEAPON_HATCHET", "WEAPON_RAILGUN"
 					};
 
-					uint32_t hash = NativeInvoke::Invoke<GET_HASH_KEY, uint32_t>("WEAPON_SMG");
-					NativeInvoke::Invoke<GIVE_DELAYED_WEAPON_TO_PED, uint32_t>(playerPedId, hash, 1000, 0);
-
 					for(int i = 0; i < sizeof(weaponNames) / sizeof(weaponNames[0]); i++)
 					{
-						uint32_t hash = NativeInvoke::Invoke<GET_HASH_KEY, uint32_t>((char *)weaponNames[i]);
-
-						NativeInvoke::Invoke<GIVE_DELAYED_WEAPON_TO_PED, uint32_t>(playerPedId, hash, 1000, 0);
+						WEAPON::GIVE_DELAYED_WEAPON_TO_PED(playerPedId, GAMEPLAY::GET_HASH_KEY((char *)weaponNames[i]), 1000, FALSE);
 					}
 
-					NativeInvoke::Invoke<SET_NOTIFICATION_TEXT_ENTRY, int>("STRING");
-					NativeInvoke::Invoke<ADD_TEXT_COMPONENT_STRING, int>("All weapons added.");
-					NativeInvoke::Invoke<DRAW_NOTIFICATION, int>(FALSE, FALSE);
+					UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
+					UI::_ADD_TEXT_COMPONENT_STRING("All weapons added.");
+					UI::_DRAW_NOTIFICATION(FALSE, FALSE);
 				}
 
 				s_bWasF10Pressed = true;
@@ -189,7 +165,7 @@ void TestThread::DoRun()
 		{
 			if(!s_bWasF11Pressed)
 			{
-				NativeInvoke::Invoke<REQUEST_MODEL, int>(0x65B93076);
+				STREAMING::REQUEST_MODEL(0x65B93076);
 
 				m_bIsWaitingForPedModelToLoad = true;
 				s_bWasF11Pressed = true;
@@ -202,15 +178,16 @@ void TestThread::DoRun()
 
 		if(m_bIsWaitingForVehicleModelToLoad)
 		{
-			if(NativeInvoke::Invoke<HAS_MODEL_LOADED, bool>(0xC1AE4D16))
+			if(STREAMING::HAS_MODEL_LOADED(0xC1AE4D16))
 			{
-				scrVector entityCoords = NativeInvoke::Invoke<GET_ENTITY_COORDS, scrVector>(playerPedId);
+				scrVector3 entityCoords = ENTITY::GET_ENTITY_COORDS(playerPedId, TRUE);
+				scrVehicle vehicle = VEHICLE::CREATE_VEHICLE(0xC1AE4D16, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, FALSE, TRUE);
 
-				NativeInvoke::Invoke<CREATE_VEHICLE, int>(0xC1AE4D16, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, 1, 0);
+				STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(0xC1AE4D16);
 
-				NativeInvoke::Invoke<SET_NOTIFICATION_TEXT_ENTRY, int>("STRING");
-				NativeInvoke::Invoke<ADD_TEXT_COMPONENT_STRING, int>("Vehicle spawned.");
-				NativeInvoke::Invoke<DRAW_NOTIFICATION, int>(FALSE, FALSE);
+				UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
+				UI::_ADD_TEXT_COMPONENT_STRING("Vehicle spawned.");
+				UI::_DRAW_NOTIFICATION(FALSE, FALSE);
 
 				m_bIsWaitingForVehicleModelToLoad = false;
 			}
@@ -218,16 +195,20 @@ void TestThread::DoRun()
 
 		if(m_bIsWaitingForPedModelToLoad)
 		{
-			if(NativeInvoke::Invoke<HAS_MODEL_LOADED, bool>(0x65B93076))
+			if(STREAMING::HAS_MODEL_LOADED(0x65B93076))
 			{
-				scrVector entityCoords = NativeInvoke::Invoke<GET_ENTITY_COORDS, scrVector>(playerPedId);
-				scrPed ped = NativeInvoke::Invoke<CREATE_PED, uint32_t>(1, 0x65B93076, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, 0, 1);
+				scrVector3 entityCoords = ENTITY::GET_ENTITY_COORDS(playerPedId, TRUE);
+				scrPed ped = PED::CREATE_PED(1, 0x65B93076, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, FALSE, TRUE);
 
-				NativeInvoke::Invoke<SET_PED_CAN_BE_TARGETTED, int>(ped, 1);
+				PED::SET_PED_CAN_BE_TARGETTED(ped, TRUE);
+				WEAPON::SET_PED_DROPS_WEAPONS_WHEN_DEAD(m_clonePed, FALSE);
+				PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(m_clonePed, TRUE);
 
-				NativeInvoke::Invoke<SET_NOTIFICATION_TEXT_ENTRY, int>("STRING");
-				NativeInvoke::Invoke<ADD_TEXT_COMPONENT_STRING, int>("Ped spawned.");
-				NativeInvoke::Invoke<DRAW_NOTIFICATION, int>(FALSE, FALSE);
+				STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(0x65B93076);
+
+				UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
+				UI::_ADD_TEXT_COMPONENT_STRING("Ped spawned.");
+				UI::_DRAW_NOTIFICATION(FALSE, FALSE);
 
 				m_spawnedPeds.push_back(ped);
 				m_bIsWaitingForPedModelToLoad = false;
@@ -240,7 +221,7 @@ void TestThread::DoRun()
 			{
 				if(!m_bIsWaitingForClonePedModelToLoad && !m_bClonePedSpawned)
 				{
-					NativeInvoke::Invoke<REQUEST_MODEL, int>(0x9B810FA2);
+					STREAMING::REQUEST_MODEL(0x9B810FA2);
 
 					m_bIsWaitingForClonePedModelToLoad = true;
 				}
@@ -255,42 +236,16 @@ void TestThread::DoRun()
 
 		if(m_bIsWaitingForClonePedModelToLoad)
 		{
-			if(NativeInvoke::Invoke<HAS_MODEL_LOADED, bool>(0x9B810FA2))
+			if(STREAMING::HAS_MODEL_LOADED(0x9B810FA2))
 			{
-				scrVector entityCoords = NativeInvoke::Invoke<GET_ENTITY_COORDS, scrVector>(playerPedId);
+				scrVector3 entityCoords = ENTITY::GET_ENTITY_COORDS(playerPedId, TRUE);
+				m_clonePed = PED::CREATE_PED(1, 0x9B810FA2, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, FALSE, TRUE);
 
-				m_clonePed = NativeInvoke::Invoke<CREATE_PED, uint32_t>(1, 0x9B810FA2, entityCoords.x, entityCoords.y + 2, entityCoords.z, 0.0f, 0, 1);
+				PED::SET_PED_CAN_BE_TARGETTED(m_clonePed, TRUE);
+				WEAPON::SET_PED_DROPS_WEAPONS_WHEN_DEAD(m_clonePed, FALSE);
+				PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(m_clonePed, TRUE);
 
-				/*if(GameAddresses::scriptHandleToPed != NULL)
-				{
-					typedef uint64_t (__fastcall * scriptHandleToPed_t)(scrPed pedHandle);
-					static scriptHandleToPed_t scriptHandleToPed = (scriptHandleToPed_t)GameAddresses::scriptHandleToPed;
-
-					uint64_t pClonePed = scriptHandleToPed(m_clonePed);
-
-					if(pClonePed != NULL && GameAddresses::pedIntelligenceOffset != 0)
-					{
-						uint64_t pClonePedIntelligence = *(uint64_t *)(pClonePed + GameAddresses::pedIntelligenceOffset);
-
-						if(pClonePedIntelligence != NULL)
-						{
-							uint64_t pTaskTreePed = *(uint64_t *)(pClonePedIntelligence + 0x360);
-
-							if(pTaskTreePed != NULL)
-							{
-								uint64_t taskPlayerOnFootConstructorAddr = hook::baseAddress + 0xA35278; // 678
-								CTaskPlayerOnFoot *pTaskPlayerOnFoot = new CTaskPlayerOnFoot;
-
-								typedef uint64_t (__fastcall * taskPlayerOnFootConstructor_t)(CTaskPlayerOnFoot *pTaskPlayerOnFoot);
-								static taskPlayerOnFootConstructor_t taskPlayerOnFootConstructor = (taskPlayerOnFootConstructor_t)taskPlayerOnFootConstructorAddr;
-
-								taskPlayerOnFootConstructor(pTaskPlayerOnFoot);
-
-								(*(void (__fastcall **)(DWORD64, DWORD64, signed __int64, DWORD64))(*(DWORD64 *)(pTaskTreePed) + 16))(pTaskTreePed, (DWORD64)pTaskPlayerOnFoot, 4, 0);
-							}
-						}
-					}
-				}*/
+				STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(0x9B810FA2);
 
 				m_bClonePedSpawned = true;
 				m_bIsWaitingForClonePedModelToLoad = false;
@@ -299,11 +254,11 @@ void TestThread::DoRun()
 
 		if(m_bClonePedSpawned && GameAddresses::scriptHandleToPed != NULL && m_clonePed != -1)
 		{
-			if(NativeInvoke::Invoke<DOES_ENTITY_EXIST, bool>(m_clonePed) && NativeInvoke::Invoke<IS_ENTITY_A_PED, bool>(m_clonePed))
+			if(ENTITY::DOES_ENTITY_EXIST(m_clonePed) && ENTITY::IS_ENTITY_A_PED(m_clonePed))
 			{
-				if(!NativeInvoke::Invoke<IS_ENTITY_DEAD, bool>(m_clonePed) && !NativeInvoke::Invoke<IS_PED_DEAD, bool>(m_clonePed))
+				if(!ENTITY::IS_ENTITY_DEAD(m_clonePed) && !PED::IS_PED_DEAD_OR_DYING(m_clonePed, TRUE))
 				{
-					if(!NativeInvoke::Invoke<IS_ENTITY_DEAD, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_DEAD, bool>(playerPedId))
+					if(!ENTITY::IS_ENTITY_DEAD(playerPedId) && !PED::IS_PED_DEAD_OR_DYING(playerPedId, TRUE))
 					{
 						typedef uint64_t (__fastcall * scriptHandleToPed_t)(scrPed pedHandle);
 						static scriptHandleToPed_t scriptHandleToPed = (scriptHandleToPed_t)GameAddresses::scriptHandleToPed;
@@ -315,73 +270,91 @@ void TestThread::DoRun()
 						{
 							g_pClonePed = pClonePed;
 
-							scrVector playerCoords;
+							scrVector3 playerCoords;
 							playerCoords.x = *(float *)(pLocalPlayerPed + 0x90);
 							playerCoords.y = *(float *)(pLocalPlayerPed + 0x94);
 							playerCoords.z = *(float *)(pLocalPlayerPed + 0x98);
 
-							scrVector playerRotation = NativeInvoke::Invoke<GET_ENTITY_ROTATION, scrVector>(playerPedId, 0);
-							scrVector playerVelocity = NativeInvoke::Invoke<GET_ENTITY_VELOCITY, scrVector>(playerPedId, 0);
+							scrVector3 playerRotation = ENTITY::GET_ENTITY_ROTATION(playerPedId, 0);
+							scrVector3 playerVelocity = ENTITY::GET_ENTITY_VELOCITY(playerPedId);
 
-							if(NativeInvoke::Invoke<IS_PED_JUMPING, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_JUMPING, bool>(m_clonePed))
+							if(PED::IS_PED_JUMPING(playerPedId) && !PED::IS_PED_JUMPING(m_clonePed))
 							{
 								playerCoords.z += 0.075f;
 							}
 
-							NativeInvoke::Invoke<SET_ENTITY_COORDS_NO_OFFSET, int>(m_clonePed, playerCoords.x, playerCoords.y + 2, playerCoords.z);
-							NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(m_clonePed, playerRotation.x, playerRotation.y, playerRotation.z, 2, 1);
-							NativeInvoke::Invoke<SET_ENTITY_VELOCITY, int>(m_clonePed, playerVelocity.x, playerVelocity.y, playerVelocity.z);
+							ENTITY::SET_ENTITY_COORDS_NO_OFFSET(m_clonePed, playerCoords.x, playerCoords.y + 2, playerCoords.z, FALSE, FALSE, FALSE);
+							ENTITY::SET_ENTITY_ROTATION(m_clonePed, playerRotation.x, playerRotation.y, playerRotation.z, 2, TRUE);
+							ENTITY::SET_ENTITY_VELOCITY(m_clonePed, playerVelocity.x, playerVelocity.y, playerVelocity.z);
+
+							PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(m_clonePed, TRUE);
 
 							scrHash
 								curPlayerPedWeaponHash = 0,
 								curClonePedWeaponHash = 0;
-						
-							NativeInvoke::Invoke<GET_CURRENT_PED_WEAPON, scrHash>(playerPedId, &curPlayerPedWeaponHash, true);
-							NativeInvoke::Invoke<GET_CURRENT_PED_WEAPON, scrHash>(m_clonePed, &curClonePedWeaponHash, true);
+
+							WEAPON::GET_CURRENT_PED_WEAPON(playerPedId, &curPlayerPedWeaponHash, TRUE);
+							WEAPON::GET_CURRENT_PED_WEAPON(m_clonePed, &curClonePedWeaponHash, TRUE);
 
 							if(curPlayerPedWeaponHash != curClonePedWeaponHash)
 							{
-								NativeInvoke::Invoke<GIVE_WEAPON_TO_PED, scrVoid>(m_clonePed, curPlayerPedWeaponHash, 9999, true, true);
-								NativeInvoke::Invoke<SET_CURRENT_PED_WEAPON, scrVoid>(m_clonePed, curPlayerPedWeaponHash, true);
+								WEAPON::GIVE_WEAPON_TO_PED(m_clonePed, curPlayerPedWeaponHash, 9999, TRUE, TRUE);
+								WEAPON::SET_CURRENT_PED_WEAPON(m_clonePed, curPlayerPedWeaponHash, TRUE);
 							}
 
-							if(NativeInvoke::Invoke<IS_PED_RELOADING, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_RELOADING, bool>(m_clonePed))
+							if(PED::IS_PED_RELOADING(playerPedId) && !PED::IS_PED_RELOADING(m_clonePed))
 							{
-								NativeInvoke::Invoke<TASK_RELOAD_WEAPON, scrVoid>(m_clonePed, 1); // not seems to work
+								WEAPON::MAKE_PED_RELOAD(m_clonePed);
+								AI::TASK_RELOAD_WEAPON(m_clonePed, TRUE);
 							}
 
-							if(NativeInvoke::Invoke<IS_PED_JUMPING, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_JUMPING, bool>(m_clonePed))
+							if(PED::IS_PED_JUMPING(playerPedId) && !PED::IS_PED_JUMPING(m_clonePed))
 							{
-								NativeInvoke::Invoke<TASK_JUMP, scrVoid>(m_clonePed, true);
-							}
-							else if(playerVelocity.x > 0 || playerVelocity.y > 0 || playerVelocity.z > 0)
-							{
-								NativeInvoke::Invoke<TASK_GO_STRAIGHT_TO_COORD, scrVoid>(m_clonePed, playerCoords.x, playerCoords.y + 2, playerCoords.z, 4.0f, 15, 0.0f, 0.0f);
-							}
-							else
-							{
-								NativeInvoke::Invoke<TASK_STAND_STILL, scrVoid>(m_clonePed, 15);
+								AI::TASK_JUMP(m_clonePed, TRUE);
 							}
 
-							*(float *)(pClonePed + 0x578) = *(float *)(pLocalPlayerPed + 0x578); // current sprinting speed
-							*(float *)(pClonePed + 0x580) = *(float *)(pLocalPlayerPed + 0x580); // target sprinting speed
+							*(float *)(pClonePed + 0x578) = *(float *)(pLocalPlayerPed + 0x578); // current move blend ratio
+							*(float *)(pClonePed + 0x580) = *(float *)(pLocalPlayerPed + 0x580); // target move blend ratio
+							*(float *)(pClonePed + 0x588) = *(float *)(pLocalPlayerPed + 0x578); // min move blend ratio
 						}
 					}
 				}
 				else
 				{
-					NativeInvoke::Invoke<RESURRECT_PED, int>(m_clonePed);
-					NativeInvoke::Invoke<CLEAR_PED_TASKS_IMMEDIATELY, scrVoid>(m_clonePed);
+					PED::RESURRECT_PED(m_clonePed);
+					AI::CLEAR_PED_TASKS_IMMEDIATELY(m_clonePed);
+
 /*
 					g_pClonePed = NULL;
 
-					scrPed handle = m_clonePed;
+					scrAny handle = m_clonePed;
 
 					m_bClonePedSpawned = false;
 					m_clonePed = -1;
 
-					NativeInvoke::Invoke<DELETE_PED, scrVoid>(&handle);
+					PED::DELETE_PED(&handle);
 */
+				}
+			}
+		}
+
+		for(auto& plyr : player_pool.players)
+		{
+			if(plyr.waiting_for_model_to_load && !plyr.spawned)
+			{
+				if(STREAMING::HAS_MODEL_LOADED(plyr.spawn_info.model_hash))
+				{
+					plyr.ped = PED::CREATE_PED(1, plyr.spawn_info.model_hash, plyr.spawn_info.position.x, plyr.spawn_info.position.y, plyr.spawn_info.position.z, 0.0f, FALSE, TRUE);
+					
+					ENTITY::SET_ENTITY_ROTATION(plyr.ped, plyr.spawn_info.rotation.x, plyr.spawn_info.rotation.y, plyr.spawn_info.rotation.z, 2, TRUE);
+					WEAPON::SET_PED_DROPS_WEAPONS_WHEN_DEAD(plyr.ped, FALSE);
+					PED::SET_PED_CAN_BE_TARGETTED(plyr.ped, TRUE);
+					PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(plyr.ped, TRUE);
+
+					STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(plyr.spawn_info.model_hash);
+
+					plyr.waiting_for_model_to_load = false;
+					plyr.spawned = true;
 				}
 			}
 		}
@@ -389,7 +362,7 @@ void TestThread::DoRun()
 		static long long last_onfoot_sync = 0;
 		long long current_time = SharedUtility::GetTime64();
 
-		if(GameAddresses::scriptHandleToPed != NULL && !NativeInvoke::Invoke<IS_ENTITY_DEAD, bool>(playerPedId) && !NativeInvoke::Invoke<IS_PED_DEAD, bool>(playerPedId))
+		if(GameAddresses::scriptHandleToPed != NULL && !ENTITY::IS_ENTITY_DEAD(playerPedId) && !PED::IS_PED_DEAD_OR_DYING(playerPedId, TRUE))
 		{
 			if(connected && current_time - last_onfoot_sync > 50)
 			{
@@ -409,10 +382,11 @@ void TestThread::DoRun()
 				position.y = *(float *)(pLocalPlayerPed + 0x94);
 				position.z = *(float *)(pLocalPlayerPed + 0x98);
 
-				scrVector scr_rotation = NativeInvoke::Invoke<GET_ENTITY_ROTATION, scrVector>(playerPedId, 0);
-				rotation.x = scr_rotation.x; rotation.y = scr_rotation.y; rotation.z = scr_rotation.z;
+				scrVector3
+					scr_rotation = ENTITY::GET_ENTITY_ROTATION(playerPedId, 0),
+					scr_velocity = ENTITY::GET_ENTITY_VELOCITY(playerPedId);
 
-				scrVector scr_velocity = NativeInvoke::Invoke<GET_ENTITY_VELOCITY, scrVector>(playerPedId, 0);
+				rotation.x = scr_rotation.x; rotation.y = scr_rotation.y; rotation.z = scr_rotation.z;
 				velocity.x = scr_velocity.x; velocity.y = scr_velocity.y; velocity.z = scr_velocity.z;
 
 				float
@@ -420,11 +394,11 @@ void TestThread::DoRun()
 					target_move_blend_ratio = *(float *)(pLocalPlayerPed + 0x580);
 
 				scrHash current_weapon_hash = 0;
-				NativeInvoke::Invoke<GET_CURRENT_PED_WEAPON, scrHash>(playerPedId, &current_weapon_hash, true);
+				WEAPON::GET_CURRENT_PED_WEAPON(playerPedId, &current_weapon_hash, TRUE);
 
 				bool is_jumping = false;
 
-				if(NativeInvoke::Invoke<IS_PED_JUMPING, bool>(playerPedId))
+				if(PED::IS_PED_JUMPING(playerPedId))
 				{
 					is_jumping = true;
 				}
@@ -443,17 +417,17 @@ void TestThread::DoRun()
 			}
 		}
 
-		NativeInvoke::Invoke<SET_PED_DENSITY_MULTIPLIER_THIS_FRAME, int>(0.0f);
-		NativeInvoke::Invoke<SET_SCENARIO_PED_DENSITY_MULTIPLIER_THIS_FRAME, int>(0.0f, 0.0f);
+		PED::SET_PED_DENSITY_MULTIPLIER_THIS_FRAME(0.0f);
+		PED::SET_SCENARIO_PED_DENSITY_MULTIPLIER_THIS_FRAME(0.0f, 0.0f);
 
-		NativeInvoke::Invoke<SET_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME, int>(0.0f);
-		NativeInvoke::Invoke<SET_PARKED_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME, int>(0.0f);
-		NativeInvoke::Invoke<SET_RANDOM_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME, int>(0.0f);
+		VEHICLE::SET_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(0.0f);
+		VEHICLE::SET_PARKED_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(0.0f);
+		VEHICLE::SET_RANDOM_VEHICLE_DENSITY_MULTIPLIER_THIS_FRAME(0.0f);
 
-		NativeInvoke::Invoke<SUPPRESS_SHOCKING_EVENTS_NEXT_FRAME, uint32_t>();
-		NativeInvoke::Invoke<SUPPRESS_AGITATION_EVENTS_NEXT_FRAME, uint32_t>();
+		DECISIONEVENT::SUPPRESS_SHOCKING_EVENTS_NEXT_FRAME();
+		DECISIONEVENT::SUPPRESS_AGITATION_EVENTS_NEXT_FRAME();
 
-		NativeInvoke::Invoke<SET_MAX_WANTED_LEVEL, int>(0);
+		PLAYER::SET_MAX_WANTED_LEVEL(0);
 	}
 
 	RunNetwork();
@@ -510,23 +484,52 @@ void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
 
 void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
 {
-	for(auto &plyr : player_pool.players)
+	for(auto& plyr : player_pool.players)
 	{
 		if(plyr.id == message.GetSender() && !plyr.spawned)
 		{
-			uint32_t model_hash = message.GetModelHash();
+			uint32_t _model_hash = message.GetModelHash();
 
 			Vector3
-				position,
-				rotation;
+				_position,
+				_rotation;
 
-			message.GetPosition(position);
-			message.GetRotation(rotation);
+			message.GetPosition(_position);
+			message.GetRotation(_rotation);
 
-			plyr.ped = NativeInvoke::Invoke<CREATE_PED, uint32_t>(1, model_hash, position.x, position.y, position.z, 0.0f, 0, 1);
-			NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(plyr.ped, rotation.x, rotation.y, rotation.z, 2, 1);
+			plyr.spawn_info.model_hash = _model_hash;
+			plyr.spawn_info.position = _position;
+			plyr.spawn_info.rotation = _rotation;
 
-			plyr.spawned = true;
+			if(STREAMING::IS_MODEL_IN_CDIMAGE(_model_hash))
+			{
+				if(STREAMING::HAS_MODEL_LOADED(_model_hash))
+				{
+					plyr.ped = PED::CREATE_PED(1, _model_hash, _position.x, _position.y, _position.z, 0.0f, FALSE, TRUE);
+
+					ENTITY::SET_ENTITY_ROTATION(plyr.ped, _rotation.x, _rotation.y, _rotation.z, 2, TRUE);
+					WEAPON::SET_PED_DROPS_WEAPONS_WHEN_DEAD(plyr.ped, FALSE);
+					PED::SET_PED_CAN_BE_TARGETTED(plyr.ped, TRUE);
+					PED::SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(plyr.ped, TRUE);
+
+					STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(_model_hash);
+				
+					plyr.waiting_for_model_to_load = false;
+					plyr.spawned = true;
+				}
+				else
+				{
+					STREAMING::REQUEST_MODEL(_model_hash);
+
+					plyr.waiting_for_model_to_load = true;
+					plyr.spawned = false;
+				}
+			}
+			else
+			{
+				plyr.waiting_for_model_to_load = false;
+				plyr.spawned = false;
+			}
 
 			if(pChatWindow != NULL)
 			{
@@ -543,7 +546,7 @@ void TestThread::Handle(const ENetPeer* peer, PlayerDespawn& message)
 
 void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
 {
-	for(auto &plyr : player_pool.players)
+	for(auto& plyr : player_pool.players)
 	{
 		if(plyr.id == message.GetSender() && plyr.spawned && plyr.ped != -1)
 		{
@@ -563,40 +566,28 @@ void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
 			uint32_t sync_weapon_hash = message.GetCurrentWeaponHash();
 			bool is_jumping = message.IsJumping();
 
-			NativeInvoke::Invoke<SET_ENTITY_COORDS_NO_OFFSET, int>(plyr.ped, position.x, position.y + 2, position.z);
-			NativeInvoke::Invoke<SET_ENTITY_ROTATION, int>(plyr.ped, rotation.x, rotation.y, rotation.z, 2, 1);
-			NativeInvoke::Invoke<SET_ENTITY_VELOCITY, int>(plyr.ped, velocity.x, velocity.y, velocity.z);
+			ENTITY::SET_ENTITY_COORDS_NO_OFFSET(plyr.ped, position.x, position.y, position.z, FALSE, FALSE, FALSE);
+			ENTITY::SET_ENTITY_ROTATION(plyr.ped, rotation.x, rotation.y, rotation.z, 2, TRUE);
+			ENTITY::SET_ENTITY_VELOCITY(plyr.ped, velocity.x, velocity.y, velocity.z);
 
 			scrHash current_weapon_hash = 0;
-			NativeInvoke::Invoke<GET_CURRENT_PED_WEAPON, scrHash>(plyr.ped, &current_weapon_hash, true);
+			WEAPON::GET_CURRENT_PED_WEAPON(plyr.ped, &current_weapon_hash, TRUE);
 
 			if(current_weapon_hash != sync_weapon_hash)
 			{
-				NativeInvoke::Invoke<GIVE_WEAPON_TO_PED, scrVoid>(plyr.ped, sync_weapon_hash, 9999, true, true);
-				NativeInvoke::Invoke<SET_CURRENT_PED_WEAPON, scrVoid>(plyr.ped, sync_weapon_hash, true);
+				WEAPON::GIVE_WEAPON_TO_PED(plyr.ped, sync_weapon_hash, 9999, TRUE, TRUE);
+				WEAPON::SET_CURRENT_PED_WEAPON(plyr.ped, sync_weapon_hash, TRUE);
 			}
 
-			if(is_jumping && !NativeInvoke::Invoke<IS_PED_JUMPING, bool>(plyr.ped) && !plyr.was_jumping)
+			if(is_jumping && !PED::IS_PED_JUMPING(plyr.ped) && !plyr.was_jumping)
 			{
-				NativeInvoke::Invoke<TASK_JUMP, scrVoid>(plyr.ped, true);
+				AI::TASK_JUMP(plyr.ped, TRUE);
 
 				plyr.was_jumping = true;
 			}
 			else
 			{
 				plyr.was_jumping = false;
-			}
-
-			if(!is_jumping && !NativeInvoke::Invoke<IS_PED_JUMPING, bool>(plyr.ped))
-			{
-				if(velocity.x > 0 || velocity.y > 0 || velocity.z > 0)
-				{
-					NativeInvoke::Invoke<TASK_GO_STRAIGHT_TO_COORD, scrVoid>(plyr.ped, position.x, position.y, position.z, 4.0f, 15, 0.0f, 0.0f);
-				}
-				else
-				{
-					NativeInvoke::Invoke<TASK_STAND_STILL, scrVoid>(plyr.ped, 15);
-				}
 			}
 
 			typedef uint64_t (__fastcall * scriptHandleToPed_t)(scrPed pedHandle);
@@ -608,6 +599,7 @@ void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
 			{
 				*(float *)(sync_ped + 0x578) = current_move_blend_ratio;
 				*(float *)(sync_ped + 0x580) = target_move_blend_ratio;
+				*(float *)(sync_ped + 0x588) = current_move_blend_ratio;
 			}
 		}
 	}
@@ -661,11 +653,11 @@ void TestThread::RunNetwork()
 					}
 				}
 
-				scrPed playerPedId = NativeInvoke::Invoke<GET_PLAYER_PED, uint32_t>(-1);
+				scrPed playerPedId = PLAYER::GET_PLAYER_PED(-1);
 
 				if(playerPedId != -1 && playerPedId != 0)
 				{
-					scrVector scr_rotation = NativeInvoke::Invoke<GET_ENTITY_ROTATION, scrVector>(playerPedId, 0);
+					scrVector3 scr_rotation = ENTITY::GET_ENTITY_ROTATION(playerPedId, 0);
 					rotation.x = scr_rotation.x; rotation.y = scr_rotation.y; rotation.z = scr_rotation.z;
 				}
 
