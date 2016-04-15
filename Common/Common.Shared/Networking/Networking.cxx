@@ -49,10 +49,10 @@ void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerDe
 
 void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& data)
 {
-	//if(GTA_Active())
-	//{
+	if(IsActive())
+	{
 		OnFootSync_handler.Add(data);
-	//}
+	}
 }
 
 void V_Plus_NetworkClient::RunAsync()
@@ -69,5 +69,18 @@ void V_Plus_NetworkClient::RunAsync()
 	}
 }
 
-
 #endif
+
+V_Plus_NetworkClient::V_Plus_NetworkClient()
+	: is_active(true)
+{ }
+
+void V_Plus_NetworkClient::SetActive(bool active)
+{
+	is_active = active;
+}
+
+bool V_Plus_NetworkClient::IsActive()
+{
+	return is_active;
+}

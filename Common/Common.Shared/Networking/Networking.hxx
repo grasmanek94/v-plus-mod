@@ -202,7 +202,7 @@ public:
 
 class V_Plus_NetworkClient : public NetworkClient
 #ifdef _WIN32
-                            ,public MessageReceiver
+	, public MessageReceiver
 {
 
 private:
@@ -284,6 +284,14 @@ public:
 
 		return NetworkClient::Send(packet);
 	}
+
+private:
+	std::atomic<bool> is_active;
+public:
+	void SetActive(bool active);
+	bool IsActive();
+
+	V_Plus_NetworkClient();
 };
 
 class V_Plus_NetworkServer : public NetworkServer
