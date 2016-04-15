@@ -4,3 +4,5 @@
 #include "Messages/PeerConnection.hxx"
 #include "Messages/PlayerMessages.hxx"
 #include "Messages/OnFootSync.hxx"
+#include "Messages/EventConnect.hxx"
+#include "Messages/EventDisconnect.hxx"

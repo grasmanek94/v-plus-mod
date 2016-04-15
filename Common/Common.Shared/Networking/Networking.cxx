@@ -1,35 +1,73 @@
 #include "Networking.hxx"
 
-int Packet::Send(NetworkClient& client)
-{
-	if (!packet)
-	{
-		return 0;
-	}
+#ifdef _WIN32
 
-	int return_value = client.Send(packet);
-	packet = nullptr;
-	return return_value;
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& data)
+{
+	EventConnect_handler.Add(data);
 }
 
-int Packet::Send(NetworkServer& server, ENetPeer* peer)
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data)
 {
-	if (!packet)
-	{
-		return 0;
-	}
-
-	int return_value = server.Send(peer, packet);
-	packet = nullptr;
-	return return_value;
+	EventDisconnect_handler.Add(data);
 }
 
-void Packet::Broadcast(NetworkServer& server)
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data)
 {
-	if (!packet)
+	PeerConnected_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data)
+{
+	PeerDisconnected_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& data)
+{
+	ChatMessage_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& data)
+{
+	PlayerJoin_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& data)
+{
+	PlayerQuit_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& data)
+{
+	PlayerSpawn_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& data)
+{
+	PlayerDespawn_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& data)
+{
+	//if(GTA_Active())
+	//{
+		OnFootSync_handler.Add(data);
+	//}
+}
+
+void V_Plus_NetworkClient::RunAsync()
+{
+	ENetPacket* packet = nullptr;
+	while (delayed_packets_to_send.try_pop(packet))
 	{
-		return;
+		NetworkClient::Send(packet);
 	}
 
-	server.Broadcast(packet);
+	if (NetworkClient::Pull())
+	{
+		ProcessEvent(NetworkClient::Event());
+	}
 }
+
+
+#endif

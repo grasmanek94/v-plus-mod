@@ -39,6 +39,8 @@
     <ClCompile Include="Common.cxx">
       <Filter>Networking</Filter>
     </ClCompile>
+    <ClCompile Include="Networking\Messages\EventDisconnect.cxx" />
+    <ClCompile Include="Networking\Messages\EventConnect.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Networking\Messages\ChatMessage.hxx">
@@ -74,5 +76,7 @@
     <ClInclude Include="Common.hxx">
       <Filter>Networking</Filter>
     </ClInclude>
+    <ClInclude Include="Networking\Messages\EventConnect.hxx" />
+    <ClInclude Include="Networking\Messages\EventDisconnect.hxx" />
   </ItemGroup>
 </Project>
