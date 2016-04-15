@@ -7,7 +7,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{63A1C39F-3077-44CF-9D2D-C9AEDB123E0D}</ProjectGuid>
+    <ProjectGuid>{8A606C32-3A4C-43B8-9EDD-00719476DC41}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ClientDummyThreaded</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>

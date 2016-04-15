@@ -218,7 +218,8 @@ public:
 			return false;
 		}
 
-		return delayed_packets_to_send.push(packet);
+		delayed_packets_to_send.push(packet);
+		return true;
 	}
 
 	template<typename T>
@@ -231,7 +232,8 @@ public:
 			return false;
 		}
 
-		return delayed_packets_to_send.push(packet);
+		delayed_packets_to_send.push(packet);
+		return true;
 	}
 
 	void RunAsync();
