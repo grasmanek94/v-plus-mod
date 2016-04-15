@@ -206,6 +206,10 @@ private:
 			pos.z = 2.0f * pos.x - pos.y;
 			sync.SetPosition(pos);
 
+			std::stringstream s;
+			s << "Sending OnFoot Sync: POS:[" << pos.x << "; " << pos.y << "; " << pos.z << "]" << std::endl;
+			streams.push(s.str());
+
 			V_Plus_NetworkClient::SendAsync(sync);
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 		}
@@ -215,13 +219,10 @@ private:
 	{
 		while (true)
 		{
-			if (GetAsyncKeyState('X'))
-			{
-				ChatMessage message;
-				message.SetContents(L"Hello there, here is a Dummy Client Threaded!");
-				V_Plus_NetworkClient::SendAsync(message);
-			}
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			ChatMessage message;
+			message.SetContents(L"Hello there, here is a Dummy Client Threaded!");
+			V_Plus_NetworkClient::SendAsync(message);
+			std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 		}
 	}
 

@@ -96,13 +96,13 @@ public:
 
 			case ENET_EVENT_TYPE_CONNECT:
 			{
-				Handle(event.peer, std::shared_ptr<EventConnect>());
+				Handle(event.peer, std::make_shared<EventConnect>(event.peer));
 				break;
 			}
 				
 			case ENET_EVENT_TYPE_DISCONNECT:
 			{
-				Handle(event.peer, std::shared_ptr<EventDisconnect>());
+				Handle(event.peer, std::make_shared<EventDisconnect>(event.peer));
 				break;
 			}
 
