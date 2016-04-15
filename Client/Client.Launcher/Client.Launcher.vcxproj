@@ -50,7 +50,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <UACUIAccess>false</UACUIAccess>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Common.Shared.lib;Client.Shared.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

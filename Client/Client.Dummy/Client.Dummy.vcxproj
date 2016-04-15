@@ -48,7 +48,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Network.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Common.Shared.lib;Client.Shared.lib;Client.Network.lib;Enet.lib;FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
