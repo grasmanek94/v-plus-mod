@@ -1,5 +1,12 @@
 #include "Main.h"
 
+#include "Gwen/Gwen.h"
+#include "Gwen/Skins/Simple.h"
+#include "Gwen/Skins/TexturedBase.h"
+#include "Gwen/UnitTest/UnitTest.h"
+#include "Gwen/Input/Windows.h"
+#include "Gwen/Renderers/DirectX11.h"
+
 bool GameOverlay::bInitialized = false;
 
 ID3D11Device * GameOverlay::pDevice = NULL;
@@ -13,8 +20,18 @@ IFW1FontWrapper * GameOverlay::pFontWrapper = NULL;
 
 ChatWindow *pChatWindow = NULL;
 
+bool bGwenInitialized = false;
+bool bGwenEnabled = false;
+
+Gwen::Input::Windows GwenInput;
+
 HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags)
 {
+	static Gwen::Renderer::DirectX11 *pRenderer = NULL;
+	static Gwen::Skin::TexturedBase *pSkin = NULL;
+	static Gwen::Controls::Canvas *pCanvas = NULL;
+	static UnitTest *pUnitTest = NULL;
+
     if(!bInitialized)
     {
         pSwapChain->GetDevice(__uuidof(pDevice), (void**)&pDevice);
@@ -29,6 +46,31 @@ HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT Sy
 		{
 			pChatWindow = new ChatWindow(pContext, pFontWrapper);
 		}
+
+		HWND windowHandle = FindWindow(L"grcWindow", NULL);
+
+		pRenderer = new Gwen::Renderer::DirectX11(pDevice);
+		pSkin = new Gwen::Skin::TexturedBase(pRenderer);
+		pSkin->Init("Skin.png");
+
+		RECT FrameBounds;
+		GetClientRect(windowHandle, &FrameBounds);
+
+		pCanvas = new Gwen::Controls::Canvas(pSkin);
+		pCanvas->SetSize(FrameBounds.right, FrameBounds.bottom);
+/*
+		pCanvas->SetDrawBackground(true);
+		pCanvas->SetBackgroundColor(Gwen::Color(150, 170, 170, 255));
+*/
+		pCanvas->SetDrawBackground(false);
+
+		pUnitTest = new UnitTest(pCanvas);
+		pUnitTest->SetPos(10, 10);
+
+		GwenInput.Initialize(pCanvas);
+
+		bGwenInitialized = true;
+		bGwenEnabled = true;
 
         bInitialized = true;
     }
@@ -64,6 +106,27 @@ HRESULT __stdcall GameOverlay::HookedPresent(IDXGISwapChain *pSwapChain, UINT Sy
 	if(pChatWindow != NULL)
 	{
 		pChatWindow->Draw();
+	}
+
+	static eGameState lastGameState = GameStateUnknown;
+	eGameState currentGameState = GameStateWatcher::GetGameState();
+
+	if(lastGameState != currentGameState)
+	{
+		if(currentGameState == GameStatePlaying)
+		{
+			if(bGwenEnabled)
+			{
+				bGwenEnabled = false;
+			}
+		}
+
+		lastGameState = currentGameState;
+	}
+
+	if(bGwenInitialized && bGwenEnabled && pCanvas != NULL)
+	{
+		pCanvas->RenderCanvas();
 	}
 
     return pRealPresent(pSwapChain, SyncInterval, Flags);

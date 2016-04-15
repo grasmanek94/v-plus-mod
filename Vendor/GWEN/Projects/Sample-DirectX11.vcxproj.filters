@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Samples">
+      <UniqueIdentifier>{1B76B731-BB27-BE40-B2B0-240F026E43CF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Samples\DirectX11">
+      <UniqueIdentifier>{ebda5c20-1468-492c-a3c7-e5ea816aa3a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Samples\DirectX11\DirectX11Sample.cpp">
+      <Filter>Samples\DirectX11</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

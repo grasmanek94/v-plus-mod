@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3B13137B-CDA2-F544-862E-F08FAD08D473}</ProjectGuid>
+    <RootNamespace>UnitTest</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">unittest</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\lib\windows\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)unittest.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)unittest.lib</OutputFile>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\UnitTest\Button.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\Checkbox.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\CollapsibleList.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\ColorPicker.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\ComboBox.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\CrossSplitter.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\GroupBox.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\ImagePanel.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\Label.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\LabelMultiline.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\ListBox.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\MenuStrip.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\Numeric.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\PageControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\ProgressBar.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\Properties.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\RadioButton.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\ScrollControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\Slider.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\StatusBar.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\TabControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\TextBox.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\TreeControl.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\UnitTest.cpp">
+    </ClCompile>
+    <ClCompile Include="..\UnitTest\Window.cpp">
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\UnitTest\ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

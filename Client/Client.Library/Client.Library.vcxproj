@@ -46,7 +46,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Core.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Network.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Core.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Network.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;$(SolutionDir)Vendor\GWEN\lib\windows\unittest.lib;$(SolutionDir)Vendor\GWEN\lib\windows\GWEN-Renderer-DirectX11.lib;$(SolutionDir)Vendor\GWEN\lib\windows\gwen_static.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Vendor\GWEN\lib\DXSDK</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

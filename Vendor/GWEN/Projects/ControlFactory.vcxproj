@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3ACA3994-4671-854D-994B-69E4E9BCBD45}</ProjectGuid>
+    <RootNamespace>ControlFactory</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">controlfactory</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IntDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>..\lib\windows\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ProgramDataBaseFileName>$(OutDir)controlfactory.pdb</ProgramDataBaseFileName>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Lib>
+      <OutputFile>$(OutDir)controlfactory.lib</OutputFile>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Lib>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Util\ControlFactory\Base_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\Button_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\CheckBox_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\ComboBox_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\ControlFactory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\DesignerCanvas_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\FilePicker_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\FolderPicker_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\Image_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\Label_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\ListBox_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\MenuStrip_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\PageControl_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\ProgressBar_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\Rectangle_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\Slider_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\TextBox_Factory.cpp">
+    </ClCompile>
+    <ClCompile Include="..\Util\ControlFactory\VerticalSplitter_Factory.cpp">
+    </ClCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
