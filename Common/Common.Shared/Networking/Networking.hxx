@@ -301,6 +301,19 @@ public:
 	}
 
 	template<typename T>
+	int Send(ENetPeer* peer, const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
+	{
+		ENetPacket* packet = ConvertToENetPacket(object, flags);
+
+		if (!packet)
+		{
+			return -1;
+		}
+
+		return NetworkServer::Send(peer, packet);
+	}
+
+	template<typename T>
 	bool Broadcast(const std::shared_ptr<T>& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
 	{
 		ENetPacket* packet = ConvertToENetPacket(*object, flags);
@@ -315,19 +328,6 @@ public:
 	}
 
 	template<typename T>
-	int Send(ENetPeer* peer, const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
-	{
-		ENetPacket* packet = ConvertToENetPacket(object, flags);
-
-		if (!packet)
-		{
-			return -1;
-		}
-
-		return NetworkServer::Send(peer, packet);
-	}
-
-	template<typename T>
 	bool Broadcast(const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
 	{
 		ENetPacket* packet = ConvertToENetPacket(object, flags);
@@ -338,6 +338,35 @@ public:
 		}
 
 		NetworkServer::Broadcast(packet);
+		return true;
+	}
+
+
+	template<typename T>
+	bool Broadcast(const std::shared_ptr<T>& object, ENetPeer* except, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
+	{
+		ENetPacket* packet = ConvertToENetPacket(*object, flags);
+
+		if (!packet)
+		{
+			return false;
+		}
+
+		NetworkServer::Broadcast(packet, except);
+		return true;
+	}
+
+	template<typename T>
+	bool Broadcast(const T& object, ENetPeer* except, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
+	{
+		ENetPacket* packet = ConvertToENetPacket(object, flags);
+
+		if (!packet)
+		{
+			return false;
+		}
+
+		NetworkServer::Broadcast(packet, except);
 		return true;
 	}
 };
