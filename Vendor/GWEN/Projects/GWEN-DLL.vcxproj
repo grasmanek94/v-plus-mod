@@ -62,7 +62,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImportLibrary>..\lib\windows\gwen.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
