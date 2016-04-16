@@ -39,6 +39,8 @@ public:
 	bool Create(size_t max_connections = 2);
 	void Broadcast(const void* data, size_t bytes, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE);
 	void Broadcast(ENetPacket* packet);
+	void Broadcast(const void* data, size_t bytes, _ENetPacketFlag flags, ENetPeer* except);
+	void Broadcast(ENetPacket* packet, ENetPeer* except);
 };
 
 class NetworkClient : public NetworkBase

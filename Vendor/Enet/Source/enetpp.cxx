@@ -92,6 +92,16 @@ void NetworkServer::Broadcast(ENetPacket* packet)
 	enet_host_broadcast(member, 0, packet);
 }
 
+void NetworkServer::Broadcast(const void* data, size_t bytes, _ENetPacketFlag flags, ENetPeer* except)
+{
+	enet_host_broadcast_except(member, 0, enet_packet_create(data, bytes, flags), except);
+}
+
+void NetworkServer::Broadcast(ENetPacket* packet, ENetPeer* except)
+{
+	enet_host_broadcast_except(member, 0, packet, except);
+}
+
 NetworkClient::NetworkClient()
 	: peer(nullptr)
 {

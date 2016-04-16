@@ -15,14 +15,16 @@ private:
 	V_Plus_NetworkClient connection;
 	bool connected;
 
-	void Handle(const ENetPeer* peer, PeerConnected& data) override;
-	void Handle(const ENetPeer* peer, PeerDisconnected& data) override;
-	void Handle(const ENetPeer* peer, ChatMessage& message) override;
-	void Handle(const ENetPeer* peer, PlayerJoin& message) override;
-	void Handle(const ENetPeer* peer, PlayerQuit& message) override;
-	void Handle(const ENetPeer* peer, PlayerSpawn& message) override;
-	void Handle(const ENetPeer* peer, PlayerDespawn& message) override;
-	void Handle(const ENetPeer* peer, OnFootSync& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& data) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message) override;
 
 	void RunNetwork();
 

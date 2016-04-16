@@ -11,6 +11,8 @@
     <ClCompile Include="IdCounter.cxx" />
     <ClCompile Include="Networking\Messages.cxx" />
     <ClCompile Include="Networking\Messages\ChatMessage.cxx" />
+    <ClCompile Include="Networking\Messages\EventConnect.cxx" />
+    <ClCompile Include="Networking\Messages\EventDisconnect.cxx" />
     <ClCompile Include="Networking\Messages\OnFootSync.cxx" />
     <ClCompile Include="Networking\Messages\PeerConnection.cxx" />
     <ClCompile Include="Networking\Messages\PlayerMessages.cxx" />
@@ -24,6 +26,8 @@
     <ClInclude Include="IdCounter.hxx" />
     <ClInclude Include="Networking\Messages.hxx" />
     <ClInclude Include="Networking\Messages\ChatMessage.hxx" />
+    <ClInclude Include="Networking\Messages\EventConnect.hxx" />
+    <ClInclude Include="Networking\Messages\EventDisconnect.hxx" />
     <ClInclude Include="Networking\Messages\OnFootSync.hxx" />
     <ClInclude Include="Networking\Messages\PeerConnection.hxx" />
     <ClInclude Include="Networking\Messages\PlayerMessages.hxx" />

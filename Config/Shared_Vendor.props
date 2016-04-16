@@ -6,6 +6,7 @@
     <OutDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Build\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <_PropertySheetDisplayName>Shared_Vendor</_PropertySheetDisplayName>
+    <LibraryPath>$(SolutionDir)Build\$(Platform)\$(Configuration)\;$(OutDir)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup />

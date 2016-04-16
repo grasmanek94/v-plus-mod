@@ -433,44 +433,44 @@ void TestThread::DoRun()
 	RunNetwork();
 }
 
-void TestThread::Handle(const ENetPeer* peer, PeerConnected& data)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data)
 {
 
 }
 
-void TestThread::Handle(const ENetPeer* peer, PeerDisconnected& data)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data)
 {
 
 }
 
-void TestThread::Handle(const ENetPeer* peer, ChatMessage& message)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& message)
 {
 	//std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;
 
 	if(pChatWindow != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"[%d]: %ls", message.GetSender(), message.GetContents().c_str());
+		pChatWindow->AddInfoMessageW(L"[%d]: %ls", message->GetSender(), message->GetContents().c_str());
 	}
 }
 
-void TestThread::Handle(const ENetPeer* peer, PlayerJoin& message)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& message)
 {
-	__Player plyr(message.GetSender(), message.GetName());
+	__Player plyr(message->GetSender(), message->GetName());
 	player_pool.players.push_back(plyr);
 
 	if(pChatWindow != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message.GetName().c_str(), message.GetSender());
+		pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message->GetName().c_str(), message->GetSender());
 	}
 }
 
-void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& message)
 {
     for(auto iter = player_pool.players.begin(); iter != player_pool.players.end();)
     {
         auto temp_iter = iter++;
 
-        if(temp_iter->id == message.GetSender())
+        if(temp_iter->id == message->GetSender())
 		{
 			if(pChatWindow != NULL)
 			{
@@ -482,20 +482,20 @@ void TestThread::Handle(const ENetPeer* peer, PlayerQuit& message)
     }
 }
 
-void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& message)
 {
 	for(auto& plyr : player_pool.players)
 	{
-		if(plyr.id == message.GetSender() && !plyr.spawned)
+		if(plyr.id == message->GetSender() && !plyr.spawned)
 		{
-			uint32_t _model_hash = message.GetModelHash();
+			uint32_t _model_hash = message->GetModelHash();
 
 			Vector3
 				_position,
 				_rotation;
 
-			message.GetPosition(_position);
-			message.GetRotation(_rotation);
+			message->GetPosition(_position);
+			message->GetRotation(_rotation);
 
 			plyr.spawn_info.model_hash = _model_hash;
 			plyr.spawn_info.position = _position;
@@ -539,32 +539,32 @@ void TestThread::Handle(const ENetPeer* peer, PlayerSpawn& message)
 	}
 }
 
-void TestThread::Handle(const ENetPeer* peer, PlayerDespawn& message)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& message)
 {
 
 }
 
-void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message)
 {
 	for(auto& plyr : player_pool.players)
 	{
-		if(plyr.id == message.GetSender() && plyr.spawned && plyr.ped != -1)
+		if(plyr.id == message->GetSender() && plyr.spawned && plyr.ped != -1)
 		{
 			Vector3
 				position,
 				rotation,
 				velocity;
 
-			message.GetPosition(position);
-			message.GetRotation(rotation);
-			message.GetVelocity(velocity);
+			message->GetPosition(position);
+			message->GetRotation(rotation);
+			message->GetVelocity(velocity);
 
 			float
-				current_move_blend_ratio = message.GetCurrentMoveBlendRatio(),
-				target_move_blend_ratio = message.GetTargetMoveBlendRatio();
+				current_move_blend_ratio = message->GetCurrentMoveBlendRatio(),
+				target_move_blend_ratio = message->GetTargetMoveBlendRatio();
 
-			uint32_t sync_weapon_hash = message.GetCurrentWeaponHash();
-			bool is_jumping = message.IsJumping();
+			uint32_t sync_weapon_hash = message->GetCurrentWeaponHash();
+			bool is_jumping = message->IsJumping();
 
 			ENTITY::SET_ENTITY_COORDS_NO_OFFSET(plyr.ped, position.x, position.y, position.z, FALSE, FALSE, FALSE);
 			ENTITY::SET_ENTITY_ROTATION(plyr.ped, rotation.x, rotation.y, rotation.z, 2, TRUE);
@@ -605,95 +605,80 @@ void TestThread::Handle(const ENetPeer* peer, OnFootSync& message)
 	}
 }
 
-void TestThread::RunNetwork()
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& message)
 {
-	if (connection.Pull())
+	//std::cout << "Connected!" << std::endl;
+
+	if (pChatWindow != NULL)
 	{
-		ENetEvent event = connection.Event();
+		pChatWindow->AddInfoMessageW(L"Connected!");
+	}
 
-		switch (event.type)
+	connected = true;
+
+	player_pool.players.clear();
+
+	PlayerJoin player_join;
+	player_join.SetName(L"Player");
+	connection.Send(player_join);
+
+	PlayerSpawn player_spawn;
+
+	Vector3
+		position,
+		rotation;
+
+	if (GameAddresses::ppPedFactory != NULL)
+	{
+		uint64_t pPedFactory = *(uint64_t *)(GameAddresses::ppPedFactory);
+
+		if (pPedFactory != NULL)
 		{
-			case ENET_EVENT_TYPE_CONNECT:
+			uint64_t pLocalPlayerPed = *(uint64_t *)(pPedFactory + 8);
+
+			if (pLocalPlayerPed != NULL)
 			{
-				//std::cout << "Connected!" << std::endl;
-
-				if(pChatWindow != NULL)
-				{
-					pChatWindow->AddInfoMessageW(L"Connected!");
-				}
-
-				connected = true;
-
-				player_pool.players.clear();
-
-				PlayerJoin player_join;
-				player_join.SetName(L"Player");
-				connection.Send(player_join);
-
-				PlayerSpawn player_spawn;
-
-				Vector3
-					position,
-					rotation;
-
-				if(GameAddresses::ppPedFactory != NULL)
-				{
-					uint64_t pPedFactory = *(uint64_t *)(GameAddresses::ppPedFactory);
-
-					if(pPedFactory != NULL)
-					{
-						uint64_t pLocalPlayerPed = *(uint64_t *)(pPedFactory + 8);
-
-						if(pLocalPlayerPed != NULL)
-						{
-							position.x = *(float *)(pLocalPlayerPed + 0x90);
-							position.y = *(float *)(pLocalPlayerPed + 0x94);
-							position.z = *(float *)(pLocalPlayerPed + 0x98);
-						}
-					}
-				}
-
-				scrPed playerPedId = PLAYER::GET_PLAYER_PED(-1);
-
-				if(playerPedId != -1 && playerPedId != 0)
-				{
-					scrVector3 scr_rotation = ENTITY::GET_ENTITY_ROTATION(playerPedId, 0);
-					rotation.x = scr_rotation.x; rotation.y = scr_rotation.y; rotation.z = scr_rotation.z;
-				}
-
-				player_spawn.SetModelHash(0x0D7114C9);
-				player_spawn.SetPosition(position);
-				player_spawn.SetRotation(rotation);
-
-				connection.Send(player_spawn);
-				break;
-			}
-
-			case ENET_EVENT_TYPE_RECEIVE:
-			{
-				ProcessPacketReceiveEvent(event);
-				break;
-			}
-
-			case ENET_EVENT_TYPE_DISCONNECT:
-			{
-				//std::cout << "Disconnected! Reconnecting..." << std::endl;
-				connected = false;
-
-				if(pChatWindow != NULL)
-				{
-					pChatWindow->AddInfoMessageW(L"Disconnected! Reconnecting...");
-				}
-
-				connection.Connect("127.0.0.1", 5544);
-				break;
-			}
-
-			case ENET_EVENT_TYPE_NONE:
-			{
-				//plz no warnings
-				break;
+				position.x = *(float *)(pLocalPlayerPed + 0x90);
+				position.y = *(float *)(pLocalPlayerPed + 0x94);
+				position.z = *(float *)(pLocalPlayerPed + 0x98);
 			}
 		}
 	}
+
+	scrPed playerPedId = PLAYER::GET_PLAYER_PED(-1);
+
+	if (playerPedId != -1 && playerPedId != 0)
+	{
+		scrVector3 scr_rotation = ENTITY::GET_ENTITY_ROTATION(playerPedId, 0);
+		rotation.x = scr_rotation.x; rotation.y = scr_rotation.y; rotation.z = scr_rotation.z;
+	}
+
+	player_spawn.SetModelHash(0x0D7114C9);
+	player_spawn.SetPosition(position);
+	player_spawn.SetRotation(rotation);
+
+	connection.Send(player_spawn);
+}
+
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& message)
+{
+	//std::cout << "Disconnected! Reconnecting..." << std::endl;
+	connected = false;
+
+	if (pChatWindow != NULL)
+	{
+		pChatWindow->AddInfoMessageW(L"Disconnected! Reconnecting...");
+	}
+
+	connection.Connect("127.0.0.1", 5544);
+}
+
+void TestThread::RunNetwork()
+{
+	//Run this in another thread: (you may only use callbacks in SAME thread!)
+	connection.RunAsync();
+	//if you need data to/from other thread, remove callback (DO NOT OVERRIDE), and use:
+	//ClassName_handler.GetCount() // check if data available
+	//ClassName_handler.TryGet() : std::shared_ptr<ClassName> // tries to get data
+	//connection.SendAsync(ClassName) // send the data from another thread to network thread, network thread will run connection.Send on this
 }

@@ -3,83 +3,96 @@
 #include <Networking/Networking.hxx>
 #include <SharedUtility.h>
 
-class Client : public MessageReceiver
+class Client : public V_Plus_NetworkClient
 {
 private:
-	V_Plus_NetworkClient connection;
-
 	void HandleTick()
 	{
 		if (GetAsyncKeyState('X'))
 		{
 			ChatMessage message;
 			message.SetContents(L"Hello there, here is a Dummy Client!");
-			connection.Send(message);
+			V_Plus_NetworkClient::Send(message);
 		}
 	}
 
-	void Handle(const ENetPeer* peer, PeerConnected& data) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& data) override
+	{
+		in_addr x;
+		x.S_un.S_addr = peer->address.host;
+		std::cout << "EventConnect: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
+	}
+
+	void Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data) override
+	{
+		in_addr x;
+		x.S_un.S_addr = peer->address.host;
+		std::cout << "EventDisconnect: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
+	}
+
+
+	void Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data) override
 	{
 		in_addr x;
 		x.S_un.S_addr = peer->address.host;
 		std::cout << "Host connected: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
 	}
 
-	void Handle(const ENetPeer* peer, PeerDisconnected& data) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data) override
 	{
 		in_addr x;
 		x.S_un.S_addr = peer->address.host;
 		std::cout << "Host disconnected: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
 	}
 
-	void Handle(const ENetPeer* peer, ChatMessage& message) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& message) override
 	{
-		std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;
+		std::wcout << "[" << message->GetSender() << "]: " << message->GetContents() << std::endl;
 	}
 
-	void Handle(const ENetPeer* peer, PlayerJoin& message) override
-	{
-
-	}
-
-	void Handle(const ENetPeer* peer, PlayerQuit& message) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& message) override
 	{
 
 	}
 
-	void Handle(const ENetPeer* peer, PlayerSpawn& message) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& message) override
 	{
 
 	}
 
-	void Handle(const ENetPeer* peer, PlayerDespawn& message) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& message) override
 	{
 
 	}
 
-	void Handle(const ENetPeer* peer, OnFootSync& message) override
+	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& message) override
+	{
+
+	}
+
+	void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message) override
 	{
 		static size_t cloned_id = -1;
 
 		if(cloned_id == -1)
 		{
-			cloned_id = message.GetSender();
+			cloned_id = message->GetSender();
 		}
 
-		if(cloned_id == message.GetSender())
+		if(cloned_id == message->GetSender())
 		{
 			Vector3 position;
-			message.GetPosition(position);
+			message->GetPosition(position);
 			position.y += 2;
-			message.SetPosition(position);
-			connection.Send(message);
+			message->SetPosition(position);
+			V_Plus_NetworkClient::Send(message);
 		}
 	}
 
 public:
 	Client()
 	{
-		int init_code = connection.GetInitCode();
+		int init_code = V_Plus_NetworkClient::GetInitCode();
 
 		if (init_code)
 		{
@@ -87,7 +100,7 @@ public:
 			throw std::exception(("Cannot initialize ENET, error code: " + std::to_string(init_code)).c_str());
 		}
 
-		if (!connection.Create() || !connection.Good())
+		if (!V_Plus_NetworkClient::Create() || !V_Plus_NetworkClient::Good())
 		{
 			// TODO custom exception class
 			throw std::exception("ENET host member creation failed");
@@ -99,56 +112,13 @@ public:
 
 	void Tick()
 	{
-		if (connection.Pull())
-		{
-			ENetEvent event = connection.Event();
-
-			switch (event.type)
-			{
-
-			case ENET_EVENT_TYPE_CONNECT:
-			{
-				std::cout << "Connected!" << std::endl;
-
-				PlayerJoin player_join;
-				player_join.SetName(L"DummyClient");
-				connection.Send(player_join);
-
-				std::cout << "Sent player join packet!" << std::endl;
-
-				PlayerSpawn player_spawn;
-				player_spawn.SetModelHash(SharedUtility::HashString("A_C_Chimp"));
-				player_spawn.SetPosition(Vector3(-786.44f, -48.50f, 37.75f));
-				player_spawn.SetRotation(Vector3(0.0f, 0.0f, 0.0f));
-				connection.Send(player_spawn);
-
-				std::cout << "Sent player spawn packet!" << std::endl;
-				break;
-			}
-
-			case ENET_EVENT_TYPE_RECEIVE:
-			{
-				ProcessPacketReceiveEvent(event);
-			}
-			break;
-
-			case ENET_EVENT_TYPE_DISCONNECT:
-				std::cout << "Disconnected!" << std::endl;
-				break;
-
-			case ENET_EVENT_TYPE_NONE:
-				//plz no warnings
-				break;
-
-			}
-		}
-
+		V_Plus_NetworkClient::RunAsync();
 		HandleTick();
 	}
 
 	void Connect(const std::string& host, uint16_t port, const std::string& password)
 	{
-		connection.Connect(host, port);
+		V_Plus_NetworkClient::Connect(host, port);
 	}
 
 	~Client()
