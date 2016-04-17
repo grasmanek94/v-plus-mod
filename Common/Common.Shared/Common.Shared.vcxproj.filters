@@ -82,5 +82,8 @@
     <ClInclude Include="Networking\Messages\EventDisconnect.hxx" />
     <ClInclude Include="Networking\Messages\WorldUpdate.hxx" />
     <ClInclude Include="Networking\Messages\GameSetup.hxx" />
+    <ClInclude Include="Math\Vector2.hxx">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

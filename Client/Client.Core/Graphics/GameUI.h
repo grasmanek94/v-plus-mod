@@ -4,7 +4,9 @@ class GameUI
 {
 private:
 	bool m_bInitialized;
+
 	bool m_bDrawDebugInfo;
+	bool m_bTestWorldToScreen;
 
 	ID3D11Device *m_pD3D11Device;
 	ID3D11DeviceContext *m_pD3D11DeviceContext;
@@ -64,5 +66,9 @@ public:
 	void ToggleDrawingDebugInfo() { m_bDrawDebugInfo ^= 1; }
 	void DisableDrawingDebugInfo() { m_bDrawDebugInfo = false; }
 
+	void ToggleTestWorldToScreen() { m_bTestWorldToScreen ^= 1; }
+	void DisableWorldToScreenTest() { m_bTestWorldToScreen = false; }
+
 	void DrawDebugInfo();
+	void TestWorldToScreen();
 };

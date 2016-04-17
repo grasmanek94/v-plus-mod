@@ -3,7 +3,9 @@
 GameUI::GameUI(ID3D11Device *pD3D11Device, ID3D11DeviceContext *pD3D11DeviceContext)
 {
 	m_bInitialized = false;
+
 	m_bDrawDebugInfo = false;
+	m_bTestWorldToScreen = false;
 
 	m_pD3D11Device = pD3D11Device;
 	m_pD3D11DeviceContext = pD3D11DeviceContext;
@@ -97,6 +99,11 @@ void GameUI::Draw()
 			m_pChatWindow->Draw();
 		}
 	}
+
+	if(m_bTestWorldToScreen)
+	{
+		TestWorldToScreen();
+	}
 }
 
 bool GameUI::MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -139,10 +146,28 @@ bool GameUI::MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-
-	if(uMsg == WM_KEYUP && wParam == VK_F3)
+	
+	if(uMsg == WM_KEYUP)
 	{
-		ToggleDrawingDebugInfo();
+		switch(wParam)
+		{
+			case VK_F3:
+			{
+				ToggleDrawingDebugInfo();
+				break;
+			}
+
+			case VK_F5:
+			{
+				ToggleTestWorldToScreen();
+				break;
+			}
+
+			default:
+			{
+				break;
+			}
+		}
 	}
 
 	return true;
@@ -177,4 +202,36 @@ void GameUI::DrawDebugInfo()
 	}
 
 	drawTaskList(m_pD3D11DeviceContext, m_pDefaultFontWrapper);
+}
+
+void GameUI::TestWorldToScreen()
+{
+	if(GameStateWatcher::GetGameState() == GameStatePlaying && GameAddresses::ppPedFactory != NULL)
+	{
+		uint64_t pPedFactory = *(uint64_t *)(GameAddresses::ppPedFactory);
+
+		if(pPedFactory != NULL)
+		{
+			uint64_t pLocalPlayerPed = *(uint64_t *)(pPedFactory + 8);
+
+			if(pLocalPlayerPed != NULL)
+			{
+				struct
+				{
+					Vector3 world;
+					Vector2 screen;
+				} playerPosition;
+
+				playerPosition.world = Vector3(*(float *)(pLocalPlayerPed + 0x90), *(float *)(pLocalPlayerPed + 0x94), *(float *)(pLocalPlayerPed + 0x98));
+				playerPosition.screen = Vector2(0.0f, 0.0f);
+
+				GameOverlay::WorldToScreen(playerPosition.world, playerPosition.screen);
+
+				if(m_pD3D11DeviceContext != NULL && m_pDefaultFontWrapper != NULL)
+				{
+					m_pDefaultFontWrapper->DrawString(m_pD3D11DeviceContext, L"Player", 12.0f, playerPosition.screen.x, playerPosition.screen.y, 0xffffffff, FW1_RESTORESTATE);
+				}
+			}
+		}
+	}
 }

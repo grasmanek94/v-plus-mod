@@ -1,8 +1,12 @@
 #pragma once
 
-typedef HRESULT (__stdcall *DXGISwapChainPresent) (IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags); 
+class Vector2;
+class Vector3;
 
 class GameUI;
+
+typedef HRESULT (__stdcall *DXGISwapChainPresent) (IDXGISwapChain *pSwapChain, UINT SyncInterval, UINT Flags); 
+typedef bool (__fastcall *EngineWorldToScreen_t)(Vector3 worldPos, float *pRelativeScreenPositionX, float *pRelativeScreenPositionY);
 
 class GameOverlay
 {
@@ -13,6 +17,8 @@ private:
 	static DXGISwapChainPresent pRealPresent;
 	static uintptr_t hkSwapChainVFTable[64];
 
+	static EngineWorldToScreen_t EngineWorldToScreen;
+
 	static HRESULT __stdcall HookedPresent(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags);
 
 public:
@@ -21,4 +27,6 @@ public:
 
 	static bool Setup();
 	static void Shutdown();
+
+	static bool WorldToScreen(const Vector3 &worldPosition, Vector2 &screenPosition);
 };

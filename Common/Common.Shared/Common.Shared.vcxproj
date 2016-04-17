@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Math\Math.hxx" />
+    <ClInclude Include="Math\Vector2.hxx" />
     <ClInclude Include="Math\Vector3.hxx" />
     <ClInclude Include="Common.hxx" />
     <ClInclude Include="IdCounter.hxx" />
