@@ -4,6 +4,7 @@
 #include <concurrent_queue.h>
 #endif
 
+#include <cstdlib>
 #include <enet/enetpp.hxx>
 #include <memory>
 #include <atomic>
@@ -23,7 +24,7 @@ public:
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& data) = 0;
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& data) = 0;
 public:
-	template <typename size_t unused = 0>
+	template <size_t unused = 0>
 	void ProcessEvent(const ENetEvent& event)
 	{
 		switch(event.type)
