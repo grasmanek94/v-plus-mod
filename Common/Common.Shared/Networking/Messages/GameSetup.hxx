@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdlib>
 #include <Networking/SendableEventMessage.hxx>
 
 class GameSetup
@@ -14,4 +15,9 @@ public:
 	}
 
 	UniqueClassId_Declare(GameSetup);
+
+	GameSetup(size_t id = -1);
+
+	size_t GetId() const;
+	void SetId(size_t id);
 };
