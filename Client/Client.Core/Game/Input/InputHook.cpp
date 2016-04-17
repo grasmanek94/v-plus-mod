@@ -4,14 +4,15 @@ WNDPROC	oWndProc;
 
 LRESULT APIENTRY InputHook::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	LRESULT lResult = CallWindowProc(oWndProc, hwnd, uMsg, wParam, lParam);
-
 	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI() != NULL)
 	{
-		GameOverlay::GetGameUI()->MsgProc(hwnd, uMsg, wParam, lParam);
+		if(!GameOverlay::GetGameUI()->MsgProc(hwnd, uMsg, wParam, lParam))
+		{
+			return 0;
+		}
 	}
 
-	return lResult;
+	return CallWindowProc(oWndProc, hwnd, uMsg, wParam, lParam);
 }
 
 bool InputHook::Initialize()

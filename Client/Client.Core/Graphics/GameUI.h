@@ -59,7 +59,7 @@ public:
 	void Shutdown();
 
 	void Draw();
-	void MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	bool MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	void ToggleDrawingDebugInfo() { m_bDrawDebugInfo ^= 1; }
 	void DisableDrawingDebugInfo() { m_bDrawDebugInfo = false; }

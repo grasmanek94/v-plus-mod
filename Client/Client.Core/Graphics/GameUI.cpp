@@ -99,13 +99,29 @@ void GameUI::Draw()
 	}
 }
 
-void GameUI::MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+bool GameUI::MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	if(m_Gwen.bInitialized)
 	{
 		if(uMsg == WM_KEYUP && wParam == VK_F2)
 		{
 			m_Gwen.bEnabled ^= 1;
+
+			if(GameAddresses::pMouseInputEnabled != NULL)
+			{
+				if(*(GameAddresses::pMouseInputEnabled) != !m_Gwen.bEnabled)
+				{
+					*(GameAddresses::pMouseInputEnabled) = !m_Gwen.bEnabled;
+				}
+			}
+
+			if(GameAddresses::pKeyboardInputEnabled != NULL)
+			{
+				if(*(GameAddresses::pKeyboardInputEnabled) != !m_Gwen.bEnabled)
+				{
+					*(GameAddresses::pKeyboardInputEnabled) = !m_Gwen.bEnabled;
+				}
+			}
 		}
 
 		if(m_Gwen.bEnabled)
@@ -117,7 +133,10 @@ void GameUI::MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			msg.wParam = wParam;
 			msg.lParam = lParam;
 
-			m_Gwen.pInput->ProcessMessage(msg);
+			if(m_Gwen.pInput->ProcessMessage(msg))
+			{
+				return false;
+			}
 		}
 	}
 
@@ -125,6 +144,8 @@ void GameUI::MsgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		ToggleDrawingDebugInfo();
 	}
+
+	return true;
 }
 
 void GameUI::DrawDebugInfo()

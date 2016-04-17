@@ -4,6 +4,8 @@ uint64_t GameAddresses::ppPedFactory = NULL;
 char * GameAddresses::pGameKeyArray = NULL;
 uint64_t GameAddresses::scriptHandleToPed = NULL;
 uint32_t GameAddresses::pedIntelligenceOffset = NULL;
+uint8_t * GameAddresses::pMouseInputEnabled = NULL;
+uint8_t * GameAddresses::pKeyboardInputEnabled = NULL;
 
 bool GameAddresses::FindAddresses()
 {
@@ -58,6 +60,18 @@ bool GameAddresses::FindAddresses()
 	if(location)
 	{
 		pedIntelligenceOffset = *(uint32_t *)(location + 27);
+	}
+	else
+	{
+		return false;
+	}
+
+	location = GameUtility::FindPattern("\x48\x83\xEC\x28\x80\x3D\x00\x00\x00\x00\x00\x74\x05\xE8\x00\x00\x00\x00\x80", "xxxxxx????xxxx????x");
+
+	if(location)
+	{
+		pMouseInputEnabled = (uint8_t *)((location + 0x22) + *(unsigned int *)(location + 0x22) + 5);
+		pKeyboardInputEnabled = (uint8_t *)((location + 0x14) + *(unsigned int *)(location + 0x14) + 5);
 	}
 	else
 	{
