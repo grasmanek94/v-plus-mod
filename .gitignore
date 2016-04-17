@@ -282,3 +282,4 @@ $RECYCLE.BIN/
 *.lnk
 g-mp.VC.opendb
 Common/Common.Version/auto_version.h
+Common/Common.Version/temp_auto_version.h
