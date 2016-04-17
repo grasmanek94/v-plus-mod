@@ -13,7 +13,7 @@
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Server\Server.Application;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\Common.Shared.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Enet.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
