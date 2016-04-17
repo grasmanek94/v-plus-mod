@@ -87,6 +87,9 @@
       <Command>$(SolutionDir)Util\UpdateVersion.bat</Command>
     </PreBuildEvent>
     <Lib />
+    <Lib>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Version.cxx" />

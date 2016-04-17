@@ -102,6 +102,9 @@
       <AdditionalDependencies>$(SolutionDir)Build\$(Platform)\$(Configuration)\FW1FontWrapper.lib;$(SolutionDir)Build\$(Platform)\$(Configuration)\Client.Shared.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib />
+    <Lib>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\Client.Shared\SharedUtility.h" />

@@ -112,6 +112,7 @@
     <Lib>
       <OutputFile>$(OutDir)unittest.lib</OutputFile>
       <TargetMachine>MachineX64</TargetMachine>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
     </Lib>
     <Link>
       <SubSystem>Windows</SubSystem>

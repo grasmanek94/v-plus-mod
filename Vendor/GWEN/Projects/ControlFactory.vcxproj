@@ -113,6 +113,7 @@
     <Lib>
       <OutputFile>$(OutDir)controlfactory.lib</OutputFile>
       <TargetMachine>MachineX64</TargetMachine>
+      <LinkTimeCodeGeneration>false</LinkTimeCodeGeneration>
     </Lib>
     <Link>
       <SubSystem>Windows</SubSystem>
