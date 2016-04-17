@@ -47,6 +47,16 @@ void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerDe
 	PlayerDespawn_handler.Add(data);
 }
 
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data)
+{
+	GameSetup_handler.Add(data);
+}
+
+void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& data)
+{
+	WorldUpdate_handler.Add(data);
+}
+
 void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& data)
 {
 	if(IsActive())

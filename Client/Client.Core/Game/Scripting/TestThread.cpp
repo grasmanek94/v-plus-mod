@@ -456,6 +456,17 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>&
 
 }
 
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data)
+{
+
+}
+
+void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& data)
+{
+
+}
+
+
 void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& message)
 {
 	//std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;

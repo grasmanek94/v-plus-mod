@@ -41,6 +41,8 @@
     </ClCompile>
     <ClCompile Include="Networking\Messages\EventDisconnect.cxx" />
     <ClCompile Include="Networking\Messages\EventConnect.cxx" />
+    <ClCompile Include="Networking\Messages\GameSetup.cxx" />
+    <ClCompile Include="Networking\Messages\WorldUpdate.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Networking\Messages\ChatMessage.hxx">
@@ -78,5 +80,7 @@
     </ClInclude>
     <ClInclude Include="Networking\Messages\EventConnect.hxx" />
     <ClInclude Include="Networking\Messages\EventDisconnect.hxx" />
+    <ClInclude Include="Networking\Messages\WorldUpdate.hxx" />
+    <ClInclude Include="Networking\Messages\GameSetup.hxx" />
   </ItemGroup>
 </Project>

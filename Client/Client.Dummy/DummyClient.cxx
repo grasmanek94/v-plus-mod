@@ -70,6 +70,16 @@ private:
 
 	}
 
+	void Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& data) override 
+	{
+	
+	}
+
+	void Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data) override 
+	{
+	
+	}
+
 	void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message) override
 	{
 		static size_t cloned_id = -1;

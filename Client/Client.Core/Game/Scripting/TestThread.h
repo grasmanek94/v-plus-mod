@@ -25,6 +25,8 @@ private:
 	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& message) override;
 	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& message) override;
 	void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& message) override;
+	void Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& message) override;
 
 	void RunNetwork();
 

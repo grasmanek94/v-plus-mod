@@ -6,3 +6,5 @@
 #include "Messages/OnFootSync.hxx"
 #include "Messages/EventConnect.hxx"
 #include "Messages/EventDisconnect.hxx"
+#include "Messages/WorldUpdate.hxx"
+#include "Messages/GameSetup.hxx"

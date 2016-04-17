@@ -15,6 +15,7 @@ class MessageReceiver
 public:
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& data) = 0;
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data) = 0;
+
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data) = 0;
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data) = 0;
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& data) = 0;
@@ -23,6 +24,8 @@ public:
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& data) = 0;
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& data) = 0;
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& data) = 0;
+	virtual void Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& data) = 0;
+	virtual void Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data) = 0;
 public:
 	template <size_t unused = 0>
 	void ProcessEvent(const ENetEvent& event)
@@ -82,6 +85,8 @@ public:
 						#ifdef VPLUS_CLIENT
 						IMPLEMENT_CASE_FOR(PeerConnected);
 						IMPLEMENT_CASE_FOR(PeerDisconnected);
+						IMPLEMENT_CASE_FOR(GameSetup);
+						IMPLEMENT_CASE_FOR(WorldUpdate);
 						#endif
 					}
 
@@ -247,6 +252,7 @@ public: \
 
 	DECLARE_ASYNC_HANDLER(EventConnect);
 	DECLARE_ASYNC_HANDLER(EventDisconnect);
+
 	DECLARE_ASYNC_HANDLER(PeerConnected);
 	DECLARE_ASYNC_HANDLER(PeerDisconnected);
 	DECLARE_ASYNC_HANDLER(ChatMessage);
@@ -255,6 +261,8 @@ public: \
 	DECLARE_ASYNC_HANDLER(PlayerSpawn);
 	DECLARE_ASYNC_HANDLER(PlayerDespawn);
 	DECLARE_ASYNC_HANDLER(OnFootSync);
+	DECLARE_ASYNC_HANDLER(WorldUpdate);
+	DECLARE_ASYNC_HANDLER(GameSetup);
 #else
 {
 #endif

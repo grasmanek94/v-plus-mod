@@ -186,6 +186,17 @@ private:
 		}
 	}
 
+	void OtherReceiveThread()
+	{
+		while (true)
+		{
+			V_Plus_NetworkClient::WorldUpdate_handler.TryGet();
+			V_Plus_NetworkClient::GameSetup_handler.TryGet();
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(100 / (GameSetup_handler.GetCount() + WorldUpdate_handler.GetCount() + 1)));
+		}
+	}
+
 	void NetworkThread()
 	{
 		while (true)
@@ -290,6 +301,7 @@ public:
 		threads.push_back(std::thread(&ExtremelyThreadedClient::OnFootSyncSenderThread, this));
 		threads.push_back(std::thread(&ExtremelyThreadedClient::ChatMessageSenderThread, this));
 		threads.push_back(std::thread(&ExtremelyThreadedClient::ConsoleTextSyncThread, this));
+		threads.push_back(std::thread(&ExtremelyThreadedClient::OtherReceiveThread, this));
 
 		for(auto& thread: threads)
 		{

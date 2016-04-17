@@ -13,7 +13,7 @@
 #include <Math/Math.hxx>
 #include <IdCounter.hxx>
 
-struct __Player // temporary
+struct Player // temporary
 {
 	ENetPeer* peer;
 	size_t id;
@@ -22,20 +22,49 @@ struct __Player // temporary
 	uint32_t model_hash;
 	Vector3 position;
 	Vector3 rotation;
-
-	__Player(ENetPeer* _peer, size_t _id, std::wstring _name)
-	{
-		peer = _peer;
-		id = _id;
-		name = _name;
-		spawned = false;
-	}
 };
 
-struct __PlayerPool // temporary
+class Link
 {
-	std::list<__Player> players;
-} player_pool;
+private:
+	ENetPeer* peer;
+	Player player;
+
+public:
+	Link()
+		: peer(nullptr)
+	{ }
+
+	void SetPeer(ENetPeer* p)
+	{
+		if (peer)
+		{
+			peer->data = nullptr;
+		}
+
+		peer = p;
+		player.peer = p;
+		if (p)
+		{
+			p->data = reinterpret_cast<void*>(&player);
+		}
+	}
+
+	ENetPeer* GetPeer() const
+	{
+		return peer;
+	}
+
+	Player* GetPlayer()
+	{
+		return &player;
+	}
+
+	static Player* GetPlayer(ENetPeer* peer)
+	{
+		return reinterpret_cast<Player*>(peer->data);
+	}
+};
 
 class Server: public MessageReceiver
 {
@@ -43,86 +72,48 @@ private:
 	V_Plus_NetworkServer connection;
 	IdCounter id_generator;
 	const size_t max_players;
-	std::vector<ENetPeer*> peers;
-	std::set<ENetPeer*> connected_peers;
+	std::vector<Link> peers;
+	std::set<Link*> connected_peers;
 
-	void HandleTick()
-	{
+	// Not used in svr:
+	void Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data) override { }
+	void Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& data) override { }
+	void Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data) override { }
+	void Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data) override { }
 
-	}
-
+	// Handlers:
 	void Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& data) override
 	{
 		size_t id = id_generator.GetId();
 
-		peer->data = reinterpret_cast<void*>(id);//we can make this point to a structure fo the players data
+		Link* link = &peers[id];
+		link->SetPeer(peer);
+		connected_peers.insert(link);
 
-		if (id < max_players)
-		{
-			peers[id] = peer;
-			connected_peers.insert(peer);
-			//Handle connect
-			Handle(peer, std::make_shared<PeerConnected>(id));
-		}
-		else
-		{
-			//Server full
-			//Shouldn't happen because ENet already has max connections limited but ok, maybe we might switch sometime so lets leave this
-		}
+		std::cout << "Peer connected: " << peer->address.host << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data) override
 	{
-		size_t id = reinterpret_cast<size_t>(peer->data);
-		if (id < max_players)
-		{
-			//Handle disconnect
-			Handle(peer, std::make_shared<PeerDisconnected>(id));
+		Player* player = Link::GetPlayer(peer);
 
-			peers[id] = nullptr;
-			connected_peers.erase(peer);
-			id_generator.FreeId(id);
-		}
-	}
+		PlayerQuit player_quit;
+		player_quit.SetSender(player->id);
 
-	void Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data) override
-	{
-		//in_addr x;
-		//x.S_un.S_addr = peer->address.host;
-		std::cout << "Peer connected: " << peer->address.host << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
-	}
+		connection.Broadcast(player_quit, peer);
 
-	void Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data) override
-	{
-		for(auto iter = player_pool.players.begin(); iter != player_pool.players.end();)
-		{
-			auto temp_iter = iter++;
-
-			if(temp_iter->id == reinterpret_cast<size_t>(peer->data))
-			{
-				PlayerQuit player_quit;
-				player_quit.SetSender(temp_iter->id);
-
-				for(auto &plyr : player_pool.players)
-				{
-					if(plyr.id != temp_iter->id)
-					{
-						connection.Send(plyr.peer, player_quit);
-					}
-				}
-
-				player_pool.players.erase(temp_iter);
-			}
-		}
-
-		//in_addr x;
-		//x.S_un.S_addr = peer->address.host;
 		std::cout << "Peer disconnected: " << peer->address.host << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
+
+		peers[player->id].SetPeer(nullptr);
+		connected_peers.erase(&peers[player->id]);
+		id_generator.FreeId(player->id);
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& message) override
 	{
-		message->SetSender(reinterpret_cast<size_t>(peer->data));
+		Player* player = Link::GetPlayer(peer);
+
+		message->SetSender(player->id);
 
 		std::wcout << "[" << message->GetSender() << "]: " << message->GetContents() << std::endl;
 
@@ -131,141 +122,84 @@ private:
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& message) override
 	{
+		Player* player = Link::GetPlayer(peer);
+
 		message->SetSender(reinterpret_cast<size_t>(peer->data));
 
-		__Player plyr((ENetPeer*)peer, message->GetSender(), message->GetName());
-		player_pool.players.push_back(plyr);
+		message->SetSender(player->id);
+		message->SetName(player->name);
 
-		for(auto &plyr : player_pool.players)
+		for(auto& link: connected_peers)
 		{
-			if(plyr.id != message->GetSender())
+			Player* remote = link->GetPlayer();
+			if(remote != player)
 			{
-				PlayerJoin player_join;
-				player_join.SetSender(plyr.id);
-				player_join.SetName(plyr.name);
-				connection.Send((ENetPeer*)peer, player_join);
-
-				if(plyr.spawned)
+				if(remote->spawned)
 				{
 					PlayerSpawn player_spawn;
-					player_spawn.SetSender(plyr.id);
-					player_spawn.SetModelHash(plyr.model_hash);
-					player_spawn.SetPosition(plyr.position);
-					player_spawn.SetRotation(plyr.rotation);
-					connection.Send((ENetPeer*)peer, player_spawn);
+					player_spawn.SetSender(remote->id);
+					player_spawn.SetModelHash(remote->model_hash);
+					player_spawn.SetPosition(remote->position);
+					player_spawn.SetRotation(remote->rotation);
+					connection.Send(peer, player_spawn);
 				}
 			}
 		}
 
-		std::wcout << "Player joined: " << message->GetName() << " with ID:" << message->GetSender() << std::endl;
+		connection.Broadcast(message, peer);
 
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id != message->GetSender())
-			{
-				connection.Send(plyr.peer, message);
-			}
-		}
+		std::wcout << "Player joined: " << message->GetName() << " with ID:" << message->GetSender() << std::endl;
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& message) override
 	{
-		message->SetSender(reinterpret_cast<size_t>(peer->data));
+		Player* player = Link::GetPlayer(peer);
 
-		for(auto iter = player_pool.players.begin(); iter != player_pool.players.end();)
-		{
-			auto temp_iter = iter++;
+		message->SetSender(player->id);
 
-			if(temp_iter->id == message->GetSender())
-			{
-				player_pool.players.erase(temp_iter);
-			}
-		}
-
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id != message->GetSender())
-			{
-				connection.Send(plyr.peer, message);
-			}
-		}
+		connection.Broadcast(message, peer);
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& message) override
 	{
+		Player* player = Link::GetPlayer(peer);
+
 		message->SetSender(reinterpret_cast<size_t>(peer->data));
 
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id == message->GetSender())
-			{
-				Vector3
-					_position,
-					_rotation;
+		Vector3
+			_position,
+			_rotation;
 
-				plyr.model_hash = message->GetModelHash();
+		player->model_hash = message->GetModelHash();
 
-				message->GetPosition(_position);
-				plyr.position = _position;
+		message->GetPosition(_position);
+		player->position = _position;
 
-				message->GetRotation(_rotation);
-				plyr.rotation = _rotation;
+		message->GetRotation(_rotation);
+		player->rotation = _rotation;
 
-				plyr.spawned = true;
-			}
-		}
+		player->spawned = true;
 
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id != message->GetSender())
-			{
-				connection.Send(plyr.peer, message);
-			}
-		}
+		connection.Broadcast(message, peer);
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& message) override
 	{
+		Player* player = Link::GetPlayer(peer);
+
 		message->SetSender(reinterpret_cast<size_t>(peer->data));
 
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id != message->GetSender())
-			{
-				connection.Send(plyr.peer, message);
-			}
-		}
+		connection.Broadcast(message, peer);
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message) override
 	{
+		Player* player = Link::GetPlayer(peer);
+
 		message->SetSender(reinterpret_cast<size_t>(peer->data));
 
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id == message->GetSender())
-			{
-				Vector3
-					_position,
-					_rotation;
-
-				message->GetPosition(_position);
-				plyr.position = _position;
-
-				message->GetRotation(_rotation);
-				plyr.rotation = _rotation;
-			}
-		}
-
-		for(auto &plyr : player_pool.players)
-		{
-			if(plyr.id != message->GetSender())
-			{
-				connection.Send(plyr.peer, message);
-			}
-		}
+		connection.Broadcast(message, peer);
 	}
-
 public:
 	Server(const std::string bind_address, uint16_t port, size_t max_players)
 		: id_generator(max_players), max_players(max_players)
@@ -293,6 +227,10 @@ public:
 		}		
 
 		peers.resize(max_players);
+		for (size_t i = 0; i < max_players; ++i)
+		{
+			peers[i].GetPlayer()->id = i;
+		}
 		//ready
 	}
 
@@ -302,8 +240,6 @@ public:
 		{
 			ProcessEvent(connection.Event());
 		}
-
-		HandleTick();
 	}
 
 	~Server()
