@@ -5,8 +5,7 @@ workspace "v-plus"
     location ""
     libdirs { "Build/%{cfg.platform}/%{cfg.buildcfg}" }
     targetdir "Build/%{cfg.platform}/%{cfg.buildcfg}"
-    removefiles { "**.vcxproj", "**.filters", "**.user", "**.rc" }
-    
+ 
     filter "platforms:x64"
         architecture "x64"
   
