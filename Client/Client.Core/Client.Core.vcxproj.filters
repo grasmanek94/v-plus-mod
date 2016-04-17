@@ -50,6 +50,9 @@
     <ClCompile Include="Game\GameHooks.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\GameUI.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game\Input\InputHook.h">
@@ -137,6 +140,9 @@
     </ClInclude>
     <ClInclude Include="Game\Scripting\Natives.h">
       <Filter>Game\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\GameUI.h">
+      <Filter>Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

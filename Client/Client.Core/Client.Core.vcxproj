@@ -110,6 +110,7 @@
     <ClInclude Include="Graphics\ChatWindow.h" />
     <ClInclude Include="Graphics\ChatWindowEntry.h" />
     <ClInclude Include="Graphics\ChatWindowEntrySection.h" />
+	<ClInclude Include="Graphics\GameUI.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Game\GameAddresses.h" />
     <ClInclude Include="Game\GameOverlay.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="Graphics\ChatWindow.cpp" />
     <ClCompile Include="Graphics\ChatWindowEntry.cpp" />
     <ClCompile Include="Graphics\ChatWindowEntrySection.cpp" />
+	<ClCompile Include="Graphics\GameUI.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

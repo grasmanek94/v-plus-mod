@@ -220,6 +220,8 @@ static std::unordered_map<uint16_t, std::wstring> taskMap = {
 	{ 299, L"TaskWeaponBlocked" },
 	{ 300, L"TaskEnterCover" },
 	{ 301, L"TaskExitCover" },
+	{ 302, L"TaskAimGunFromCoverIntro" },
+	{ 303, L"TaskAimGunFromCoverOutro" },
 	{ 304, L"TaskAimGunBlindFire" },
 	{ 307, L"TaskCombatClosestTargetInArea" },
 	{ 308, L"TaskCombatAdditionalTask" },

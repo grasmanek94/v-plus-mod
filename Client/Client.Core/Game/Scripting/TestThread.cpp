@@ -2,7 +2,6 @@
 #include "Natives.h"
 
 extern uintptr_t hook::baseAddress;
-extern ChatWindow *pChatWindow;
 
 uint64_t g_pClonePed = NULL;
 
@@ -96,9 +95,14 @@ void TestThread::DoRun()
 
 			connection.Connect("127.0.0.1", 5544);
 
-			if(pChatWindow != NULL)
+			if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
 			{
-				pChatWindow->AddInfoMessageW(L"Connecting...");
+				ChatWindow *pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+
+				if(pChatWindow != NULL)
+				{
+					pChatWindow->AddInfoMessageW(L"Connecting...");
+				}
 			}
 
 			m_bInitialized = true;
@@ -313,8 +317,17 @@ void TestThread::DoRun()
 								AI::TASK_JUMP(m_clonePed, TRUE);
 							}
 
+							if(*(DWORD *)(pLocalPlayerPed + 1488) >> 5 & 1) // is stealth mode active
+							{
+								*(DWORD *)(pClonePed + 1488) |= 0x20u; // enable stealth
+							}
+							else
+							{
+								*(DWORD *)(pClonePed + 1488) &= 0xFFFFFFDF; // disable stealth
+							}
+
 							*(float *)(pClonePed + 0x578) = *(float *)(pLocalPlayerPed + 0x578); // current move blend ratio
-							*(float *)(pClonePed + 0x580) = *(float *)(pLocalPlayerPed + 0x580); // target move blend ratio
+							//*(float *)(pClonePed + 0x580) = *(float *)(pLocalPlayerPed + 0x580); // target move blend ratio
 							*(float *)(pClonePed + 0x588) = *(float *)(pLocalPlayerPed + 0x578); // min move blend ratio
 						}
 					}
@@ -447,9 +460,14 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& mess
 {
 	//std::wcout << "[" << message.GetSender() << "]: " << message.GetContents() << std::endl;
 
-	if(pChatWindow != NULL)
+	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"[%d]: %ls", message->GetSender(), message->GetContents().c_str());
+		ChatWindow *pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+
+		if(pChatWindow != NULL)
+		{
+			pChatWindow->AddInfoMessageW(L"[%d]: %ls", message->GetSender(), message->GetContents().c_str());
+		}
 	}
 }
 
@@ -458,14 +476,26 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& messa
 	__Player plyr(message->GetSender(), message->GetName());
 	player_pool.players.push_back(plyr);
 
-	if(pChatWindow != NULL)
+	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message->GetName().c_str(), message->GetSender());
+		ChatWindow *pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+
+		if(pChatWindow != NULL)
+		{
+			pChatWindow->AddInfoMessageW(L"%ls joined. (ID: %d)", message->GetName().c_str(), message->GetSender());
+		}
 	}
 }
 
 void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& message)
 {
+	ChatWindow *pChatWindow = NULL;
+
+	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
+	{
+		pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+	}
+
     for(auto iter = player_pool.players.begin(); iter != player_pool.players.end();)
     {
         auto temp_iter = iter++;
@@ -531,9 +561,14 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& mess
 				plyr.spawned = false;
 			}
 
-			if(pChatWindow != NULL)
+			if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
 			{
-				pChatWindow->AddInfoMessageW(L"%ls spawned. (ID: %d)", plyr.name.c_str(), plyr.id);
+				ChatWindow *pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+
+				if(pChatWindow != NULL)
+				{
+					pChatWindow->AddInfoMessageW(L"%ls spawned. (ID: %d)", plyr.name.c_str(), plyr.id);
+				}
 			}
 		}
 	}
@@ -609,9 +644,14 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& mes
 {
 	//std::cout << "Connected!" << std::endl;
 
-	if (pChatWindow != NULL)
+	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"Connected!");
+		ChatWindow *pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+
+		if(pChatWindow != NULL)
+		{
+			pChatWindow->AddInfoMessageW(L"Connected!");
+		}
 	}
 
 	connected = true;
@@ -665,9 +705,14 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& 
 	//std::cout << "Disconnected! Reconnecting..." << std::endl;
 	connected = false;
 
-	if (pChatWindow != NULL)
+	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI != NULL)
 	{
-		pChatWindow->AddInfoMessageW(L"Disconnected! Reconnecting...");
+		ChatWindow *pChatWindow = GameOverlay::GetGameUI()->GetChatWindow();
+
+		if(pChatWindow != NULL)
+		{
+			pChatWindow->AddInfoMessageW(L"Disconnected! Reconnecting...");
+		}
 	}
 
 	connection.Connect("127.0.0.1", 5544);

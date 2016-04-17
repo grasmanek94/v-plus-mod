@@ -2,7 +2,6 @@
 
 bool GamePatches::InstallPatches()
 {
-	if(!SkipIntro()) { OutputDebugString(L"[V+ | Core] Failed to install skip intro patch."); return false; }
 	if(!RevealFullMap(true)) { OutputDebugString(L"[V+ | Core] Failed to install reveal full map patch."); return false; }
 	if(!UseMultiplayerUI()) { OutputDebugString(L"[V+ | Core] Failed to install use multiplayer UI patch."); return false; }
 	if(!DisableWeaponAndRadioWheelEffect()) { OutputDebugString(L"[V+ | Core] Failed to install disable weapon and radio wheel effect patch."); return false; }

@@ -1,36 +1,17 @@
 #include "Main.h"
-#include "Gwen/Input/Windows.h"
 
 WNDPROC	oWndProc;
 
-extern bool bGwenInitialized;
-extern bool bGwenEnabled;
-
-extern Gwen::Input::Windows GwenInput;
-
 LRESULT APIENTRY InputHook::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if(bGwenInitialized)
+	LRESULT lResult = CallWindowProc(oWndProc, hwnd, uMsg, wParam, lParam);
+
+	if(GameOverlay::IsInitialized() && GameOverlay::GetGameUI() != NULL)
 	{
-		if(uMsg == WM_KEYUP && wParam == VK_F2)
-		{
-			bGwenEnabled ^= 1;
-		}
-
-		if(bGwenEnabled)
-		{
-			MSG msg;
-
-			msg.hwnd = hwnd;
-			msg.message = uMsg;
-			msg.wParam = wParam;
-			msg.lParam = lParam;
-
-			GwenInput.ProcessMessage(msg);
-		}
+		GameOverlay::GetGameUI()->MsgProc(hwnd, uMsg, wParam, lParam);
 	}
 
-	return CallWindowProc(oWndProc, hwnd, uMsg, wParam, lParam);
+	return lResult;
 }
 
 bool InputHook::Initialize()

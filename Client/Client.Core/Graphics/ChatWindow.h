@@ -34,7 +34,7 @@ private:
 	void AddChatMessageEntry(std::wstring wstrNickname, std::wstring wstrMessage, unsigned long ulNickColor, unsigned long ulMessageColor);
 
 public:
-	ChatWindow::ChatWindow(ID3D11DeviceContext *pD3D11DeviceContext, IFW1FontWrapper *pFW1FontWrapper);
+	ChatWindow(ID3D11DeviceContext *pD3D11DeviceContext, IFW1FontWrapper *pFW1FontWrapper);
 	~ChatWindow();
 
 	void Draw();

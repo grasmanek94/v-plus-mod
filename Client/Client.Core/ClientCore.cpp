@@ -8,6 +8,8 @@ DWORD WINAPI ClientCore::Run()
 	{
 		Sleep(50);
 	}
+	
+	GamePatches::SkipIntro();
 
 	if(!InputHook::Initialize())
 	{
