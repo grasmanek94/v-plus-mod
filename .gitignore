@@ -283,3 +283,5 @@ $RECYCLE.BIN/
 g-mp.VC.opendb
 Common/Common.Version/auto_version.h
 Common/Common.Version/temp_auto_version.h
+*.make
+Makefile

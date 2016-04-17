@@ -87,9 +87,9 @@ private:
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data) override
 	{
-		in_addr x;
-		x.S_un.S_addr = peer->address.host;
-		std::cout << "Peer connected: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
+		//in_addr x;
+		//x.S_un.S_addr = peer->address.host;
+		std::cout << "Peer connected: " << peer->address.host << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data) override
@@ -115,9 +115,9 @@ private:
 			}
 		}
 
-		in_addr x;
-		x.S_un.S_addr = peer->address.host;
-		std::cout << "Peer disconnected: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
+		//in_addr x;
+		//x.S_un.S_addr = peer->address.host;
+		std::cout << "Peer disconnected: " << peer->address.host << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& message) override
@@ -275,15 +275,21 @@ public:
 		if (init_code)
 		{
 			// TODO custom exception class
-			throw std::exception(("Cannot initialize ENET, error code: " + std::to_string(init_code)).c_str());
+			throw std::exception(
+#ifdef _WIN32
+				("Cannot initialize ENET, error code: " + std::to_string(init_code)).c_str()
+#endif
+			);
 		}
 
 		connection.SetHost(bind_address, port);
 
 		if (!connection.Create(max_players) || !connection.Good())
 		{
+#ifdef _WIN32
 			// TODO custom exception class
 			throw std::exception("ENET host member creation failed");
+#endif
 		}		
 
 		peers.resize(max_players);
