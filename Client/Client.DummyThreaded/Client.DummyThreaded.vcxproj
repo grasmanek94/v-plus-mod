@@ -78,7 +78,8 @@
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <LargeAddressAware>true</LargeAddressAware>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -106,7 +107,8 @@
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <MapExports>true</MapExports>
       <AssemblyDebug>true</AssemblyDebug>
-      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

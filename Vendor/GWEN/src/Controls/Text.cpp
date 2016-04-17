@@ -173,13 +173,13 @@ int Text::GetClosestCharacter( Gwen::Point p )
 
 	for ( size_t i = 0; i < m_String.GetUnicode().length() + 1; i++ )
 	{
-		Gwen::Rect cp = GetCharacterPosition( i );
+		Gwen::Rect cp = GetCharacterPosition( (int)i );
 		int iDist = abs( cp.x - p.x ) + abs( cp.y - p.y );   // this isn't proper
 
 		if ( iDist > iDistance ) { continue; }
 
 		iDistance = iDist;
-		iChar = i;
+		iChar = (int)i;
 	}
 
 	return iChar;
@@ -356,7 +356,7 @@ void Text::RefreshSizeWrap()
 
 int Text::NumLines()
 {
-	return m_Lines.size();
+	return (int)m_Lines.size();
 }
 
 Text* Text::GetLine( int i )

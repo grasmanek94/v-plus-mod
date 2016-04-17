@@ -76,6 +76,7 @@
       </AddModuleNamesToAssembly>
       <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
       <AdditionalDependencies>kernel32.lib;winmm.lib;user32.lib</AdditionalDependencies>
+      <LinkTimeCodeGeneration />
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -100,7 +101,8 @@
       </AddModuleNamesToAssembly>
       <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
       <AdditionalDependencies>kernel32.lib;winmm.lib;user32.lib</AdditionalDependencies>
-      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

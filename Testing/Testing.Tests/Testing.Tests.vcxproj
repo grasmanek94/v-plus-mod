@@ -79,7 +79,8 @@
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <LargeAddressAware>true</LargeAddressAware>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)Build\$(Platform)\$(Configuration)\Tests.exe</Command>
@@ -112,7 +113,8 @@
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <MapExports>true</MapExports>
       <AssemblyDebug>true</AssemblyDebug>
-      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>
+      </LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
       <Command>$(SolutionDir)Build\$(Platform)\$(Configuration)\Tests.exe</Command>

@@ -506,7 +506,6 @@ namespace Gwen
 				return;
 			}
 			
-			BYTE bAlpha;
 			DWORD* pDst32;
 			BYTE* pDstRow = (BYTE*)texmap.pData;
 
