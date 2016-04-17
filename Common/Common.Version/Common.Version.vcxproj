@@ -72,7 +72,6 @@
       <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Util;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <OmitFramePointers>false</OmitFramePointers>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
