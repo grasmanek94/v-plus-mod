@@ -76,7 +76,7 @@ private:
 	{
 		Player* player = Link::GetPlayer(peer);
 
-		message->SetSender(reinterpret_cast<size_t>(peer->data));
+		message->SetSender(player->id);
 
 		message->SetSender(player->id);
 		message->SetName(player->name);
@@ -116,7 +116,7 @@ private:
 	{
 		Player* player = Link::GetPlayer(peer);
 
-		message->SetSender(reinterpret_cast<size_t>(peer->data));
+		message->SetSender(player->id);
 
 		Vector3
 			_position,
@@ -139,7 +139,7 @@ private:
 	{
 		Player* player = Link::GetPlayer(peer);
 
-		message->SetSender(reinterpret_cast<size_t>(peer->data));
+		message->SetSender(player->id);
 
 		connection.Broadcast(message, peer);
 	}
@@ -148,7 +148,7 @@ private:
 	{
 		Player* player = Link::GetPlayer(peer);
 
-		message->SetSender(reinterpret_cast<size_t>(peer->data));
+		message->SetSender(player->id);
 
 		connection.Broadcast(message, peer);
 	}
