@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClCompile Include="Common.cxx" />
     <ClCompile Include="IdCounter.cxx" />
+    <ClCompile Include="NetPlayer.cxx" />
+    <ClCompile Include="Networking\Link.cxx" />
     <ClCompile Include="Networking\Messages.cxx" />
     <ClCompile Include="Networking\Messages\ChatMessage.cxx" />
     <ClCompile Include="Networking\Messages\EventConnect.cxx" />
@@ -31,6 +33,8 @@
     <ClInclude Include="Math\Vector3.hxx" />
     <ClInclude Include="Common.hxx" />
     <ClInclude Include="IdCounter.hxx" />
+    <ClInclude Include="NetPlayer.hxx" />
+    <ClInclude Include="Networking\Link.hxx" />
     <ClInclude Include="Networking\Messages.hxx" />
     <ClInclude Include="Networking\Messages\ChatMessage.hxx" />
     <ClInclude Include="Networking\Messages\EventConnect.hxx" />

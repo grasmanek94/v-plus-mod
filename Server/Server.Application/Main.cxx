@@ -9,62 +9,13 @@
 #include <algorithm>
 #include <iterator>
 
-#include <Networking/Networking.hxx>
-#include <Math/Math.hxx>
 #include <IdCounter.hxx>
+#include <NetPlayer.hxx>
 
-struct Player // temporary
-{
-	ENetPeer* peer;
-	size_t id;
-	std::wstring name;
-	bool spawned;
-	uint32_t model_hash;
-	Vector3 position;
-	Vector3 rotation;
-};
+#include <Networking/Networking.hxx>
+#include <Networking/Link.hxx>
 
-class Link
-{
-private:
-	ENetPeer* peer;
-	Player player;
-
-public:
-	Link()
-		: peer(nullptr)
-	{ }
-
-	void SetPeer(ENetPeer* p)
-	{
-		if (peer)
-		{
-			peer->data = nullptr;
-		}
-
-		peer = p;
-		player.peer = p;
-		if (p)
-		{
-			p->data = reinterpret_cast<void*>(&player);
-		}
-	}
-
-	ENetPeer* GetPeer() const
-	{
-		return peer;
-	}
-
-	Player* GetPlayer()
-	{
-		return &player;
-	}
-
-	static Player* GetPlayer(ENetPeer* peer)
-	{
-		return reinterpret_cast<Player*>(peer->data);
-	}
-};
+using Player = NetPlayer;
 
 class Server: public MessageReceiver
 {
@@ -90,6 +41,7 @@ private:
 		link->SetPeer(peer);
 		connected_peers.insert(link);
 
+		connection.Send(peer, GameSetup( id ));
 		std::cout << "Peer connected: " << peer->address.host << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
 	}
 

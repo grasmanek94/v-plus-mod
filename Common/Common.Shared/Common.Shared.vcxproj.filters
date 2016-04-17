@@ -43,6 +43,8 @@
     <ClCompile Include="Networking\Messages\EventConnect.cxx" />
     <ClCompile Include="Networking\Messages\GameSetup.cxx" />
     <ClCompile Include="Networking\Messages\WorldUpdate.cxx" />
+    <ClCompile Include="NetPlayer.cxx" />
+    <ClCompile Include="Networking\Link.cxx" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Networking\Messages\ChatMessage.hxx">
@@ -85,5 +87,7 @@
     <ClInclude Include="Math\Vector2.hxx">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="NetPlayer.hxx" />
+    <ClInclude Include="Networking\Link.hxx" />
   </ItemGroup>
 </Project>
