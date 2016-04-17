@@ -116,12 +116,16 @@
   <ItemGroup>
     <ClInclude Include="..\Client.Shared\SharedUtility.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="info.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
