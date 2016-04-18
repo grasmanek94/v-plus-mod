@@ -1,10 +1,43 @@
 #include "Main.h"
+#include "../Client.Steam/Main.h"
 
 //#define UNPROXY_DIRECTINPUT
+
+static SteamComponent steamComponent;
+
+void LaunchSteamComponent();
+void KillAllLauncherProcess();
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
 	srand((unsigned int)(time(0)));
+
+	const wchar_t* steamPart = L"-steam";
+	const wchar_t* steamChildPart = L"-steamchild:";
+
+	wchar_t* steamPartMatch = wcsstr(GetCommandLine(), steamPart);
+	wchar_t* steamChildPartMatch = wcsstr(GetCommandLine(), steamChildPart);
+
+	if(steamPartMatch || steamChildPartMatch)
+	{
+		steamComponent.Initialize();
+		Instance<ISteamComponent>::Set(&steamComponent);
+
+		if(steamPartMatch)
+		{
+			while(!SharedUtility::IsProcessRunning(L"GTAVLauncher.exe") && !SharedUtility::IsProcessRunning(L"GTA5.exe"))
+			{
+				Sleep(50);
+			}
+
+			while(SharedUtility::IsProcessRunning(L"GTAVLauncher.exe") || SharedUtility::IsProcessRunning(L"GTA5.exe"))
+			{
+				Sleep(50);
+			}
+
+			return 0;
+		}
+	}
 
 	if(SharedUtility::IsProcessRunning(L"GTAVLauncher.exe") || SharedUtility::IsProcessRunning(L"GTA5.exe"))
 	{
@@ -47,14 +80,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		return 0;
 	}
 
-	DWORD dwCurrentProcessId = GetCurrentProcessId();
-
-	while(SharedUtility::GetProcessIdFromProcessName(L"v-plus.exe", NULL, dwCurrentProcessId))
-	{
-		SharedUtility::KillProcess(L"v-plus.exe");
-
-		Sleep(25);
-	}
+	KillAllLauncherProcess();
 
 #ifdef UNPROXY_DIRECTINPUT
 	if(SharedUtility::IsFileExists(wszDirectInputProxyPath))
@@ -64,6 +90,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		bMovedDirectInputProxy = true;
 	}
 #endif
+
+	LaunchSteamComponent();
 
 	STARTUPINFO startupInfo;
 	PROCESS_INFORMATION processInfo;
@@ -75,6 +103,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 
 	if(!CreateProcess(NULL, wszLauncherPath, NULL, NULL, TRUE, 0, NULL, NULL, &startupInfo, &processInfo))
 	{
+		KillAllLauncherProcess();
+
 #ifdef UNPROXY_DIRECTINPUT
 		if(bMovedDirectInputProxy)
 		{
@@ -102,6 +132,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 
 	if(!SharedUtility::IsProcessRunning(L"GTAVLauncher.exe") || !SharedUtility::IsProcessRunning(L"GTA5.exe"))
 	{
+		KillAllLauncherProcess();
+
 #ifdef UNPROXY_DIRECTINPUT
 		if(bMovedDirectInputProxy)
 		{
@@ -119,6 +151,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 
 	if(!SharedUtility::GetProcessIdFromProcessName(L"GTA5.exe", &dwGameProcessId))
 	{
+		KillAllLauncherProcess();
+
 #ifdef UNPROXY_DIRECTINPUT
 		if(bMovedDirectInputProxy)
 		{
@@ -136,6 +170,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	{
 		SharedUtility::KillProcess(L"GTAVLauncher.exe");
 		SharedUtility::KillProcess(L"GTA5.exe");
+
+		KillAllLauncherProcess();
 
 #ifdef UNPROXY_DIRECTINPUT
 		if(bMovedDirectInputProxy)
@@ -169,5 +205,37 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		SharedUtility::KillProcess(L"GTAVLauncher.exe");
 	}
 
+	KillAllLauncherProcess();
 	return 0;
+}
+
+void LaunchSteamComponent()
+{
+	STARTUPINFO startupInfo;
+	PROCESS_INFORMATION processInfo;
+
+	memset(&startupInfo, 0x00, sizeof(STARTUPINFO));
+	memset(&processInfo, 0x00, sizeof(PROCESS_INFORMATION));
+
+	startupInfo.cb = sizeof(STARTUPINFO);
+
+	wchar_t wszSteamComponentLauncherPath[MAX_PATH];
+	swprintf_s(wszSteamComponentLauncherPath, MAX_PATH, L"%s%s -steam", SharedUtility::GetExecutablePath(), L"v-plus.exe");
+	
+	CreateProcess(NULL, wszSteamComponentLauncherPath, NULL, NULL, TRUE, 0, NULL, NULL, &startupInfo, &processInfo);
+}
+
+void KillAllLauncherProcess()
+{
+	DWORD dwProcessId = 0xFFFFFFFF;
+
+	while(SharedUtility::GetProcessIdFromProcessName(L"v-plus.exe", &dwProcessId, GetCurrentProcessId()))
+	{
+		HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, dwProcessId);
+
+		if(hProcess)
+		{
+			TerminateProcess(hProcess, 0);
+		}
+	}
 }

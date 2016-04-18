@@ -6,6 +6,7 @@
     <ClCompile Include="Utility\Hooking\HookFunction.cpp" />
     <ClCompile Include="Utility\Hooking\Hooking.cpp" />
     <ClCompile Include="Utility\Hooking\Hooking.Patterns.cpp" />
+    <ClCompile Include="InstanceRegistry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharedUtility.h" />
@@ -18,5 +19,7 @@
     <ClInclude Include="Utility\Hooking\Hooking.Invoke.h" />
     <ClInclude Include="Utility\Hooking\Hooking.Patterns.h" />
     <ClInclude Include="jitasm\jitasm.h" />
+    <ClInclude Include="InstanceRegistry.h" />
+    <ClInclude Include="fwRef.h" />
   </ItemGroup>
 </Project>
