@@ -118,7 +118,6 @@
   <ItemGroup>
     <ClInclude Include="..\Client.Shared\SharedUtility.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
