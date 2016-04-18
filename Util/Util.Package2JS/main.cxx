@@ -24,18 +24,16 @@ int main()
 
 	bool first = true;
 
-	output_buffer << std::hex;
-
 	for (const auto& c : str)
 	{
 		if (first)
 		{
 			first = false;
-			output_buffer << "0x" << (int)c;
+			output_buffer << (int)c;
 		}
 		else
 		{
-			output_buffer << ",0x" << (int)c;
+			output_buffer << "," << (int)c;
 		}
 	}
 
