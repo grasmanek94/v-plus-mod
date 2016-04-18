@@ -59,7 +59,7 @@
       <PreprocessorDefinitions>VPLUS_CLIENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile />
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Vendor\GWEN\include;$(SolutionDir)Vendor\GWEN\include\DXSDK;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.Shared\jitasm;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Network;$(SolutionDir)Client\Client.Library;$(SolutionDir)Client\Client.Launcher;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Vendor\GWEN\include;$(SolutionDir)Vendor\GWEN\include\DXSDK;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.Shared\jitasm;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Network;$(SolutionDir)Client\Client.Library;$(SolutionDir)Client\Client.Application;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
@@ -87,7 +87,7 @@
       <PrecompiledHeaderFile>
       </PrecompiledHeaderFile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Vendor\GWEN\include;$(SolutionDir)Vendor\GWEN\include\DXSDK;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.Shared\jitasm;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Network;$(SolutionDir)Client\Client.Library;$(SolutionDir)Client\Client.Launcher;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Vendor\GWEN\include;$(SolutionDir)Vendor\GWEN\include\DXSDK;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.Shared\jitasm;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Network;$(SolutionDir)Client\Client.Library;$(SolutionDir)Client\Client.Application;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <OmitFramePointers>false</OmitFramePointers>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>

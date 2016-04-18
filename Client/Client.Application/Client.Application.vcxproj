@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{91078F02-5C23-4458-AE68-F442CE01C4AA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ClientLauncher</RootNamespace>
+    <RootNamespace>ClientApplication</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -65,7 +65,7 @@
       <StringPooling>true</StringPooling>
       <FloatingPointModel>Fast</FloatingPointModel>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Vendor\udis86;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.Shared\jitasm;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Network;$(SolutionDir)Client\Client.Steam;$(SolutionDir)Client\Client.Library;$(SolutionDir)Client\Client.Launcher;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Vendor\cereal-1.1.2\include;$(SolutionDir)Vendor\FW1FontWrapper\Source;$(SolutionDir)Vendor\ENet\Source\include;$(SolutionDir)Vendor\udis86;$(SolutionDir)Common\Common.Shared;$(SolutionDir)Client\Client.Core;$(SolutionDir)Client\Client.Shared\jitasm;$(SolutionDir)Client\Client.Shared;$(SolutionDir)Client\Client.Network;$(SolutionDir)Client\Client.Steam;$(SolutionDir)Client\Client.Library;$(SolutionDir)Client\Client.Application;$(DXSDK_DIR)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="..\Client.Shared\SharedUtility.h" />
     <ClInclude Include="Main.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
