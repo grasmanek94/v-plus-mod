@@ -414,3 +414,8 @@ std::wstring getTaskNameById(uint16_t taskId);
 void addTaskListEntry(wchar_t *pwszTaskListString, size_t taskListStringLength, uint64_t pTask);
 void getTaskTreeInfo(wchar_t *pwszTaskListString, size_t taskListStringLength, uint64_t pTaskTree);
 void drawTaskList(ID3D11DeviceContext *pD3D11DeviceContext, IFW1FontWrapper *pFW1FontWrapper);
+uint64_t getTaskFromTreeById(uint64_t pTaskTree, uint16_t taskId);
+int32_t getSlotOfTaskFromTreeById(uint64_t pTaskTree, uint16_t taskId);
+int32_t getFreeSlotInTaskTree(uint64_t pTaskTree);
+void removeTaskFromTreeBySlot(uint64_t pTaskTree, int32_t slot);
+void cloneTask(uint64_t pSourceTaskTreePed, uint64_t pTargetTaskTreePed, uint16_t taskId);

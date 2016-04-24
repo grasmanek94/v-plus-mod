@@ -1,17 +1,22 @@
 #include "Main.h"
 #include "../Client.Steam/Main.h"
 
+//#define STEAM_PRESENCE
 //#define UNPROXY_DIRECTINPUT
 
-static SteamComponent steamComponent;
+#ifdef STEAM_PRESENCE
+	static SteamComponent steamComponent;
 
-void LaunchSteamComponent();
+	void LaunchSteamComponent();
+#endif
+
 void KillAllLauncherProcess();
 
 int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
 	srand((unsigned int)(time(0)));
 
+#ifdef STEAM_PRESENCE
 	const wchar_t* steamPart = L"-steam";
 	const wchar_t* steamChildPart = L"-steamchild:";
 
@@ -38,6 +43,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 			return 0;
 		}
 	}
+#endif
 
 	if(SharedUtility::IsProcessRunning(L"GTAVLauncher.exe") || SharedUtility::IsProcessRunning(L"GTA5.exe"))
 	{
@@ -91,7 +97,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	}
 #endif
 
+#ifdef STEAM_PRESENCE
 	LaunchSteamComponent();
+#endif
 
 	STARTUPINFO startupInfo;
 	PROCESS_INFORMATION processInfo;
@@ -209,6 +217,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	return 0;
 }
 
+#ifdef STEAM_PRESENCE
 void LaunchSteamComponent()
 {
 	STARTUPINFO startupInfo;
@@ -224,6 +233,7 @@ void LaunchSteamComponent()
 	
 	CreateProcess(NULL, wszSteamComponentLauncherPath, NULL, NULL, TRUE, 0, NULL, NULL, &startupInfo, &processInfo);
 }
+#endif
 
 void KillAllLauncherProcess()
 {

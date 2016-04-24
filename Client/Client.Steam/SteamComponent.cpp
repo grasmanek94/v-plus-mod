@@ -330,7 +330,7 @@ bool SteamComponent::RunPresenceDummy()
 	const wchar_t* steamChildPart = L"-steamchild:";
 	wchar_t* commandLineMatch = wcsstr(GetCommandLine(), steamChildPart);
 
-	LOG_PRINT("CitizenFX Steam child starting - command line: %s\n", GetCommandLineA());
+	LOG_PRINT("Steam child starting - command line: %s\n", GetCommandLineA());
 	
 	// if it does
 	if (commandLineMatch)

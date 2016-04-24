@@ -306,6 +306,7 @@ void TestThread::DoRun()
 								WEAPON::SET_CURRENT_PED_WEAPON(m_clonePed, curPlayerPedWeaponHash, TRUE);
 							}
 
+/*
 							if(PED::IS_PED_RELOADING(playerPedId) && !PED::IS_PED_RELOADING(m_clonePed))
 							{
 								WEAPON::MAKE_PED_RELOAD(m_clonePed);
@@ -315,6 +316,37 @@ void TestThread::DoRun()
 							if(PED::IS_PED_JUMPING(playerPedId) && !PED::IS_PED_JUMPING(m_clonePed))
 							{
 								AI::TASK_JUMP(m_clonePed, TRUE);
+							}
+*/
+
+							if(GameAddresses::pedIntelligenceOffset != 0)
+							{
+								uint64_t pLocalPlayerIntelligence = *(uint64_t *)(pLocalPlayerPed + GameAddresses::pedIntelligenceOffset);
+								uint64_t pClonePedIntelligence = *(uint64_t *)(pClonePed + GameAddresses::pedIntelligenceOffset);
+
+								if(pLocalPlayerIntelligence != NULL && pClonePedIntelligence != NULL)
+								{
+									uint64_t pLocalTaskTreePed = *(uint64_t *)(pLocalPlayerIntelligence + 0x360);
+									uint64_t pCloneTaskTreePed = *(uint64_t *)(pClonePedIntelligence + 0x360);
+
+									if(pLocalTaskTreePed != NULL && pCloneTaskTreePed != NULL)
+									{
+										//cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 4); // TaskAimGunOnFoot
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 16); // TaskGetUp
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 18); // TaskFallOver
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 19); // TaskFallAndGetUp
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 50); // TaskVault
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 51); // TaskDropDown
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 56); // TaskSwapWeapon
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 97); // TaskDyingDead
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 128); // TaskMelee
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 289); // TaskAimAndThrowProjectile
+										//cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 290); // TaskGun
+										//cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 298); // TaskReloadGun
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 421); // TaskJump
+										cloneTask(pLocalTaskTreePed, pCloneTaskTreePed, 422); // TaskFall
+									}
+								}
 							}
 
 							if(*(DWORD *)(pLocalPlayerPed + 1488) >> 5 & 1) // is stealth mode active
