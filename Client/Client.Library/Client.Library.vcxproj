@@ -95,7 +95,7 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>Common.Shared.lib;Client.Core.lib;Client.Shared.lib;Client.Network.lib;Enet.lib;FW1FontWrapper.lib;unittest.lib;GWEN-Renderer-DirectX11.lib;gwen_static.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Common.Shared.lib;Client.Core.lib;Client.Shared.lib;Client.Network.lib;Enet.lib;FW1FontWrapper.lib;unittest.lib;GWEN-Renderer-DirectX11.lib;gwen_static.lib;ws2_32.lib;winmm.lib;notelemetry.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Vendor\GWEN\lib\DXSDK</AdditionalLibraryDirectories>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>

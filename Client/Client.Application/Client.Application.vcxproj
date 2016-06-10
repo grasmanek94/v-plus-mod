@@ -106,7 +106,7 @@
       <OptimizeReferences>false</OptimizeReferences>
       <UACExecutionLevel>AsInvoker</UACExecutionLevel>
       <UACUIAccess>false</UACUIAccess>
-      <AdditionalDependencies>Common.Shared.lib;Client.Shared.lib;Client.Steam.lib;libudis86.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Common.Shared.lib;Client.Shared.lib;Client.Steam.lib;libudis86.lib;ws2_32.lib;winmm.lib;notelemetry.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>

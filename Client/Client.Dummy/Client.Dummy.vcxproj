@@ -96,7 +96,7 @@
       <EnableCOMDATFolding>false</EnableCOMDATFolding>
       <OptimizeReferences>false</OptimizeReferences>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <AdditionalDependencies>Common.Shared.lib;Client.Shared.lib;Client.Network.lib;Enet.lib;FW1FontWrapper.lib;ws2_32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Common.Shared.lib;Client.Shared.lib;Client.Network.lib;Enet.lib;FW1FontWrapper.lib;ws2_32.lib;winmm.lib;notelemetry.obj;%(AdditionalDependencies)</AdditionalDependencies>
       <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>

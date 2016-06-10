@@ -98,7 +98,7 @@
       <AddModuleNamesToAssembly>
       </AddModuleNamesToAssembly>
       <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
-      <AdditionalDependencies>kernel32.lib;winmm.lib;user32.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;winmm.lib;user32.lib;notelemetry.obj</AdditionalDependencies>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
   </ItemDefinitionGroup>
