@@ -32,6 +32,9 @@ enum GameVersionId : int
 	VER_1_0_678_1_STEAM,
 	VER_1_0_678_1_NOSTEAM,
 
+	VER_1_0_757_4_STEAM,
+	VER_1_0_757_4_NOSTEAM,
+
 	VER_SIZE,
 	VER_UNK = -1
 };

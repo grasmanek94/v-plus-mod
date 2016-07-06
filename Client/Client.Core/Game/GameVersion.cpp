@@ -9,6 +9,8 @@ std::list<GameVersionId> GameVersion::supportedVersions =
 
 	VER_1_0_678_1_STEAM,
 	VER_1_0_678_1_NOSTEAM,
+	
+	VER_1_0_757_4_STEAM,
 };
 
 GameVersionId GameVersion::Get()
@@ -28,6 +30,7 @@ GameVersionId GameVersion::Get()
 		if(v0 == 0x57085889) { return VER_1_0_505_2_STEAM; }
 		if(v0 > 0x100FF360)
 		{
+			if(v0 == 0x158B48FF) { return VER_1_0_757_4_STEAM; }
 			if(v0 == 0x28C48348) { return VER_1_0_505_2_NOSTEAM; }
 			if(v0 == 0x36CB0305) { return VER_1_0_678_1_STEAM; }
 			if(v0 == 0x48FFF41E) { return VER_1_0_617_1_NOSTEAM; }
