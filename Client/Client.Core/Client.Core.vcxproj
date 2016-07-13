@@ -111,6 +111,8 @@
     <ClInclude Include="ClientCore.h" />
     <ClInclude Include="Game\GameHooks.h" />
     <ClInclude Include="Game\Scripting\Natives.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_678to757.h" />
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_757to791.h" />
     <ClInclude Include="Game\Tasks.h" />
     <ClInclude Include="Graphics\ChatWindow.h" />
     <ClInclude Include="Graphics\ChatWindowEntry.h" />

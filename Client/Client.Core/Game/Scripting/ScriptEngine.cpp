@@ -335,6 +335,8 @@ uint64_t ScriptEngine::GetNewHashFromOldHash(uint64_t oldHash)
 			break;
 		}
 		
+		case VER_1_0_757_2_STEAM:
+		case VER_1_0_757_2_NOSTEAM:
 		case VER_1_0_757_4_STEAM:
 		case VER_1_0_757_4_NOSTEAM:
 		{
@@ -347,6 +349,30 @@ uint64_t ScriptEngine::GetNewHashFromOldHash(uint64_t oldHash)
 								if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_573to617), 5493, tempHash);
 									if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_617to678), 5511, tempHash);
 										if(tempHash != NULL) { newHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_678to757), 5565, tempHash); }
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			break;
+		}
+
+		case VER_1_0_791_2_STEAM:
+		case VER_1_0_791_2_NOSTEAM:
+		{
+			tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_335to350), 5257, oldHash);
+			if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_350to372), 5280, tempHash);
+				if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_372to393), 5291, tempHash);
+					if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_393to473), 5360, tempHash);
+						if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_473to505), 5406, tempHash);
+							if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_505to573), 5487, tempHash);
+								if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_573to617), 5493, tempHash);
+									if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_617to678), 5511, tempHash);
+										if(tempHash != NULL) { tempHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_678to757), 5565, tempHash);
+											if(tempHash != NULL) { newHash = TranslateNativeHash((uintptr_t)(&nativeTranslationTable_757to791), 5591, tempHash); }
+										}
 									}
 								}
 							}

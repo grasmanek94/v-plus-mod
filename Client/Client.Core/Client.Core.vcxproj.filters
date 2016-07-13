@@ -144,6 +144,12 @@
     <ClInclude Include="Graphics\GameUI.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_678to757.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\Scripting\NativeTranslationTables\NativeTranslationTable_757to791.h">
+      <Filter>Game\Scripting\NativeTranslationTables</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Game">

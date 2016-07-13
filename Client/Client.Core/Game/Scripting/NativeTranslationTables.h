@@ -9,3 +9,4 @@
 #include "NativeTranslationTables\NativeTranslationTable_573to617.h"
 #include "NativeTranslationTables\NativeTranslationTable_617to678.h"
 #include "NativeTranslationTables\NativeTranslationTable_678to757.h"
+#include "NativeTranslationTables\NativeTranslationTable_757to791.h"

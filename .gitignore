@@ -282,7 +282,9 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-g-mp.VC.opendb
+v-plus.VC.db
+v-plus.VC.opendb
+v-plus.VC.VC.opendb
 Common/Common.Version/auto_version.h
 Common/Common.Version/temp_auto_version.h
 *.make

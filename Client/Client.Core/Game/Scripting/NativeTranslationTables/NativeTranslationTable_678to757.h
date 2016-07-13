@@ -1,3 +1,5 @@
+#pragma once
+
 static uint64_t nativeTranslationTable_678to757[11130] = {
 	0x28ABC81F45DAE44B, 0x6EB7CC64D61453EB,
 	0xC50CBF271182CF24, 0x56624FBF50719B9C,

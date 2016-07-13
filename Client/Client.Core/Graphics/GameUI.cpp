@@ -220,16 +220,34 @@ void GameUI::TestWorldToScreen()
 				{
 					Vector3 world;
 					Vector2 screen;
-				} playerPosition;
+				} position;
 
-				playerPosition.world = Vector3(*(float *)(pLocalPlayerPed + 0x90), *(float *)(pLocalPlayerPed + 0x94), *(float *)(pLocalPlayerPed + 0x98));
-				playerPosition.screen = Vector2(0.0f, 0.0f);
+				typedef void*(__fastcall* GetPedRootBonePositionFromMask_t)(uint64_t pPlayerPed, D3DXVECTOR4& vBonePos, WORD dwMask);
+				GetPedRootBonePositionFromMask_t GetPedRootBonePositionFromMask = GetPedRootBonePositionFromMask_t(GameAddresses::getPedRootBonePosition);
 
-				GameOverlay::WorldToScreen(playerPosition.world, playerPosition.screen);
+				typedef void*(__fastcall* GetPedBonePositionFromMask_t)(uint64_t pPlayerPed, D3DXVECTOR4& vBonePos, WORD dwMask);
+				GetPedBonePositionFromMask_t GetPedBonePositionFromMask = GetPedBonePositionFromMask_t(GameAddresses::getPedBonePosition);
+
+				D3DXVECTOR4 head_position;
+				GetPedRootBonePositionFromMask(pLocalPlayerPed, head_position, ROOTBONETAG_HEAD);
+
+				//position.world = Vector3(*(float *)(pLocalPlayerPed + 0x90), *(float *)(pLocalPlayerPed + 0x94), *(float *)(pLocalPlayerPed + 0x98));
+
+				position.world = Vector3(head_position.x, head_position.y, head_position.z + 0.375f);
+				position.screen = Vector2(0.0f, 0.0f);
+
+				GameOverlay::WorldToScreen(position.world, position.screen);
 
 				if(m_pD3D11DeviceContext != NULL && m_pDefaultFontWrapper != NULL)
 				{
-					m_pDefaultFontWrapper->DrawString(m_pD3D11DeviceContext, L"Player", 12.0f, playerPosition.screen.x, playerPosition.screen.y, 0xffffffff, FW1_RESTORESTATE);
+					FW1_RECTF layoutRect = { 0.0f, 0.0f, 8192.0f, 8192.0f };
+					FW1_RECTF rect = m_pDefaultFontWrapper->MeasureString(L"Player", L"Tahoma", 14.0f, &layoutRect, FW1_RESTORESTATE);
+
+					float
+						text_width = rect.Right - rect.Left,
+						text_height = rect.Top - rect.Bottom;
+
+					m_pDefaultFontWrapper->DrawString(m_pD3D11DeviceContext, L"Player", 12.0f, position.screen.x - (text_width / 2), position.screen.y - (text_height / 2), 0xffffffff, FW1_RESTORESTATE);
 				}
 			}
 		}

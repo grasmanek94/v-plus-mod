@@ -23,6 +23,7 @@
 #pragma warning( push )
 #pragma warning( disable : 4005 )
 #include <d3d11.h>
+#include <D3DX10Math.h>
 #include "FW1FontWrapper.h"
 #pragma warning( pop )
 
@@ -69,6 +70,7 @@
 #include "Graphics/ChatWindow.h"
 #include "Graphics/GameUI.h"
 
+#include "Game/PedBoneTags.h"
 #include "Game/Tasks.h"
 
 #define LOG_PRINT SharedUtility::TemporaryLogFunction
