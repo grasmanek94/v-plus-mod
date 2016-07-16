@@ -456,7 +456,7 @@ void TestThread::DoRun()
 				onfoot_sync_data.SetCurrentWeaponHash(current_weapon_hash);
 				onfoot_sync_data.SetJumping(is_jumping);
 
-				connection.Send(onfoot_sync_data);
+				connection.SendAsync(onfoot_sync_data);
 
 				last_onfoot_sync = current_time;
 			}
@@ -703,7 +703,7 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& mes
 
 	PlayerJoin player_join;
 	player_join.SetName(L"Player");
-	connection.Send(player_join);
+	connection.SendAsync(player_join);
 
 	PlayerSpawn player_spawn;
 
@@ -740,7 +740,7 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& mes
 	player_spawn.SetPosition(position);
 	player_spawn.SetRotation(rotation);
 
-	connection.Send(player_spawn);
+	connection.SendAsync(player_spawn);
 }
 
 void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& message)
@@ -763,10 +763,7 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& 
 
 void TestThread::RunNetwork()
 {
-	//Run this in another thread: (you may only use callbacks in SAME thread!)
-	connection.RunAsync();
-	//if you need data to/from other thread, remove callback (DO NOT OVERRIDE), and use:
-	//ClassName_handler.GetCount() // check if data available
-	//ClassName_handler.TryGet() : std::shared_ptr<ClassName> // tries to get data
-	//connection.SendAsync(ClassName) // send the data from another thread to network thread, network thread will run connection.Send on this
+	//you can run RunNetworking in another thread safely
+	connection.RunNetworking();
+	connection.ProcessEvents(this);
 }

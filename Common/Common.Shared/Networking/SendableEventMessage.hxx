@@ -33,6 +33,6 @@ const size_t constexpr const_hash(char const *input)
 		5381;
 }
 
-#define UniqueClassId_Declare(className) static const size_t constexpr UniqueClassId() { return const_hash(#className); }/* const size_t Event_Id() const*/
+#define UniqueClassId_Declare(className, captureWhenInactive) static const size_t constexpr UniqueClassId() { return const_hash(#className); } static const bool constexpr CaptureWhenInactive() { return captureWhenInactive; } /* const size_t Event_Id() const*/
 #define UniqueClassId_Implement(className) /*const size_t className::Event_Id() const { return UniqueClassId(); }*/
-#define UniqueClassId_ImplementInline(className) static const size_t constexpr UniqueClassId() { return const_hash(#className); }/* const size_t Event_Id() const { return UniqueClassId(); }*/
+#define UniqueClassId_ImplementInline(className, captureWhenInactive) static const size_t constexpr UniqueClassId() { return const_hash(#className); }  static const bool constexpr CaptureWhenInactive() { return captureWhenInactive; } /* const size_t Event_Id() const { return UniqueClassId(); }*/

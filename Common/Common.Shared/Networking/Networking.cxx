@@ -1,71 +1,6 @@
 #include "Networking.hxx"
 
-#ifdef _WIN32
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<EventConnect>& data)
-{
-	EventConnect_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data)
-{
-	EventDisconnect_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PeerConnected>& data)
-{
-	PeerConnected_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PeerDisconnected>& data)
-{
-	PeerDisconnected_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<ChatMessage>& data)
-{
-	ChatMessage_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& data)
-{
-	PlayerJoin_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& data)
-{
-	PlayerQuit_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& data)
-{
-	PlayerSpawn_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& data)
-{
-	PlayerDespawn_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data)
-{
-	GameSetup_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<WorldUpdate>& data)
-{
-	WorldUpdate_handler.Add(data);
-}
-
-void V_Plus_NetworkClient::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& data)
-{
-	if(IsActive())
-	{
-		OnFootSync_handler.Add(data);
-	}
-}
-
-void V_Plus_NetworkClient::RunAsync()
+void V_Plus_NetworkClient::RunNetworking()
 {
 	ENetPacket* packet = nullptr;
 	while (delayed_packets_to_send.try_pop(packet))
@@ -75,11 +10,68 @@ void V_Plus_NetworkClient::RunAsync()
 
 	if (NetworkClient::Pull())
 	{
-		ProcessEvent(NetworkClient::Event());
+		ENetEvent event = NetworkClient::Event();
+		if (event.type != ENET_EVENT_TYPE_NONE)
+		{
+			if (IsActive() || event.type != ENET_EVENT_TYPE_RECEIVE)
+			{
+				received_events_to_process.push(event);
+			}
+			else if (!IsActive() && event.type == ENET_EVENT_TYPE_RECEIVE)
+			{
+				ENetPacket* packet = event.packet;
+				if (packet->dataLength >= sizeof(size_t))
+				{
+					size_t unique_class_id = (*reinterpret_cast<size_t*>(packet->data));
+
+					#define IMPLEMENT_CASE_FOR(class_name) \
+						case class_name::UniqueClassId(): \
+						{ \
+							if(class_name::CaptureWhenInactive()) \
+							{ \
+								received_events_to_process.push(event); \
+							} \
+						} \
+						break;
+
+					#pragma warning( push )
+					#pragma warning( disable : 4307 )
+
+					switch (unique_class_id)
+					{
+						IMPLEMENT_CASE_FOR(ChatMessage);
+						IMPLEMENT_CASE_FOR(PlayerJoin);
+						IMPLEMENT_CASE_FOR(PlayerQuit);
+						IMPLEMENT_CASE_FOR(PlayerSpawn);
+						IMPLEMENT_CASE_FOR(PlayerDespawn);
+						IMPLEMENT_CASE_FOR(OnFootSync);
+
+						//Because of this we need to impl in header, so, template:
+						#ifdef VPLUS_CLIENT
+						IMPLEMENT_CASE_FOR(PeerConnected);
+						IMPLEMENT_CASE_FOR(PeerDisconnected);
+						IMPLEMENT_CASE_FOR(GameSetup);
+						IMPLEMENT_CASE_FOR(WorldUpdate);
+						#endif
+					}
+
+					#pragma warning( pop )
+
+					#undef IMPLEMENT_CASE_FOR
+				}
+			}
+		}
 	}
 }
 
-#endif
+void V_Plus_NetworkClient::ProcessEvents(MessageReceiver* receiver)
+{
+	ENetEvent event;
+	while (received_events_to_process.try_pop(event))
+	{
+		receiver->ProcessEvent(event);
+	}
+}
 
 V_Plus_NetworkClient::V_Plus_NetworkClient()
 	: is_active(true)

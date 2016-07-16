@@ -22,7 +22,7 @@ public:
 		ar(position, rotation, velocity, current_move_blend_ratio, target_move_blend_ratio, current_weapon_hash, is_jumping, sender);
 	}
 
-	UniqueClassId_Declare(OnFootSync);
+	UniqueClassId_Declare(OnFootSync, false);
 
 	OnFootSync();
 

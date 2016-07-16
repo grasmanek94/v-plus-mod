@@ -16,7 +16,7 @@ public:
 		ar(player_name, sender);
 	}
 
-	UniqueClassId_Declare(PlayerJoin);
+	UniqueClassId_Declare(PlayerJoin, true);
 
 	PlayerJoin();
 
@@ -39,7 +39,7 @@ public:
 		ar(sender);
 	}
 
-	UniqueClassId_Declare(PlayerQuit);
+	UniqueClassId_Declare(PlayerQuit, true);
 
 	PlayerQuit();
 
@@ -62,7 +62,7 @@ public:
 		ar(model_hash, position, rotation, sender);
 	}
 
-	UniqueClassId_Declare(PlayerSpawn);
+	UniqueClassId_Declare(PlayerSpawn, true);
 
 	PlayerSpawn();
 
@@ -89,7 +89,7 @@ public:
 		ar(sender);
 	}
 
-	UniqueClassId_Declare(PlayerDespawn);
+	UniqueClassId_Declare(PlayerDespawn, true);
 
 	PlayerDespawn();
 

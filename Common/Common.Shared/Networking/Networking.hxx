@@ -172,47 +172,12 @@ ENetPacket* ConvertToENetPacket(const T& object, _ENetPacketFlag flags = ENET_PA
 	return packet;
 }
 
-#ifdef _WIN32
-template <typename T>
-class PacketAsyncHandler
-{
-private:
-	std::atomic<size_t> item_count;
-	Concurrency::concurrent_queue<std::shared_ptr<T>> queue;
-public:
-	size_t GetCount() const
-	{
-		return item_count;
-	}
-
-	void Add(std::shared_ptr<T> ptr)
-	{
-		++item_count;
-		queue.push(ptr);
-	}
-
-	std::shared_ptr<T> TryGet()
-	{
-		std::shared_ptr<T> ptr;
-
-		queue.try_pop(ptr);
-		if (ptr)
-		{
-			--item_count;
-		}
-
-		return ptr;
-	}
-};
-#endif
-
 class V_Plus_NetworkClient : public NetworkClient
-#ifdef _WIN32
-	, public MessageReceiver
 {
 
 private:
 	Concurrency::concurrent_queue<ENetPacket*> delayed_packets_to_send;
+	Concurrency::concurrent_queue<ENetEvent> received_events_to_process;
 public:
 	template<typename T>
 	bool SendAsync(const std::shared_ptr<T>& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
@@ -242,58 +207,8 @@ public:
 		return true;
 	}
 
-	void RunAsync();
-
-#define DECLARE_ASYNC_HANDLER(class_name) \
-private: \
-	virtual void Handle(ENetPeer* peer, const std::shared_ptr<class_name>& data) override; \
-public: \
-	PacketAsyncHandler<class_name> class_name ## _handler;
-
-	DECLARE_ASYNC_HANDLER(EventConnect);
-	DECLARE_ASYNC_HANDLER(EventDisconnect);
-
-	DECLARE_ASYNC_HANDLER(PeerConnected);
-	DECLARE_ASYNC_HANDLER(PeerDisconnected);
-	DECLARE_ASYNC_HANDLER(ChatMessage);
-	DECLARE_ASYNC_HANDLER(PlayerJoin);
-	DECLARE_ASYNC_HANDLER(PlayerQuit);
-	DECLARE_ASYNC_HANDLER(PlayerSpawn);
-	DECLARE_ASYNC_HANDLER(PlayerDespawn);
-	DECLARE_ASYNC_HANDLER(OnFootSync);
-	DECLARE_ASYNC_HANDLER(WorldUpdate);
-	DECLARE_ASYNC_HANDLER(GameSetup);
-#else
-{
-#endif
-
-public:
-	template<typename T>
-	int Send(const std::shared_ptr<T>& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
-	{
-		ENetPacket* packet = ConvertToENetPacket(*object, flags);
-
-		if (!packet)
-		{
-			return -1;
-		}
-
-		return NetworkClient::Send(packet);
-	}
-
-	template<typename T>
-	int Send(const T& object, _ENetPacketFlag flags = ENET_PACKET_FLAG_RELIABLE)
-	{
-		ENetPacket* packet = ConvertToENetPacket(object, flags);
-
-		if (!packet)
-		{
-			return -1;
-		}
-
-		return NetworkClient::Send(packet);
-	}
-
+	void RunNetworking();
+	void ProcessEvents(MessageReceiver* receiver);
 private:
 	std::atomic<bool> is_active;
 public:

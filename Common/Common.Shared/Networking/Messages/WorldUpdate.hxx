@@ -12,5 +12,5 @@ public:
 		ar(time);
 	}
 
-	UniqueClassId_Declare(WorldUpdate);
+	UniqueClassId_Declare(WorldUpdate, true);
 };

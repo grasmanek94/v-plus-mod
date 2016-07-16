@@ -13,7 +13,7 @@ public:
 		ar(id);
 	}
 
-	UniqueClassId_Declare(PeerConnected);
+	UniqueClassId_Declare(PeerConnected, true);
 
 	PeerConnected(size_t id = (size_t)-1);
 	size_t Id() const;
@@ -31,7 +31,7 @@ public:
 		ar(id);
 	}
 
-	UniqueClassId_Declare(PeerDisconnected);
+	UniqueClassId_Declare(PeerDisconnected, true);
 
 	PeerDisconnected(size_t id = (size_t)-1);
 

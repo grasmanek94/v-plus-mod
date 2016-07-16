@@ -3,7 +3,7 @@
 #include <Networking/Networking.hxx>
 #include <SharedUtility.h>
 
-class Client : public V_Plus_NetworkClient
+class Client : public V_Plus_NetworkClient, public MessageReceiver
 {
 private:
 	void HandleTick()
@@ -12,7 +12,7 @@ private:
 		{
 			ChatMessage message;
 			message.SetContents(L"Hello there, here is a Dummy Client!");
-			V_Plus_NetworkClient::Send(message);
+			V_Plus_NetworkClient::SendAsync(message);
 		}
 	}
 
@@ -95,7 +95,7 @@ private:
 			message->GetPosition(position);
 			position.y += 2;
 			message->SetPosition(position);
-			V_Plus_NetworkClient::Send(message);
+			V_Plus_NetworkClient::SendAsync(message);
 		}
 	}
 
@@ -122,7 +122,8 @@ public:
 
 	void Tick()
 	{
-		V_Plus_NetworkClient::RunAsync();
+		V_Plus_NetworkClient::RunNetworking();
+		V_Plus_NetworkClient::ProcessEvents(this);
 		HandleTick();
 	}
 

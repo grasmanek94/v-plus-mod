@@ -14,7 +14,7 @@ public:
 		ar(player_id);
 	}
 
-	UniqueClassId_Declare(GameSetup);
+	UniqueClassId_Declare(GameSetup, true);
 
 	GameSetup(size_t id = -1);
 
