@@ -366,19 +366,12 @@ void TestThread::DoRun()
 				}
 				else
 				{
-					PED::RESURRECT_PED(m_clonePed);
-					AI::CLEAR_PED_TASKS_IMMEDIATELY(m_clonePed);
-
-/*
 					g_pClonePed = NULL;
 
-					scrAny handle = m_clonePed;
+					PED::DELETE_PED((scrAny *)(&m_clonePed));
 
 					m_bClonePedSpawned = false;
 					m_clonePed = -1;
-
-					PED::DELETE_PED(&handle);
-*/
 				}
 			}
 		}
@@ -530,6 +523,22 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerJoin>& messa
 	}
 }
 
+void DespawnPlayer(__Player &plyr)
+{
+	if(plyr.spawned)
+	{
+		if(ENTITY::DOES_ENTITY_EXIST(plyr.ped) && ENTITY::IS_ENTITY_A_PED(plyr.ped))
+		{
+			PED::DELETE_PED((scrAny *)(&plyr.ped));
+		}
+
+		plyr.ped = 0;
+
+		plyr.waiting_for_model_to_load = false;
+		plyr.spawned = false;
+	}
+}
+
 void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& message)
 {
 	ChatWindow *pChatWindow = NULL;
@@ -545,6 +554,8 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerQuit>& messa
 
         if(temp_iter->id == message->GetSender())
 		{
+			DespawnPlayer(*temp_iter);
+
 			if(pChatWindow != NULL)
 			{
 				pChatWindow->AddInfoMessageW(L"%ls left. (ID: %d)", temp_iter->name.c_str(), temp_iter->id);
@@ -619,7 +630,13 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerSpawn>& mess
 
 void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<PlayerDespawn>& message)
 {
-
+	for(auto& plyr : player_pool.players)
+	{
+		if(plyr.id == message->GetSender() && plyr.spawned)
+		{
+			DespawnPlayer(plyr);
+		}
+	}
 }
 
 void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& message)
@@ -676,7 +693,7 @@ void TestThread::Handle(ENetPeer* peer, const std::shared_ptr<OnFootSync>& messa
 			if(sync_ped != NULL)
 			{
 				*(float *)(sync_ped + 0x578) = current_move_blend_ratio;
-				*(float *)(sync_ped + 0x580) = target_move_blend_ratio;
+				//*(float *)(sync_ped + 0x580) = target_move_blend_ratio;
 				*(float *)(sync_ped + 0x588) = current_move_blend_ratio;
 			}
 		}

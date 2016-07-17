@@ -21,6 +21,16 @@ private:
 		in_addr x;
 		x.S_un.S_addr = peer->address.host;
 		std::cout << "EventConnect: " << inet_ntoa(x) << ":" << peer->address.port << " with ID: " << reinterpret_cast<size_t>(peer->data) << std::endl;
+
+		PlayerJoin player_join;
+		player_join.SetName(L"DummyClient");
+		V_Plus_NetworkClient::SendAsync(player_join);
+
+		PlayerSpawn player_spawn;
+		player_spawn.SetModelHash(0xA8683715); // A_C_Chimp
+		player_spawn.SetPosition(Vector3(-786.44f, -48.50f, 37.75f));
+		player_spawn.SetRotation(Vector3(0.0f, 0.0f, 0.0f));
+		V_Plus_NetworkClient::SendAsync(player_spawn);
 	}
 
 	void Handle(ENetPeer* peer, const std::shared_ptr<EventDisconnect>& data) override

@@ -2,6 +2,8 @@
 
 static pgPtrCollection<ScriptThread> *scrThreadCollection;
 static uint32_t activeThreadTlsOffset;
+static uint32_t * scrThreadId;
+static uint32_t * scrThreadCount;
 static scriptHandlerMgr *g_scriptHandlerMgr;
 
 struct NativeRegistration
@@ -30,8 +32,11 @@ bool ScriptEngine::Initialize()
 {
 	auto scrThreadCollectionPattern = hook::pattern("48 8B C8 EB 03 48 8B CB 48 8B 05");
 	auto activeThreadTlsOffsetPattern = hook::pattern("48 8B 04 D0 4A 8B 14 00 48 8B 01 F3 44 0F 2C 42 20");
+	auto scrThreadIdPattern = hook::pattern("89 15 ? ? ? ? 48 8B 0C D8");
+	auto scrThreadCountPattern = hook::pattern("FF 0D ? ? ? ? 48 8B F9");
 	auto registrationTablePattern = hook::pattern("76 61 49 8B 7A 40 48 8D 0D ? ? ? ? 4E 8B 1C C7 41 0F B6 C3 48 8B 0C C1");
 	auto g_scriptHandlerMgrPattern = hook::pattern("74 17 48 8B C8 E8 ? ? ? ? 48 8D 0D");
+	auto getScriptIdBlock = hook::pattern("80 78 32 00 75 34 B1 01 E8");
 
 	hook::executable_meta executable;
 	executable.EnsureInit();
@@ -46,7 +51,7 @@ bool ScriptEngine::Initialize()
 	}
 
 	scrThreadCollection = reinterpret_cast<decltype(scrThreadCollection)>(location + *(int32_t*)location + 4);
-	LOG_DEBUG("scrThreadCollection\t 0x%p (0x%.8X)", scrThreadCollection, reinterpret_cast<uintptr_t>(scrThreadCollection) - executable.begin());
+	LOG_DEBUG("scrThreadCollection: 0x%p (0x%.8X)", scrThreadCollection, reinterpret_cast<uintptr_t>(scrThreadCollection) - executable.begin());
 
 	// get activet tls offset
 	uint32_t *tlsLoc = activeThreadTlsOffsetPattern.count(1).get(0).get<uint32_t>(-4);
@@ -58,7 +63,31 @@ bool ScriptEngine::Initialize()
 	}
 
 	activeThreadTlsOffset = *tlsLoc;
-	LOG_DEBUG("activeThreadTlsOffset 0x%.8X", activeThreadTlsOffset);
+	LOG_DEBUG("activeThreadTlsOffset: 0x%.8X", activeThreadTlsOffset);
+
+	// get thread id
+	location = scrThreadIdPattern.count(1).get(0).get<char>(2);
+
+	if(location == nullptr)
+	{
+		LOG_ERROR("Unable to find scrThreadId");
+		return false;
+	}
+
+	scrThreadId = reinterpret_cast<decltype(scrThreadId)>(location + *(int32_t*)location + 4);
+	LOG_DEBUG("scrThreadId: 0x%p (0x%.8X)", scrThreadId, reinterpret_cast<uintptr_t>(scrThreadId) - executable.begin());
+
+	// get thread count
+	location = scrThreadCountPattern.get(0).get<char>(2);
+
+	if(location == nullptr)
+	{
+		LOG_ERROR("Unable to find scrThreadCount");
+		return false;
+	}
+
+	scrThreadCount = reinterpret_cast<decltype(scrThreadCount)>(location + *(int32_t*)location + 4);
+	LOG_DEBUG("scrThreadCount: 0x%p (0x%.8X)", scrThreadCount, reinterpret_cast<uintptr_t>(scrThreadCount) - executable.begin());
 
 	// get registration table
 	location = registrationTablePattern.count(1).get(0).get<char>(9);
@@ -70,7 +99,7 @@ bool ScriptEngine::Initialize()
 	}
 
 	registrationTable = reinterpret_cast<decltype(registrationTable)>(location + *(int32_t*)location + 4);
-	LOG_DEBUG("registrationTable\t 0x%p (0x%.8X)", registrationTable, reinterpret_cast<uintptr_t>(registrationTable) - executable.begin());
+	LOG_DEBUG("registrationTable: 0x%p (0x%.8X)", registrationTable, reinterpret_cast<uintptr_t>(registrationTable) - executable.begin());
 
 	// get scriptHandlerMgr
 	location = g_scriptHandlerMgrPattern.count(1).get(0).get<char>(13);
@@ -82,9 +111,38 @@ bool ScriptEngine::Initialize()
 	}
 
 	g_scriptHandlerMgr = reinterpret_cast<decltype(g_scriptHandlerMgr)>(location + *(int32_t*)location + 4);
-	LOG_DEBUG("g_scriptHandlerMgr\t 0x%p (0x%.8X)", g_scriptHandlerMgr, reinterpret_cast<uintptr_t>(g_scriptHandlerMgr) - executable.begin());
+	LOG_DEBUG("g_scriptHandlerMgr: 0x%p (0x%.8X)", g_scriptHandlerMgr, reinterpret_cast<uintptr_t>(g_scriptHandlerMgr) - executable.begin());
 
-	hook::jump(hook::pattern("48 83 EC 20 80 B9 46 01  00 00 00 8B FA").count(1).get(0).get<void>(-0xB), JustNoScript);
+	// rage::AVscriptHandler::ctor
+	location = getScriptIdBlock.count(1).get(0).get<char>(4);
+
+	if(location == nullptr)
+	{
+		LOG_ERROR("Unable to find getScriptIdBlock");
+		return false;
+	}
+
+	LOG_DEBUG("getScriptIdBlock: 0x%p (0x%.8X)", location, reinterpret_cast<uintptr_t>(location) - executable.begin());
+
+/*
+	// ignore some error @ rage::AVscriptHandler::ctor
+	hook::putVP(location, 0xEB);
+
+	// disable ERR_SYS_PURE #1
+	if(*(BYTE *)(location + 0x04) == 0xE8)
+	{
+		hook::putVP(hook::get_call<char *>(location + 0x04), 0xC3);
+	}
+*/
+
+	// disable ERR_SYS_PURE #2
+	if(*(BYTE *)(location + 0x1D) == 0xE8)
+	{
+		hook::putVP(hook::get_call<char *>(location + 0x1D), 0xC3);
+	}
+
+	// gtaThreadTick hook
+	hook::jump(hook::pattern("48 83 EC 20 80 B9 46 01 00 00 00 8B FA").count(1).get(0).get<void>(-0xB), JustNoScript);
 	return true;
 }
 
@@ -136,27 +194,27 @@ void ScriptEngine::CreateThread(ScriptThread *thread)
 	// did we get a slot?
 	if(slot == collection->count())
 	{
-		//LOG_ERROR(" Failed to spawn script engine thread! (couldn't get a slot)" );
 		return;
 	}
 
 	auto context = thread->GetContext();
-	/*thread->Reset( ( *scrThreadCount ) + 1, nullptr, 0 );
+	thread->Reset((*scrThreadCount) + 1, nullptr, 0);
 
-	if ( *scrThreadId == 0 ) {
-		( *scrThreadId )++;
-	}*/
+	if(*scrThreadId == 0)
+	{
+		*scrThreadId++;
+	}
 
-	context->m_iThreadId = (uint32_t)(5000 + g_ownedThreads.size()); /**scrThreadId;
+	context->m_iThreadId = *scrThreadId;
 
-	( *scrThreadCount )++;
-	( *scrThreadId )++;*/
+	*scrThreadCount++;
+	*scrThreadId++;
 
 	collection->set(slot, thread);
 
 	g_ownedThreads.insert(thread);
 
-	//LOG_PRINT/*LOG_DEBUG*/( "Created thread, id %d", thread->GetId() );
+	LOG_DEBUG("Created thread, id %d", thread->GetId());
 }
 
 ScriptEngine::NativeHandler ScriptEngine::GetNativeHandler(uint64_t oldHash)
@@ -181,7 +239,7 @@ ScriptEngine::NativeHandler ScriptEngine::GetNativeHandler(uint64_t oldHash)
 		}
 	}
 
-	//LOG_PRINT( "Failed to find the native handler of 0x%016llX", oldHash );
+	LOG_DEBUG("Failed to find the native handler of 0x%016llX", oldHash);
 	return nullptr;
 }
 
