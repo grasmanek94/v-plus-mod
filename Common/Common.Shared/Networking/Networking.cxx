@@ -64,12 +64,26 @@ void V_Plus_NetworkClient::RunNetworking()
 	}
 }
 
-void V_Plus_NetworkClient::ProcessEvents(MessageReceiver* receiver)
+void V_Plus_NetworkClient::ProcessEvents(MessageReceiver* receiver, std::vector<size_t> class_list)
 {
 	ENetEvent event;
-	while (received_events_to_process.try_pop(event))
+	if (class_list.size() == 0)
 	{
-		receiver->ProcessEvent(event);
+		while (received_events_to_process.try_pop(event))
+		{
+			receiver->ProcessEvent(event);
+		}
+	}
+	else
+	{
+		while (received_events_to_process.try_pop(event))
+		{
+			if (!receiver->ProcessEvent(event, class_list))
+			{
+				received_events_to_process.push(event);
+				break;
+			}
+		}
 	}
 }
 

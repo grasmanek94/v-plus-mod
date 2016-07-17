@@ -28,14 +28,17 @@ public:
 	virtual void Handle(ENetPeer* peer, const std::shared_ptr<GameSetup>& data) = 0;
 public:
 	template <size_t unused = 0>
-	void ProcessEvent(const ENetEvent& event)
+	bool ProcessEvent(const ENetEvent& event, std::vector<size_t> class_list = {})
 	{
+		bool return_value = false;
+
 		switch(event.type)
 		{
 			case ENET_EVENT_TYPE_RECEIVE:
 			{
 				//Handle packet
 				ENetPacket* packet = event.packet;
+				bool processed_packet = true;
 				if (packet->dataLength >= sizeof(size_t))
 				{
 					size_t unique_class_id = (*reinterpret_cast<size_t*>(packet->data));
@@ -65,6 +68,7 @@ public:
 							if (!errorOccured) \
 							{ \
 								Handle(event.peer, var); \
+								return_value = true; \
 							} \
 						} \
 						break;
@@ -72,22 +76,48 @@ public:
 					#pragma warning( push )
 					#pragma warning( disable : 4307 )
 
-					switch (unique_class_id)
-					{
-						IMPLEMENT_CASE_FOR(ChatMessage);
-						IMPLEMENT_CASE_FOR(PlayerJoin);
-						IMPLEMENT_CASE_FOR(PlayerQuit);
-						IMPLEMENT_CASE_FOR(PlayerSpawn);
-						IMPLEMENT_CASE_FOR(PlayerDespawn);
-						IMPLEMENT_CASE_FOR(OnFootSync);
+					bool process_this_case;
 
-						//Because of this we need to impl in header, so, template:
-						#ifdef VPLUS_CLIENT
-						IMPLEMENT_CASE_FOR(PeerConnected);
-						IMPLEMENT_CASE_FOR(PeerDisconnected);
-						IMPLEMENT_CASE_FOR(GameSetup);
-						IMPLEMENT_CASE_FOR(WorldUpdate);
-						#endif
+					if (class_list.size())
+					{
+						process_this_case = false;
+						for (auto& class_id : class_list)
+						{
+							if (class_id == unique_class_id)
+							{
+								process_this_case = true;
+								break;
+							}
+						}
+					}
+					else
+					{
+						process_this_case = true;
+					}
+
+					if (process_this_case)
+					{
+						switch (unique_class_id)
+						{
+							IMPLEMENT_CASE_FOR(ChatMessage);
+							IMPLEMENT_CASE_FOR(PlayerJoin);
+							IMPLEMENT_CASE_FOR(PlayerQuit);
+							IMPLEMENT_CASE_FOR(PlayerSpawn);
+							IMPLEMENT_CASE_FOR(PlayerDespawn);
+							IMPLEMENT_CASE_FOR(OnFootSync);
+
+							//Because of this we need to impl in header, so, template:
+							#ifdef VPLUS_CLIENT
+							IMPLEMENT_CASE_FOR(PeerConnected);
+							IMPLEMENT_CASE_FOR(PeerDisconnected);
+							IMPLEMENT_CASE_FOR(GameSetup);
+							IMPLEMENT_CASE_FOR(WorldUpdate);
+							#endif
+						}
+					}
+					else
+					{
+						processed_packet = false;
 					}
 
 					#pragma warning( pop )
@@ -95,28 +125,80 @@ public:
 					#undef IMPLEMENT_CASE_FOR
 
 				}
-				/* Clean up the packet now that we're done using it. */
-				enet_packet_destroy(event.packet);
+
+				if (processed_packet)
+				{
+					/* Clean up the packet now that we're done using it. */
+					enet_packet_destroy(event.packet);
+				}
 				break;
 			}
 
 			case ENET_EVENT_TYPE_CONNECT:
 			{
-				Handle(event.peer, std::make_shared<EventConnect>(event.peer));
+				bool process_this_case;
+
+				if (class_list.size())
+				{
+					process_this_case = false;
+					for (auto& class_id : class_list)
+					{
+						if (class_id == EventConnect::UniqueClassId())
+						{
+							process_this_case = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					process_this_case = true;
+				}
+
+				if (process_this_case)
+				{
+					Handle(event.peer, std::make_shared<EventConnect>(event.peer));
+					return_value = true;
+				}
 				break;
 			}
 				
 			case ENET_EVENT_TYPE_DISCONNECT:
 			{
-				Handle(event.peer, std::make_shared<EventDisconnect>(event.peer));
+				bool process_this_case;
+
+				if (class_list.size())
+				{
+					process_this_case = false;
+					for (auto& class_id : class_list)
+					{
+						if (class_id == EventDisconnect::UniqueClassId())
+						{
+							process_this_case = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					process_this_case = true;
+				}
+
+				if (process_this_case)
+				{
+					Handle(event.peer, std::make_shared<EventDisconnect>(event.peer));
+					return_value = true;
+				}
 				break;
 			}
 
 			case ENET_EVENT_TYPE_NONE:
 				//no warnings plz
+				return_value = true;
 				break;
 
 		}
+		return return_value;
 	}
 };
 
@@ -208,7 +290,7 @@ public:
 	}
 
 	void RunNetworking();
-	void ProcessEvents(MessageReceiver* receiver);
+	void ProcessEvents(MessageReceiver* receiver, std::vector<size_t> class_list = {});
 private:
 	std::atomic<bool> is_active;
 public:
