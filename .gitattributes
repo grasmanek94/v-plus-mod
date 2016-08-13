@@ -1,6 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text eol=crlf
-*.* text eol=crlf
 *.vcxproj text eol=crlf
 
 # Custom for Visual Studio
@@ -29,3 +28,4 @@
 *.ttf binary
 *.PNG binary
 *.lib binary
+*.psd binary
